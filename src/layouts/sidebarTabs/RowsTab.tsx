@@ -17,18 +17,18 @@ export const RowsTab = () => {
   const handleAdd = (state: DndState) => {
     if (!state.dragged || !state.droppedOn) return;
     const sourceRow = state.dragged?.data.item as RowEntity;
-    const newRow: RowEntity = {
-      ...sourceRow,
-      id: generateId(),
-      columns: sourceRow.columns.map((col) => ({
-        ...col,
-        id: generateId(),
-        blocks: col.blocks.map((block) => ({
-          ...block,
-          id: generateId(),
-        })),
-      })),
-    };
+
+    // Deep clone to avoid sharing nested objects (style, content)
+    const newRow: RowEntity = structuredClone(sourceRow);
+
+    // Assign new IDs to all elements
+    newRow.id = generateId();
+    newRow.columns.forEach((col) => {
+      col.id = generateId();
+      col.blocks.forEach((block) => {
+        block.id = generateId();
+      });
+    });
 
     let index = getRowCoordinates(state.droppedOn.id) ?? 0;
     index += state.isTopHalf ? 0 : 1;
