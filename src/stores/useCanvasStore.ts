@@ -75,14 +75,43 @@ export const useCanvasStore = create<State>()((set, get) => ({
   getElementById(id) {
     const { template, rowIndexMap, blockIndexMap } = get();
     if (!template) return null;
+
+    // Check if it's a row
     const rowIndex = rowIndexMap.get(id) ?? null;
-    if (rowIndex !== null) return template.rows[rowIndex];
-    const blockCoordenates = blockIndexMap.get(id) ?? null;
-    if (blockCoordenates !== null) {
-      return template.rows[blockCoordenates.rowIndex].columns[
-        blockCoordenates.columnIndex
-      ].blocks[blockCoordenates.blockIndex];
+    if (rowIndex !== null) {
+      // Bounds check to prevent crashes if maps are out of sync
+      if (rowIndex >= 0 && rowIndex < template.rows.length) {
+        return template.rows[rowIndex];
+      }
+      console.error(`Invalid rowIndex: ${rowIndex} for id: ${id}`);
+      return null;
     }
+
+    // Check if it's a block
+    const blockCoordinates = blockIndexMap.get(id) ?? null;
+    if (blockCoordinates !== null) {
+      // Bounds check each level to prevent crashes
+      const row = template.rows[blockCoordinates.rowIndex];
+      if (!row) {
+        console.error(`Invalid rowIndex: ${blockCoordinates.rowIndex} for block id: ${id}`);
+        return null;
+      }
+
+      const column = row.columns[blockCoordinates.columnIndex];
+      if (!column) {
+        console.error(`Invalid columnIndex: ${blockCoordinates.columnIndex} for block id: ${id}`);
+        return null;
+      }
+
+      const block = column.blocks[blockCoordinates.blockIndex];
+      if (!block) {
+        console.error(`Invalid blockIndex: ${blockCoordinates.blockIndex} for block id: ${id}`);
+        return null;
+      }
+
+      return block;
+    }
+
     return null;
   },
 }));
