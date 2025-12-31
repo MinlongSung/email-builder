@@ -33,7 +33,7 @@
   align-items: center;
   gap: var(--spacing-1);
   background: var(--bg-gradient-primary);
-  color: var(--text-inverse);
+  color: #ffffff;
   font-family: var(--font-sans);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);

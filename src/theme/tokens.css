@@ -186,8 +186,8 @@ body.dark {
   --bg-primary: #0a0a0a;
   --bg-secondary: var(--color-slate-950);
   --bg-tertiary: var(--color-slate-900);
-  --bg-hover: var(--color-slate-900);
-  --bg-active: var(--color-slate-800);
+  --bg-hover: var(--color-slate-800);
+  --bg-active: var(--color-slate-700);
   --bg-elevated: var(--color-slate-900);
 
   /* Dark mode gradients */
@@ -195,10 +195,11 @@ body.dark {
   --bg-gradient-primary: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-primary-700) 100%);
   --bg-gradient-accent: linear-gradient(135deg, var(--color-accent-purple) 0%, var(--color-accent-pink) 100%);
 
-  --text-primary: var(--color-slate-50);
-  --text-secondary: var(--color-slate-400);
-  --text-tertiary: var(--color-slate-500);
-  --text-placeholder: var(--color-slate-600);
+  /* Improved text contrast for WCAG AA compliance (4.5:1 minimum) */
+  --text-primary: var(--color-slate-50);        /* #f8fafc - Ratio ~18:1 (AAA) */
+  --text-secondary: var(--color-slate-300);     /* #cbd5e1 - Ratio ~8.5:1 (AAA) */
+  --text-tertiary: var(--color-slate-400);      /* #94a3b8 - Ratio ~5.5:1 (AA) */
+  --text-placeholder: var(--color-slate-500);   /* #64748b - Ratio ~3.2:1 (UI components minimum) */
   --text-inverse: var(--color-slate-950);
   --text-accent: var(--color-primary-400);
 
