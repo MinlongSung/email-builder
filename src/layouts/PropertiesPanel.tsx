@@ -15,6 +15,7 @@ export const PropertiesPanel = () => {
 
   return (
     <aside
+      data-no-dismiss
       className={`${styles.propertiesPanel} ${
         isOpen ? styles.open : styles.close
       }`}

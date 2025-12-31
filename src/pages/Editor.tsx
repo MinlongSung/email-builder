@@ -25,9 +25,9 @@ export function EditorPage() {
       <DragAndDropProvider>
         <ProsemirrorProvider>
           <Canvas template={template} />
+          <Sidebar />
+          <PropertiesPanel />
         </ProsemirrorProvider>
-        <Sidebar />
-        <PropertiesPanel />
       </DragAndDropProvider>
     </div>
   );

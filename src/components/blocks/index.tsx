@@ -6,6 +6,7 @@ import { Row } from "@/components/blocks/row/Row";
 import { RowSidebar } from "@/components/blocks/row/RowSidebar";
 import { TextSidebar } from "@/components/blocks/text/TextSidebar";
 import { ButtonSidebar } from "@/components/blocks/button/ButtonSidebar";
+import { TextPanel } from "@/components/blocks/text/TextPanel";
 
 export type Draggable = BlockEntity | RowEntity;
 
@@ -22,7 +23,7 @@ export const DRAGGABLES_REGISTRY: {
     interactable: (entity) => <TextBlock block={entity} />,
     sidebar: () => <TextSidebar />,
     propertiesPanel: (_entity) => {
-      return <div>{"text"}</div>;
+      return <TextPanel />;
     },
   },
   button: {
