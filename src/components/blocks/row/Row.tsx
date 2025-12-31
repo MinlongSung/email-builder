@@ -1,10 +1,4 @@
 import { Fragment } from "react";
-import { useUIStore } from "@/stores/useUIStore";
-import { useEditorStore } from "@/stores/useEditorStore";
-import { historyService } from "@/history/services/historyService";
-import { CloneRowCommand } from "@/history/commands/CloneRowCommand";
-import { DeleteRowCommand } from "@/history/commands/DeleteRowCommand";
-
 import { ROW_TYPES, type RowEntity } from "@/entities/template";
 import { Column } from "@/components/blocks/row/Column";
 import { useTranslation } from "react-i18next";
@@ -14,73 +8,13 @@ import {
   DeleteAction,
   MoveAction,
 } from "@/components/blocks/shared/SelectionCardActions";
-import { MoveRowCommand } from "@/history/commands/MoveRowCommand";
 import { Draggable } from "@/dnd/adapter/components/Draggable";
-import type { DndState } from "@/dnd/core/types";
 import { DropIndicator } from "@/dnd/adapter/components/DropIndicator";
+import { useRow } from "@/components/blocks/row/hooks/useRow";
 
 export const Row: React.FC<{ row: RowEntity }> = ({ row }) => {
   const { t } = useTranslation();
-  const viewMode = useUIStore((state) => state.viewMode);
-  const template = useEditorStore((state) => state.template);
-  const setTemplate = useEditorStore((state) => state.setTemplate);
-  const getRowCoordinates = useEditorStore((state) => state.getRowCoordinates);
-
-  const isMobileView = viewMode === "mobile";
-  const shouldStack = isMobileView && row.isResponsive;
-
-  const handleClone = () => {
-    if (!template) return;
-    const rowIndex = getRowCoordinates(row.id);
-    if (rowIndex === null) return;
-
-    const command = new CloneRowCommand({
-      template,
-      setTemplate,
-      rowIndex,
-      type: "row.clone",
-    });
-    historyService.executeCommand(command);
-  };
-
-  const handleDelete = () => {
-    if (!template) return;
-    const rowIndex = getRowCoordinates(row.id);
-    if (rowIndex === null) return;
-
-    const command = new DeleteRowCommand({
-      template,
-      setTemplate,
-      rowIndex,
-      type: "row.delete",
-    });
-    historyService.executeCommand(command);
-  };
-
-  const handleMove = (state: DndState) => {
-    if (!state.dragged || !state.droppedOn) return;
-    const oldIndex = getRowCoordinates(state.dragged.id);
-    let newIndex = getRowCoordinates(state.droppedOn.id);
-    if (oldIndex === null || newIndex === null) return;
-
-    newIndex += state.isTopHalf ? 0 : 1;
-
-    // Ajustar si estamos moviendo hacia abajo en el mismo contenedor
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
-
-    if (oldIndex === newIndex) return;
-
-    const command = new MoveRowCommand({
-      template,
-      setTemplate,
-      oldIndex,
-      newIndex,
-      type: "row.move",
-    });
-    historyService.executeCommand(command);
-  };
+  const { shouldStack, cloneRow, deleteRow, moveRow } = useRow(row);
 
   return (
     <Draggable
@@ -89,7 +23,7 @@ export const Row: React.FC<{ row: RowEntity }> = ({ row }) => {
       accepts={ROW_TYPES}
       item={row}
       handle={"[data-drag-handle]"}
-      onDragEnd={handleMove}
+      onDragEnd={moveRow}
     >
       {({ setNodeRef, overId, isTopHalf, beingDragged }) => (
         <SelectionCard
@@ -98,8 +32,8 @@ export const Row: React.FC<{ row: RowEntity }> = ({ row }) => {
           label={t("row")}
           actions={[
             <MoveAction label={t("move")} />,
-            <CloneAction label={t("clone")} onClick={handleClone} />,
-            <DeleteAction label={t("delete")} onClick={handleDelete} />,
+            <CloneAction label={t("clone")} onClick={cloneRow} />,
+            <DeleteAction label={t("delete")} onClick={deleteRow} />,
           ]}
         >
           {overId === row.id && isTopHalf && (

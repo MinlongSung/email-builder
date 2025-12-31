@@ -1,5 +1,9 @@
 import { create } from "zustand";
-import type { TemplateEntity } from "@/entities/template";
+import type {
+  BlockEntity,
+  RowEntity,
+  TemplateEntity,
+} from "@/entities/template";
 
 export interface ColumnCoordinates {
   rowIndex: number;
@@ -21,6 +25,7 @@ interface State {
   getRowCoordinates: (id: string) => number | null;
   getColumnCoordinates: (id: string) => ColumnCoordinates | null;
   getBlockCoordinates: (id: string) => BlockCoordinates | null;
+  getElementById: (id: string) => BlockEntity | RowEntity | null;
 }
 
 export const useEditorStore = create<State>()((set, get) => ({
@@ -65,5 +70,19 @@ export const useEditorStore = create<State>()((set, get) => ({
 
   getBlockCoordinates(id) {
     return get().blockIndexMap.get(id) ?? null;
+  },
+
+  getElementById(id) {
+    const { template, rowIndexMap, blockIndexMap } = get();
+    if (!template) return null;
+    const rowIndex = rowIndexMap.get(id) ?? null;
+    if (rowIndex !== null) return template.rows[rowIndex];
+    const blockCoordenates = blockIndexMap.get(id) ?? null;
+    if (blockCoordenates !== null) {
+      return template.rows[blockCoordenates.rowIndex].columns[
+        blockCoordenates.columnIndex
+      ].blocks[blockCoordenates.blockIndex];
+    }
+    return null;
   },
 }));
