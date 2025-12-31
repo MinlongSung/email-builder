@@ -6,7 +6,7 @@ import type { BlockEntity } from "@/entities/template";
 import { AddBlockCommand } from "@/history/commands/AddBlockCommand";
 import { historyService } from "@/history/services/historyService";
 import styles from "@/layouts/sidebarTabs/BlocksTab.module.css";
-import { useEditorStore } from "@/stores/useEditorStore";
+import { useEditorStore } from "@/stores/useCanvasStore";
 import { generateId } from "@/utils/generateId";
 
 export const BlocksTab = () => {

@@ -6,13 +6,13 @@ import type { RowEntity } from "@/entities/template";
 import { AddRowCommand } from "@/history/commands/AddRowCommand";
 import { historyService } from "@/history/services/historyService";
 import styles from "@/layouts/sidebarTabs/RowsTab.module.css";
-import { useEditorStore } from "@/stores/useEditorStore";
+import { useCanvasStore } from "@/stores/useCanvasStore";
 import { generateId } from "@/utils/generateId";
 
 export const RowsTab = () => {
-  const template = useEditorStore((store) => store.template);
-  const setTemplate = useEditorStore((store) => store.setTemplate);
-  const getRowCoordinates = useEditorStore((store) => store.getRowCoordinates);
+  const template = useCanvasStore((store) => store.template);
+  const setTemplate = useCanvasStore((store) => store.setTemplate);
+  const getRowCoordinates = useCanvasStore((store) => store.getRowCoordinates);
 
   const handleAdd = (state: DndState) => {
     if (!state.dragged || !state.droppedOn) return;

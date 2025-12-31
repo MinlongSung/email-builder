@@ -5,7 +5,7 @@ import { ProsemirrorPreview } from "@/richtext/adapter/components/ProsemirrorPre
 import type { Editor } from "@/richtext/core/Editor";
 import { historyService } from "@/history/services/historyService";
 import { useDebouncedCallback } from "@/hooks/useDebouncedCallback";
-import { useEditorStore } from "@/stores/useEditorStore";
+import { useEditorStore } from "@/stores/useCanvasStore";
 import { useUIStore } from "@/stores/useUIStore";
 
 interface ButtonBlockProps {

@@ -4,13 +4,13 @@ import { CloneBlockCommand } from "@/history/commands/CloneBlockCommand";
 import { DeleteBlockCommand } from "@/history/commands/DeleteBlockCommand";
 import { MoveBlockCommand } from "@/history/commands/MoveBlockCommand";
 import { historyService } from "@/history/services/historyService";
-import { useEditorStore } from "@/stores/useEditorStore";
+import { useCanvasStore } from "@/stores/useCanvasStore";
 
 export const useBlock = (block: BlockEntity) => {
-  const template = useEditorStore((s) => s.template);
-  const setTemplate = useEditorStore((s) => s.setTemplate);
-  const getBlockCoordinates = useEditorStore((s) => s.getBlockCoordinates);
-  const getColumnCoordinates = useEditorStore((s) => s.getColumnCoordinates);
+  const template = useCanvasStore((s) => s.template);
+  const setTemplate = useCanvasStore((s) => s.setTemplate);
+  const getBlockCoordinates = useCanvasStore((s) => s.getBlockCoordinates);
+  const getColumnCoordinates = useCanvasStore((s) => s.getColumnCoordinates);
 
   const cloneBlock = () => {
     if (!template) return;
@@ -56,8 +56,7 @@ export const useBlock = (block: BlockEntity) => {
     }
 
     const sameColumn =
-      from.rowIndex === to.rowIndex &&
-      from.columnIndex === to.columnIndex;
+      from.rowIndex === to.rowIndex && from.columnIndex === to.columnIndex;
 
     to.blockIndex += state.isTopHalf ? 0 : 1;
 

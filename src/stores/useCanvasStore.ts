@@ -28,7 +28,7 @@ interface State {
   getElementById: (id: string) => BlockEntity | RowEntity | null;
 }
 
-export const useEditorStore = create<State>()((set, get) => ({
+export const useCanvasStore = create<State>()((set, get) => ({
   template: null,
   rowIndexMap: new Map(),
   columnIndexMap: new Map(),

@@ -4,14 +4,14 @@ import { CloneRowCommand } from "@/history/commands/CloneRowCommand";
 import { DeleteRowCommand } from "@/history/commands/DeleteRowCommand";
 import { MoveRowCommand } from "@/history/commands/MoveRowCommand";
 import { historyService } from "@/history/services/historyService";
-import { useEditorStore } from "@/stores/useEditorStore";
+import { useCanvasStore } from "@/stores/useCanvasStore";
 import { useUIStore } from "@/stores/useUIStore";
 
 export const useRow = (row: RowEntity) => {
   const viewMode = useUIStore((state) => state.viewMode);
-  const template = useEditorStore((state) => state.template);
-  const setTemplate = useEditorStore((state) => state.setTemplate);
-  const getRowCoordinates = useEditorStore((state) => state.getRowCoordinates);
+  const template = useCanvasStore((state) => state.template);
+  const setTemplate = useCanvasStore((state) => state.setTemplate);
+  const getRowCoordinates = useCanvasStore((state) => state.getRowCoordinates);
 
   const isMobileView = viewMode === "mobile";
   const shouldStack = isMobileView && row.isResponsive;
@@ -67,7 +67,6 @@ export const useRow = (row: RowEntity) => {
       })
     );
   };
-
 
   return {
     shouldStack,

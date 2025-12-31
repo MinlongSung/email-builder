@@ -4,8 +4,9 @@ import { DragAndDropProvider } from "@/dnd/adapter/providers/DragAndDropProvider
 import { Canvas } from "@/layouts/Canvas";
 import { Sidebar } from "@/layouts/Sidebar";
 import { Topbar } from "@/layouts/Topbar";
+import { PropertiesPanel } from "@/layouts/PropertiesPanel";
 import { ProsemirrorProvider } from "@/richtext/adapter/providers/ProsemirrorProvider";
-import { useEditorStore } from "@/stores/useEditorStore";
+import { useEditorStore } from "@/stores/useCanvasStore";
 import styles from "@/pages/Editor.module.css";
 
 export function EditorPage() {
@@ -26,6 +27,7 @@ export function EditorPage() {
           <Canvas template={template} />
         </ProsemirrorProvider>
         <Sidebar />
+        <PropertiesPanel />
       </DragAndDropProvider>
     </div>
   );

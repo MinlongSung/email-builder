@@ -1,17 +1,24 @@
 import { DRAGGABLES_REGISTRY } from "@/components/blocks";
-import { useEditorStore } from "@/stores/useEditorStore";
+import { useCanvasStore } from "@/stores/useCanvasStore";
 import { useUIStore } from "@/stores/useUIStore";
+import styles from "./PropertiesPanel.module.css";
 
 export const PropertiesPanel = () => {
   const selectedId = useUIStore((store) => store.selectedId);
-  const getElementById = useEditorStore((store) => store.getElementById);
+  const getElementById = useCanvasStore((store) => store.getElementById);
   if (!selectedId) return null;
   const element = getElementById(selectedId);
-  if (!element) return null;
-  
+
   return (
-    <aside>
-      {DRAGGABLES_REGISTRY[element.type].propertiesPanel(element as never)}
+    <aside
+      className={`${styles.propertiesPanel} ${
+        element ? styles.open : styles.close
+      }`}
+    >
+      <div className={styles.content}>
+        {element &&
+          DRAGGABLES_REGISTRY[element.type].propertiesPanel(element as never)}
+      </div>
     </aside>
   );
 };
