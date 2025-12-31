@@ -81,7 +81,7 @@ export const Row: React.FC<{ row: RowEntity }> = ({ row }) => {
                 ))}
               </tr>
             </tbody>
-          </table>{" "}
+          </table>
           {overId === row.id && !isTopHalf && (
             <DropIndicator label={t("drop_here")} />
           )}

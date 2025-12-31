@@ -1,8 +1,14 @@
-.rowsGrid {
-  padding: 16px;
+/**
+ * Rows Tab Component
+ * BEM naming convention: rowsTab__grid
+ */
+
+/* Element: rowsTab__grid */
+.rowsTab__grid {
+  padding: var(--spacing-4);
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow: auto;
-  gap: 12px;
+  gap: var(--spacing-3);
 }

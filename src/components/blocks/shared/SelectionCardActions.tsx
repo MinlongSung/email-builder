@@ -18,7 +18,7 @@ export const MoveAction = ({ label }: MoveActionProps) => {
       onClick={(e) => e.stopPropagation()}
       title={label}
     >
-      <DragHandleIcon className={styles.icon} />
+      <DragHandleIcon className={styles.action__icon} />
     </div>
   );
 };
@@ -38,7 +38,7 @@ export function CloneAction({ label, onClick }: CloneActionProps) {
       }}
       title={label}
     >
-      <CloneIcon className={styles.icon} />
+      <CloneIcon className={styles.action__icon} />
     </div>
   );
 }
@@ -57,7 +57,7 @@ export function DeleteAction({ label, onClick }: DeleteActionProps) {
       }}
       title={label}
     >
-      <DeleteIcon className={styles.icon} />
+      <DeleteIcon className={styles.action__icon} />
     </div>
   );
 }

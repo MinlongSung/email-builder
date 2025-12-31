@@ -1,65 +1,78 @@
+/**
+ * Row Sidebar Component
+ * BEM naming convention: rowCard, rowCard__preview, rowCard__column, rowCard--hover
+ */
+
+/* Block: rowCard */
 .rowCard {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 12px;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
-  background-color: #ffffff;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3);
+  border: var(--border-width-1) solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-elevated);
   cursor: grab;
-  transition: all 150ms ease;
+  transition: all var(--transition-fast);
   width: 310px;
+  box-shadow: var(--shadow-xs);
 }
 
 .rowCard:hover {
-  border-color: #3b82f6;
-  background-color: #eff6ff;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  border-color: var(--accent-primary);
+  background-color: var(--color-primary-50);
+  box-shadow: var(--shadow-sm);
 }
 
+.rowCard:active {
+  cursor: grabbing;
+  transform: scale(0.98);
+}
 
-.preview {
+/* Element: rowCard__preview */
+.rowCard__preview {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--spacing-1);
 }
 
-.columnPreview {
+/* Element: rowCard__columnPreview */
+.rowCard__columnPreview {
   display: flex;
-  gap: 8px;
+  gap: var(--spacing-2);
   width: 100%;
 }
 
-.column {
+/* Element: rowCard__column */
+.rowCard__column {
   height: 25px;
-  background-color: #e5e5e5;
-  border-radius: 4px;
-  transition: background-color 150ms;
+  background-color: var(--border-primary);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
 }
 
-.rowCard:hover .column {
-  background-color: #bfdbfe;
+.rowCard:hover .rowCard__column {
+  background-color: var(--color-primary-200);
 }
-
 
 /* Dark mode */
 :global(.dark) .rowCard {
-  border-color: #262626;
-  background-color: #0a0a0a;
+  border-color: var(--border-primary);
+  background-color: var(--bg-secondary);
 }
 
 :global(.dark) .rowCard:hover {
-  border-color: #2563eb;
-  background-color: #1e3a8a;
+  border-color: var(--accent-primary);
+  background-color: var(--color-primary-900);
 }
 
-:global(.dark) .column {
-  background-color: #404040;
+:global(.dark) .rowCard__column {
+  background-color: var(--color-slate-700);
 }
 
-:global(.dark) .rowCard:hover .column {
-  background-color: #1e40af;
+:global(.dark) .rowCard:hover .rowCard__column {
+  background-color: var(--color-primary-700);
 }

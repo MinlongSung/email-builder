@@ -1,68 +1,78 @@
+/**
+ * Block Sidebar Component
+ * BEM naming convention: blockCard, blockCard__iconWrapper, blockCard__label
+ */
+
+/* Block: blockCard */
 .blockCard {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 20px 16px;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
-  background-color: #ffffff;
+  gap: var(--spacing-2);
+  padding: var(--spacing-5) var(--spacing-4);
+  border: var(--border-width-1) solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-elevated);
   cursor: grab;
-  transition: all 150ms ease;
+  transition: all var(--transition-fast);
   width: 100px;
+  box-shadow: var(--shadow-xs);
 }
 
 .blockCard:hover {
-  border-color: #3b82f6;
-  background-color: #eff6ff;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  border-color: var(--accent-primary);
+  background-color: var(--color-primary-50);
+  box-shadow: var(--shadow-sm);
 }
 
 .blockCard:active {
+  cursor: grabbing;
   transform: scale(0.98);
 }
 
-.iconWrapper {
+/* Element: blockCard__iconWrapper */
+.blockCard__iconWrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #525252;
-  transition: color 150ms;
+  color: var(--text-secondary);
+  transition: color var(--transition-fast);
 }
 
-.blockCard:hover .iconWrapper {
-  color: #2563eb;
+.blockCard:hover .blockCard__iconWrapper {
+  color: var(--accent-primary);
 }
 
-.label {
-  font-size: 13px;
-  font-weight: 500;
-  color: #404040;
+/* Element: blockCard__label */
+.blockCard__label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
   text-align: center;
-  line-height: 1.2;
+  line-height: var(--line-height-tight);
   margin: 0;
 }
 
 /* Dark mode */
 :global(.dark) .blockCard {
-  border-color: #262626;
-  background-color: #0a0a0a;
+  border-color: var(--border-primary);
+  background-color: var(--bg-secondary);
 }
 
 :global(.dark) .blockCard:hover {
-  border-color: #2563eb;
-  background-color: #1e3a8a;
+  border-color: var(--accent-primary);
+  background-color: var(--color-primary-900);
 }
 
-:global(.dark) .iconWrapper {
-  color: #a3a3a3;
+:global(.dark) .blockCard__iconWrapper {
+  color: var(--text-secondary);
 }
 
-:global(.dark) .blockCard:hover .iconWrapper {
-  color: #60a5fa;
+:global(.dark) .blockCard:hover .blockCard__iconWrapper {
+  color: var(--accent-primary-hover);
 }
 
-:global(.dark) .label {
-  color: #d4d4d4;
+:global(.dark) .blockCard__label {
+  color: var(--text-primary);
 }

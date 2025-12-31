@@ -21,12 +21,12 @@ export const RowSidebar: React.FC<RowSidebarProps> = ({
       style={{ ...style }}
       className={`${styles.rowCard} ${className}`}
     >
-      <div className={styles.preview}>
-        <div className={styles.columnPreview}>
+      <div className={styles.rowCard__preview}>
+        <div className={styles.rowCard__columnPreview}>
           {row.columns.map((column, idx) => (
             <div
               key={idx}
-              className={styles.column}
+              className={styles.rowCard__column}
               style={{ flex: column.width }}
             />
           ))}

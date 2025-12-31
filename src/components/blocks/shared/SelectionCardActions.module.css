@@ -1,28 +1,45 @@
+/**
+ * Selection Card Actions Component
+ * BEM naming convention: action, action__icon
+ */
+
+/* Block: action */
 .action {
   display: flex;
   flex: 1;
   align-items: center;
-  gap: 10px;
-  padding: 6px;
-  border-radius: 6px;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2);
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: background-color 150ms ease;
+  transition: background-color var(--transition-fast);
   user-select: none;
-  font-size: 14px;
-  color: #1f2937;
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
 }
 
 .action:hover {
-  background-color: #f3f4f6;
+  background-color: var(--bg-hover);
 }
 
-.icon {
+/* Element: action__icon */
+.action__icon {
   width: 20px;
   height: 20px;
-  color: #6b7280;
+  color: var(--text-secondary);
   flex-shrink: 0;
+  transition: color var(--transition-fast);
 }
 
-.action:hover .icon {
-  color: #374151;
+.action:hover .action__icon {
+  color: var(--text-primary);
+}
+
+/* Dark mode */
+:global(.dark) .action {
+  color: var(--text-primary);
+}
+
+:global(.dark) .action:hover {
+  background-color: var(--bg-hover);
 }

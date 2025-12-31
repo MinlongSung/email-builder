@@ -50,7 +50,7 @@ export const BlocksTab = () => {
   };
 
   return (
-    <div className={styles.blocksGrid}>
+    <div className={styles.blocksTab__grid}>
       {BLOCKS_CATALOG.map((block) => (
         <Draggable
           key={block.id}

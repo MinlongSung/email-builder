@@ -22,10 +22,10 @@ export const BlockSidebar: React.FC<BlockSidebarProps> = ({
       style={{ ...style }}
       className={`${styles.blockCard} ${className}`}
     >
-      <div className={styles.iconWrapper}>
+      <div className={styles.blockCard__iconWrapper}>
         {icon}
       </div>
-      <span className={styles.label}>{label}</span>
+      <span className={styles.blockCard__label}>{label}</span>
     </div>
   );
 };

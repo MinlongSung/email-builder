@@ -43,7 +43,7 @@ export const RowsTab = () => {
     historyService.executeCommand(command);
   };
   return (
-    <div className={styles.rowsGrid}>
+    <div className={styles.rowsTab__grid}>
       {ROWS_CATALOG.map((row) => (
         <Draggable
           key={row.id}

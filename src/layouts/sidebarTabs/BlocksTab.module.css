@@ -1,8 +1,14 @@
-.blocksGrid {
-  padding: 12px;
+/**
+ * Blocks Tab Component
+ * BEM naming convention: blocksTab__grid
+ */
+
+/* Element: blocksTab__grid */
+.blocksTab__grid {
+  padding: var(--spacing-3);
   display: grid;
   overflow: auto;
   grid-template-columns: repeat(3, 1fr);
   grid-auto-rows: auto;
-  gap: 12px;
+  gap: var(--spacing-3);
 }

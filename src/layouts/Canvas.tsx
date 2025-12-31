@@ -15,7 +15,7 @@ export const Canvas = ({ template }: { template: Template }) => {
           <table
             ref={setNodeRef}
             width={"100%"}
-            className={styles.rootTemplate}
+            className={styles.canvas__rootTemplate}
           >
             <tbody>
               <tr>

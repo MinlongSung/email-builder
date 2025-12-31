@@ -1,23 +1,30 @@
+/**
+ * Canvas Component
+ * BEM naming convention: canvas, canvas__rootTemplate
+ */
+
+/* Block: canvas */
 .canvas {
   grid-row: 2;
   grid-column: 1;
-  background-color: #f5f5f5;
+  background-color: var(--bg-secondary);
   overflow: auto;
-  padding: 60px;
+  padding: var(--spacing-16);
 }
 
-.rootTemplate {
-  border-radius: 4px;
-  background-color: #ffffff;
-  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+/* Element: canvas__rootTemplate */
+.canvas__rootTemplate {
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-elevated);
+  box-shadow: var(--shadow-2xl);
 }
 
 /* Dark mode */
 :global(.dark) .canvas {
-  background-color: #171717;
+  background-color: var(--color-slate-900);
 }
 
-:global(.dark) .rootTemplate {
-  background-color: #0a0a0a;
+:global(.dark) .canvas__rootTemplate {
+  background-color: var(--bg-secondary);
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.2);
 }

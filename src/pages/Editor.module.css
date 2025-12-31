@@ -1,3 +1,9 @@
+/**
+ * Editor Page Component
+ * BEM naming convention: editor
+ */
+
+/* Block: editor */
 .editor {
   display: grid;
   grid-template-rows: 56px 1fr;

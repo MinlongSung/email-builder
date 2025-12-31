@@ -14,7 +14,7 @@ export const DropPlaceholder: React.FC<DropPlaceholderProps> = ({
   return (
     <div
       className={`${styles.placeholder} ${
-        isOver ? styles.isOver : ""
+        isOver ? styles["placeholder--isOver"] : ""
       } ${className}`}
       role="region"
       aria-label={
@@ -23,12 +23,12 @@ export const DropPlaceholder: React.FC<DropPlaceholderProps> = ({
           : "Empty drop zone - drag items here"
       }
     >
-      <div className={styles.content}>
-        <div className={styles.iconWrapper}>
+      <div className={styles.placeholder__content}>
+        <div className={styles.placeholder__iconWrapper}>
           {isOver ? (
-            <PlaceholderCheck strokeWidth={2.5} className={styles.icon} />
+            <PlaceholderCheck strokeWidth={2.5} className={styles.placeholder__icon} />
           ) : (
-            <PlaceholderArrow className={styles.icon} />
+            <PlaceholderArrow className={styles.placeholder__icon} />
           )}
         </div>
       </div>

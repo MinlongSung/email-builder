@@ -6,18 +6,23 @@ import styles from "./PropertiesPanel.module.css";
 export const PropertiesPanel = () => {
   const selectedId = useUIStore((store) => store.selectedId);
   const getElementById = useCanvasStore((store) => store.getElementById);
-  if (!selectedId) return null;
-  const element = getElementById(selectedId);
+
+  // Get element if selected, otherwise null
+  const element = selectedId ? getElementById(selectedId) : null;
+
+  // Always render the panel, but animate in/out with classes
+  const isOpen = !!element;
 
   return (
     <aside
       className={`${styles.propertiesPanel} ${
-        element ? styles.open : styles.close
+        isOpen ? styles.open : styles.close
       }`}
+      aria-hidden={!isOpen}
     >
       <div className={styles.content}>
         {element &&
-          DRAGGABLES_REGISTRY[element.type].propertiesPanel(element as never)}
+          DRAGGABLES_REGISTRY[element.type].propertiesPanel(element as any)}
       </div>
     </aside>
   );

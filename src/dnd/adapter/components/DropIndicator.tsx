@@ -16,7 +16,7 @@ export const DropIndicator: React.FC<DropIndicatorProps> = React.memo(({
       role="separator"
       aria-label="Drop zone indicator"
     >
-      {label && <span className={styles.label}>{label}</span>}
+      {label && <span className={styles.dropIndicator__label}>{label}</span>}
     </div>
   );
 });
