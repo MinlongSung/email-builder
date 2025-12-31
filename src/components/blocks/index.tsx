@@ -21,21 +21,21 @@ export const DRAGGABLES_REGISTRY: {
   text: {
     interactable: (entity) => <TextBlock block={entity} />,
     sidebar: () => <TextSidebar />,
-    propertiesPanel: (entity) => {
+    propertiesPanel: (_entity) => {
       return <div>{"text"}</div>;
     },
   },
   button: {
     interactable: (entity) => <ButtonBlock block={entity} />,
     sidebar: () => <ButtonSidebar />,
-    propertiesPanel: (entity) => {
+    propertiesPanel: (_entity) => {
       return <div>{"button"}</div>;
     },
   },
   row: {
     interactable: (entity) => <Row row={entity} />,
     sidebar: (entity) => <RowSidebar row={entity} />,
-    propertiesPanel: (entity) => {
+    propertiesPanel: (_entity) => {
       return <div>{"row"}</div>;
     },
   },
