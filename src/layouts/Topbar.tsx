@@ -27,8 +27,7 @@ export function Topbar() {
           <EmailIcon size={20} strokeWidth={2.5} className={styles.logoIcon} />
         </div>
         <div className={styles.titleSection}>
-          <h1 className={styles.title}>Untitled Template</h1>
-          <span className={styles.subtitle}>Email Template Editor</span>
+          <h1 className={styles.title}>Email Template Editor</h1>
         </div>
       </div>
 
