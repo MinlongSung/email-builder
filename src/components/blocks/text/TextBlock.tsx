@@ -5,7 +5,7 @@ import { ProsemirrorPreview } from "@/richtext/adapter/components/ProsemirrorPre
 import type { Editor } from "@/richtext/core/Editor";
 import { historyService } from "@/history/services/historyService";
 import { useDebouncedCallback } from "@/hooks/useDebouncedCallback";
-import { useEditorStore } from "@/stores/useCanvasStore";
+import { useCanvasStore } from "@/stores/useCanvasStore";
 import { useUIStore } from "@/stores/useUIStore";
 
 interface TextBlockProps {
@@ -14,9 +14,9 @@ interface TextBlockProps {
 
 export const TextBlock: React.FC<TextBlockProps> = ({ block }) => {
   const selectedId = useUIStore((store) => store.selectedId);
-  const template = useEditorStore((state) => state.template);
-  const setTemplate = useEditorStore((state) => state.setTemplate);
-  const getBlockCoordinates = useEditorStore(
+  const template = useCanvasStore((state) => state.template);
+  const setTemplate = useCanvasStore((state) => state.setTemplate);
+  const getBlockCoordinates = useCanvasStore(
     (state) => state.getBlockCoordinates
   );
 

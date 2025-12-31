@@ -6,17 +6,17 @@ import type { BlockEntity } from "@/entities/template";
 import { AddBlockCommand } from "@/history/commands/AddBlockCommand";
 import { historyService } from "@/history/services/historyService";
 import styles from "@/layouts/sidebarTabs/BlocksTab.module.css";
-import { useEditorStore } from "@/stores/useCanvasStore";
+import { useCanvasStore } from "@/stores/useCanvasStore";
 import { generateId } from "@/utils/generateId";
 
 export const BlocksTab = () => {
-  const template = useEditorStore((store) => store.template);
-  const setTemplate = useEditorStore((store) => store.setTemplate);
+  const template = useCanvasStore((store) => store.template);
+  const setTemplate = useCanvasStore((store) => store.setTemplate);
 
-  const getColumnCoordinates = useEditorStore(
+  const getColumnCoordinates = useCanvasStore(
     (store) => store.getColumnCoordinates
   );
-  const getBlockCoordinates = useEditorStore(
+  const getBlockCoordinates = useCanvasStore(
     (store) => store.getBlockCoordinates
   );
 

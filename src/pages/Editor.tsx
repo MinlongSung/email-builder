@@ -6,12 +6,12 @@ import { Sidebar } from "@/layouts/Sidebar";
 import { Topbar } from "@/layouts/Topbar";
 import { PropertiesPanel } from "@/layouts/PropertiesPanel";
 import { ProsemirrorProvider } from "@/richtext/adapter/providers/ProsemirrorProvider";
-import { useEditorStore } from "@/stores/useCanvasStore";
+import { useCanvasStore } from "@/stores/useCanvasStore";
 import styles from "@/pages/Editor.module.css";
 
 export function EditorPage() {
-  const setTemplate = useEditorStore((store) => store.setTemplate);
-  const template = useEditorStore((store) => store.template);
+  const setTemplate = useCanvasStore((store) => store.setTemplate);
+  const template = useCanvasStore((store) => store.template);
 
   useEffect(() => {
     setTemplate(exampleTemplate);
