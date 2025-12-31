@@ -86,7 +86,7 @@
   z-index: 2;
   top: 50%;
   transform: translateY(-50%);
-  right: -60px;
+  right: -55px;
   opacity: 0;
   transition: opacity var(--transition-base), transform var(--transition-base);
   pointer-events: none;
@@ -115,8 +115,8 @@
   position: absolute;
   top: 0px;
   right: 0px;
-  height: 65px;
-  width: 65px;
+  height: 60px;
+  width: 60px;
   z-index: -1;
 }
 
@@ -207,8 +207,8 @@
 .menuActions::before {
   content: '';
   position: absolute;
-  top: -6px;
-  right: 20px;
+  top: -7px;
+  right: 16px;
   width: 12px;
   height: 12px;
   background: var(--bg-elevated);
