@@ -1,4 +1,4 @@
-import { forwardRef, useState } from "react";
+import { forwardRef, Fragment, useState } from "react";
 import styles from "./SelectionCard.module.css";
 import { useSelectableElement } from "@/hooks/useSelectableElement";
 import { DotsVerticalIcon } from "@/assets/icons/MenuIcons";
@@ -54,9 +54,7 @@ export const SelectionCardMenu: React.FC<{
 
       <div className={`${styles.menuActions} ${open ? "" : styles.hidden}`}>
         {actions.map((action, i) => (
-          <div key={i} className={styles.menuActionsItem}>
-            {action}
-          </div>
+          <Fragment key={i}>{action}</Fragment>
         ))}
       </div>
     </div>

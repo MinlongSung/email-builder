@@ -187,7 +187,7 @@
   box-shadow: var(--shadow-xl);
   padding: var(--spacing-1);
   position: absolute;
-  right: -9.5px;
+  right: -5px;
   top: 55px;
   z-index: 3;
   backdrop-filter: var(--blur-md);
@@ -209,7 +209,7 @@
   content: '';
   position: absolute;
   top: -7px;
-  right: 23px;
+  right: 18px;
   width: 12px;
   height: 12px;
   background: var(--bg-elevated);
@@ -217,52 +217,6 @@
   border-bottom: none;
   border-right: none;
   transform: rotate(45deg);
-}
-
-.menuActionsItem {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 40px;
-  height: 40px;
-  padding: var(--spacing-2);
-  background: transparent;
-  border: none;
-  border-radius: var(--radius-lg);
-  cursor: pointer;
-  color: var(--text-secondary);
-  transition: all var(--transition-base);
-  position: relative;
-}
-
-.menuActionsItem::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--overlay-subtle);
-  border-radius: inherit;
-  opacity: 0;
-  transition: opacity var(--transition-fast);
-  z-index: -1; /* keep to allow action clicks */
-}
-
-.menuActionsItem:hover::before {
-  opacity: 1;
-}
-
-.menuActionsItem:hover {
-  color: var(--text-primary);
-  transform: scale(1.05);
-}
-
-.menuActionsItem:focus {
-  outline: 2px solid var(--border-focus);
-  outline-offset: 2px;
-}
-
-.menuActionsItem:active {
-  transform: scale(0.95);
 }
 
 /* Hidden State */

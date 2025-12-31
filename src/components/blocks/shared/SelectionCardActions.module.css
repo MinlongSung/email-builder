@@ -5,21 +5,45 @@
 
 /* Block: action */
 .action {
+  position: relative;
   display: flex;
-  flex: 1;
   align-items: center;
-  gap: var(--spacing-2);
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
   padding: var(--spacing-2);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   cursor: pointer;
-  transition: background-color var(--transition-fast);
+  transition: all var(--transition-base);
   user-select: none;
   font-size: var(--font-size-sm);
-  color: var(--text-primary);
+  color: var(--text-secondary);
+  background: transparent;
+  border: none;
+}
+
+.action::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--overlay-subtle);
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  z-index: -1;
+}
+
+.action:hover::before {
+  opacity: 1;
 }
 
 .action:hover {
-  background-color: var(--bg-hover);
+  color: var(--text-primary);
+  transform: scale(1.05);
+}
+
+.action:active {
+  transform: scale(0.95);
 }
 
 /* Element: action__icon */
