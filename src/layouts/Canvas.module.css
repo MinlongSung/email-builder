@@ -33,11 +33,11 @@
 }
 
 /* Reset link styles within email template - emails define their own link colors */
-.canvas__rootTemplate a {
+/* .canvas__rootTemplate a {
   color: initial;
   text-decoration: initial;
   transition: none;
-}
+} */
 
 .canvas__rootTemplate a:hover {
   color: initial;
