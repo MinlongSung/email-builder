@@ -21,10 +21,10 @@
 
 /* Dark mode */
 :global(.dark) .canvas {
-  background-color: var(--color-slate-900);
+  background-color: var(--bg-secondary);
 }
 
 :global(.dark) .canvas__rootTemplate {
-  background-color: var(--bg-secondary);
-  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.2);
+  background-color: var(--bg-elevated);
+  box-shadow: var(--shadow-2xl);
 }

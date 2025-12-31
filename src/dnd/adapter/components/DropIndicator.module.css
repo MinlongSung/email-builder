@@ -12,7 +12,7 @@
   align-items: center;
   justify-content: center;
   position: absolute;
-  z-index: var(--z-indicator);
+  z-index: 2;
 }
 
 /* Element: dropIndicator__label */

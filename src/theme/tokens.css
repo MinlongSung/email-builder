@@ -122,7 +122,6 @@
   /* ===== Z-INDEX ===== */
 
   --z-base: 0;
-  --z-indicator: 200;
   --z-dropdown: 1000;
   --z-sticky: 1100;
   --z-modal: 1300;
@@ -146,8 +145,8 @@
 
   /* ===== LIGHT THEME (DEFAULT) ===== */
 
-  --bg-primary: #ffffff;
-  --bg-secondary: var(--color-slate-50);
+  --bg-primary: var(--color-slate-50);
+  --bg-secondary: #ffffff;
   --bg-tertiary: var(--color-slate-100);
   --bg-hover: var(--color-slate-100);
   --bg-active: var(--color-slate-200);
@@ -183,12 +182,12 @@
 
 /* ===== DARK THEME ===== */
 
-:global(.dark) {
-  --bg-primary: var(--color-slate-950);
-  --bg-secondary: var(--color-slate-900);
-  --bg-tertiary: var(--color-slate-800);
-  --bg-hover: var(--color-slate-800);
-  --bg-active: var(--color-slate-700);
+body.dark {
+  --bg-primary: #0a0a0a;
+  --bg-secondary: var(--color-slate-950);
+  --bg-tertiary: var(--color-slate-900);
+  --bg-hover: var(--color-slate-900);
+  --bg-active: var(--color-slate-800);
   --bg-elevated: var(--color-slate-900);
 
   /* Dark mode gradients */
