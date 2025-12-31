@@ -59,13 +59,14 @@ export const Indentation: Extension<"indentation"> = {
           ...any[]
         ]) ?? ["div", {}, 0];
         const attrs = { ...attrsRaw };
-        const { indentation, dir } = node.attrs as {
+        const { indentation, textDirection } = node.attrs as {
           indentation?: number;
-          dir?: Direction;
+          textDirection?: Direction;
         };
 
         if (indentation) {
-          const side = dir === "rtl" ? "padding-right" : "padding-left";
+          const side =
+            textDirection === "rtl" ? "padding-right" : "padding-left";
           const existingStyle = attrs.style ? `${attrs.style}; ` : "";
           attrs.style = `${existingStyle}${side}: ${indentation}px`;
         }
