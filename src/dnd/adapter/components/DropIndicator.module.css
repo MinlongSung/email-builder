@@ -25,7 +25,7 @@
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   border-radius: var(--radius-full);
-  color: var(--text-inverse);
+  color: #ffffff;
   background-color: var(--accent-primary);
   box-shadow: var(--shadow-md);
 }
