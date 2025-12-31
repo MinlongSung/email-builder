@@ -16,6 +16,7 @@ export const MoveAction = ({ label }: MoveActionProps) => {
       className={styles.action}
       data-drag-handle
       onClick={(e) => e.stopPropagation()}
+      title={label}
     >
       <DragHandleIcon className={styles.icon} />
     </div>
@@ -35,6 +36,7 @@ export function CloneAction({ label, onClick }: CloneActionProps) {
         e.stopPropagation();
         onClick();
       }}
+      title={label}
     >
       <CloneIcon className={styles.icon} />
     </div>
@@ -53,6 +55,7 @@ export function DeleteAction({ label, onClick }: DeleteActionProps) {
         e.stopPropagation();
         onClick();
       }}
+      title={label}
     >
       <DeleteIcon className={styles.icon} />
     </div>
