@@ -1,0 +1,28 @@
+.action {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 10px;
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+  user-select: none;
+  font-size: 14px;
+  color: #1f2937;
+}
+
+.action:hover {
+  background-color: #f3f4f6;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.action:hover .icon {
+  color: #374151;
+}

@@ -1,0 +1,14 @@
+{
+  "blocks": "Blocks",
+  "button": "Button",
+  "drop_here": "Drop here",
+  "drag_rows_here": "Drag rows here",
+  "drag_blocks_here": "Drag blocks here",
+  "row": "Row",
+  "rows": "Rows",
+  "settings": "Settings",
+  "text": "Text",
+  "move": "Move",
+  "clone": "Clone",
+  "delete": "Delete"
+}

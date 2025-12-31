@@ -1,0 +1,68 @@
+.blockCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px 16px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  background-color: #ffffff;
+  cursor: grab;
+  transition: all 150ms ease;
+  width: 100px;
+}
+
+.blockCard:hover {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+}
+
+.blockCard:active {
+  transform: scale(0.98);
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #525252;
+  transition: color 150ms;
+}
+
+.blockCard:hover .iconWrapper {
+  color: #2563eb;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #404040;
+  text-align: center;
+  line-height: 1.2;
+  margin: 0;
+}
+
+/* Dark mode */
+:global(.dark) .blockCard {
+  border-color: #262626;
+  background-color: #0a0a0a;
+}
+
+:global(.dark) .blockCard:hover {
+  border-color: #2563eb;
+  background-color: #1e3a8a;
+}
+
+:global(.dark) .iconWrapper {
+  color: #a3a3a3;
+}
+
+:global(.dark) .blockCard:hover .iconWrapper {
+  color: #60a5fa;
+}
+
+:global(.dark) .label {
+  color: #d4d4d4;
+}

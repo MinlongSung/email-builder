@@ -1,0 +1,65 @@
+.rowCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  background-color: #ffffff;
+  cursor: grab;
+  transition: all 150ms ease;
+  width: 310px;
+}
+
+.rowCard:hover {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+}
+
+
+.preview {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.columnPreview {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.column {
+  height: 25px;
+  background-color: #e5e5e5;
+  border-radius: 4px;
+  transition: background-color 150ms;
+}
+
+.rowCard:hover .column {
+  background-color: #bfdbfe;
+}
+
+
+/* Dark mode */
+:global(.dark) .rowCard {
+  border-color: #262626;
+  background-color: #0a0a0a;
+}
+
+:global(.dark) .rowCard:hover {
+  border-color: #2563eb;
+  background-color: #1e3a8a;
+}
+
+:global(.dark) .column {
+  background-color: #404040;
+}
+
+:global(.dark) .rowCard:hover .column {
+  background-color: #1e40af;
+}

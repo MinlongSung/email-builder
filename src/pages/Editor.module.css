@@ -1,0 +1,7 @@
+.editor {
+  display: grid;
+  grid-template-rows: 56px 1fr;
+  grid-template-columns: minmax(600px, 1fr) minmax(auto, 350px);
+  overflow: hidden;
+  height: 100%;
+}

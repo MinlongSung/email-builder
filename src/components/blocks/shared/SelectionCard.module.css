@@ -1,0 +1,118 @@
+.selectionCard {
+  position: relative;
+}
+
+.highlight {
+  outline: 2px solid #3b82f6;
+  z-index: 1;
+}
+
+.badge {
+  position: absolute;
+  top: -25px;
+  left: -2px;
+  background: #3b82f6;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  z-index: 1;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 0.15);
+}
+
+.selectionCard.selected .badge {
+  background: #2563eb;
+}
+
+.selectionCardMainMenu {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  transform: translateY(-50%);
+  right: -55px;
+}
+
+.selectionCardMainMenu::after {
+  content: "";
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  height: 54px;
+  width: 54px;
+  z-index: -1;
+}
+
+.mainMenuButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 45px;
+  height: 45px;
+  padding: 8px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 150ms ease;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 0.1);
+}
+
+.mainMenuButtonIcon {
+  height: 25px;
+  width: 25px;
+  color: #6b7280;
+}
+
+.mainMenuButton:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+  box-shadow: 0 4px 6px rgb(0 0 0 / 0.1);
+}
+
+.mainMenuButton:active {
+  transform: scale(0.95);
+}
+
+.menuActions {
+  display: flex;
+  flex-direction: row-reverse;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  padding: 4px;
+  position: absolute;
+  right: 0px;
+  top: 54px;
+  z-index: 1;
+}
+
+.menuActionsItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #1f2937;
+  text-align: left;
+  transition: background-color 150ms ease;
+}
+
+.menuActionsItem:hover,
+.menuActionsItem:focus {
+  background: #f3f4f6;
+  outline: none;
+}
+
+.hidden {
+  opacity: 0;
+  display: none;
+}

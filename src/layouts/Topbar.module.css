@@ -1,0 +1,208 @@
+.topbar {
+  grid-row: 1;
+  grid-column: 1 / -1;
+  display: flex;
+  height: 56px;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #e5e5e5;
+  background-color: #ffffff;
+  padding: 0 24px;
+}
+
+.leftSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  display: flex;
+  height: 36px;
+  width: 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+}
+
+.logoIcon {
+  color: #ffffff;
+}
+
+.titleSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #171717;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: #737373;
+}
+
+.centerSection {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 8px;
+  border: 1px solid #e5e5e5;
+  background-color: #fafafa;
+  padding: 4px;
+}
+
+.viewButton {
+  display: flex;
+  height: 32px;
+  width: 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background-color: transparent;
+  border: none;
+  color: #525252;
+  cursor: pointer;
+  transition: all 150ms;
+}
+
+.viewButton:hover {
+  color: #171717;
+}
+
+.viewButton.active {
+  background-color: #ffffff;
+  color: #2563eb;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.languageSelect {
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid #e5e5e5;
+  background-color: #ffffff;
+  padding: 0 12px;
+  font-size: 14px;
+  color: #404040;
+  cursor: pointer;
+  transition: all 150ms;
+  outline: none;
+}
+
+.languageSelect:hover {
+  background-color: #fafafa;
+}
+
+.languageSelect:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 0;
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+  border: 1px solid #e5e5e5;
+  background-color: #ffffff;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #404040;
+  cursor: pointer;
+  transition: all 150ms;
+}
+
+.actionButton:hover {
+  background-color: #fafafa;
+}
+
+.saveButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+  border: none;
+  background-color: #2563eb;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  transition: all 150ms;
+}
+
+.saveButton:hover {
+  background-color: #1d4ed8;
+}
+
+/* Dark mode */
+:global(.dark) .topbar {
+  border-bottom-color: #262626;
+  background-color: #0a0a0a;
+}
+
+:global(.dark) .title {
+  color: #fafafa;
+}
+
+:global(.dark) .subtitle {
+  color: #a3a3a3;
+}
+
+:global(.dark) .centerSection {
+  border-color: #262626;
+  background-color: #171717;
+}
+
+:global(.dark) .viewButton {
+  color: #a3a3a3;
+}
+
+:global(.dark) .viewButton:hover {
+  color: #fafafa;
+}
+
+:global(.dark) .viewButton.active {
+  background-color: #262626;
+  color: #60a5fa;
+}
+
+:global(.dark) .languageSelect {
+  border-color: #262626;
+  background-color: #0a0a0a;
+  color: #d4d4d4;
+}
+
+:global(.dark) .languageSelect:hover {
+  background-color: #171717;
+}
+
+:global(.dark) .actionButton {
+  border-color: #262626;
+  background-color: #0a0a0a;
+  color: #d4d4d4;
+}
+
+:global(.dark) .actionButton:hover {
+  background-color: #171717;
+}
+
+:global(.dark) .saveButton {
+  background-color: #2563eb;
+}
+
+:global(.dark) .saveButton:hover {
+  background-color: #1d4ed8;
+}

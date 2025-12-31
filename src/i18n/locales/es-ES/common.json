@@ -1,0 +1,14 @@
+{
+  "blocks": "Bloques",
+  "button": "Botón",
+  "drag_blocks_here": "Arrastra bloques aquí",
+  "drag_rows_here": "Arrastra filas aquí",
+  "drop_here": "Soltar aquí",
+  "rows": "Filas",
+  "settings": "Configuración",
+  "text": "Texto",
+  "row": "Fila",
+  "move": "Mover",
+  "clone": "Clonar",
+  "delete": "Borrar"
+}

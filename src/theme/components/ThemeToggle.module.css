@@ -1,0 +1,29 @@
+.toggleButton {
+  display: flex;
+  height: 36px;
+  width: 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid #e5e5e5;
+  background-color: transparent;
+  color: #525252;
+  cursor: pointer;
+  transition: all 150ms;
+}
+
+.toggleButton:hover {
+  background-color: #fafafa;
+  color: #171717;
+}
+
+/* Dark mode */
+:global(.dark) .toggleButton {
+  border-color: #262626;
+  color: #a3a3a3;
+}
+
+:global(.dark) .toggleButton:hover {
+  background-color: #171717;
+  color: #fafafa;
+}

@@ -1,0 +1,20 @@
+{
+  "error": "Error",
+  "generic": "An unexpected error occurred",
+  "NETWORK_ERROR": "Internet connection error",
+  "VALIDATION_ERROR": "The entered data is not valid",
+  "UNAUTHORIZED": "You must log in to continue",
+  "FORBIDDEN": "You don't have permission to perform this action",
+  "NOT_FOUND": "The requested resource does not exist",
+  "SERVER_ERROR": "Server error, please try again later",
+  "HTTP_400": "Bad request",
+  "HTTP_401": "Unauthorized",
+  "HTTP_403": "Forbidden",
+  "HTTP_404": "Not found",
+  "HTTP_500": "Internal server error",
+  "HTTP_502": "Bad gateway",
+  "HTTP_503": "Service unavailable",
+  "JS_ERROR": "JavaScript error",
+  "GENERIC_ERROR": "Generic error",
+  "UNKNOWN_ERROR": "Unknown error"
+}
