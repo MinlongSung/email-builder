@@ -21,6 +21,7 @@
   pointer-events: none;
   z-index: var(--z-dropdown);
   padding: var(--spacing-1) var(--spacing-4);
+  font-family: var(--font-sans);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   border-radius: var(--radius-full);
