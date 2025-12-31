@@ -14,13 +14,12 @@ interface TextBlockProps {
 
 export const TextBlock: React.FC<TextBlockProps> = ({ block }) => {
   const selectedId = useUIStore((store) => store.selectedId);
-  const template = useCanvasStore((state) => state.template);
-  const setTemplate = useCanvasStore((state) => state.setTemplate);
-  const getBlockCoordinates = useCanvasStore(
-    (state) => state.getBlockCoordinates
-  );
 
+  // Fix unstable dependencies: access store imperatively inside callback
   const handleUpdate = useDebouncedCallback((editor: Editor) => {
+    const state = useCanvasStore.getState();
+    const { template, setTemplate, getBlockCoordinates } = state;
+
     if (!template) return;
     const blockCoordinates = getBlockCoordinates(block.id);
     if (blockCoordinates === null) return;
