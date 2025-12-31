@@ -26,6 +26,7 @@
   font-weight: var(--font-weight-semibold);
   border-radius: var(--radius-full);
   color: #ffffff;
+  text-transform: uppercase;
   background-color: var(--accent-primary);
   box-shadow: var(--shadow-md);
 }
