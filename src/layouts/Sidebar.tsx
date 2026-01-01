@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import styles from "./Sidebar.module.css";
 import { BlocksTab } from "@/layouts/sidebarTabs/BlocksTab";
 import { RowsTab } from "@/layouts/sidebarTabs/RowsTab";
+import { SettingsTab } from "@/layouts/sidebarTabs/SettingsTab";
 
 type Tab = "blocks" | "rows" | "settings";
 const TABS: Tab[] = ["blocks", "rows", "settings"];
@@ -12,16 +12,12 @@ export function Sidebar() {
   const { t } = useTranslation();
 
   return (
-    <aside
-      className={styles.sidebar}
-    >
-      <div className={styles.tabsList}>
+    <aside className={"sidebar"}>
+      <div className={"tabsList"}>
         {TABS.map((tab) => (
           <button
             key={tab}
-            className={`${styles.tabTrigger} ${
-              activeTab === tab ? styles.active : ""
-            }`}
+            style={{ backgroundColor: activeTab === tab ? "blue" : "" }}
             onClick={() => setActiveTab(tab)}
           >
             {t(tab)}
@@ -30,20 +26,20 @@ export function Sidebar() {
       </div>
 
       {activeTab === "blocks" && (
-        <div className={styles.tabContent}>
+        <div className={"tabContent"}>
           <BlocksTab />
         </div>
       )}
 
       {activeTab === "rows" && (
-        <div className={styles.tabContent}>
+        <div className={"tabContent"}>
           <RowsTab />
         </div>
       )}
 
       {activeTab === "settings" && (
-        <div className={styles.tabContent}>
-          <p>Settings content</p>
+        <div className={"tabContent"}>
+          <SettingsTab />
         </div>
       )}
     </aside>

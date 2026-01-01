@@ -14,6 +14,7 @@ import {
 import { keymap } from "prosemirror-keymap";
 import { percentageColumnResizing } from "@/richtext/core/extensions/nodes/table/plugins/columnResizing";
 import { tableCoordinatesPlugin } from "@/richtext/core/extensions/nodes/table/plugins/tableCoordinates";
+import { cellSelectionPlugin } from "@/richtext/core/extensions/nodes/table/plugins/cellSelection";
 import type { Extension } from "@/richtext/core/types";
 import { TableView } from "@/richtext/core/extensions/nodes/table/nodeViews/TableView";
 import { insertTable } from "@/richtext/core/extensions/nodes/table/utils/insertTable";
@@ -133,6 +134,7 @@ export const Table: Extension<"table"> = {
     tableEditing(),
     percentageColumnResizing(),
     tableCoordinatesPlugin(),
+    cellSelectionPlugin(),
     keymap({
       Tab: goToNextCell(1),
       "Shift-Tab": goToNextCell(-1),

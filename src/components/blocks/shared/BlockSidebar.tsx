@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './BlockSidebar.module.css';
 
 interface BlockSidebarProps {
   icon: React.ReactNode;
@@ -20,12 +19,12 @@ export const BlockSidebar: React.FC<BlockSidebarProps> = ({
       tabIndex={0}
       aria-label={`Draggable ${label} block`}
       style={{ ...style }}
-      className={`${styles.blockCard} ${className}`}
+      className={`${'blockCard'} ${className}`}
     >
-      <div className={styles.blockCard__iconWrapper}>
+      <div className={'blockCard__iconWrapper'}>
         {icon}
       </div>
-      <span className={styles.blockCard__label}>{label}</span>
+      <span className={'blockCard__label'}>{label}</span>
     </div>
   );
 };

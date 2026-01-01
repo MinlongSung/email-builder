@@ -7,7 +7,6 @@ import { Topbar } from "@/layouts/Topbar";
 import { PropertiesPanel } from "@/layouts/PropertiesPanel";
 import { ProsemirrorProvider } from "@/richtext/adapter/providers/ProsemirrorProvider";
 import { useCanvasStore } from "@/stores/useCanvasStore";
-import styles from "@/pages/Editor.module.css";
 
 export function EditorPage() {
   const setTemplate = useCanvasStore((store) => store.setTemplate);
@@ -20,7 +19,7 @@ export function EditorPage() {
   if (!template) return;
 
   return (
-    <div className={styles.editor}>
+    <div className={'editor'}>
       <Topbar />
       <DragAndDropProvider>
         <ProsemirrorProvider>

@@ -1,7 +1,6 @@
 import { forwardRef, Fragment, useState } from "react";
-import styles from "./SelectionCard.module.css";
 import { useSelectableElement } from "@/hooks/useSelectableElement";
-import { DotsVerticalIcon } from "@/assets/icons/MenuIcons";
+import { DotsVerticalIcon } from "@/assets/icons/Icons";
 
 interface SelectionCardProps {
   id: string;
@@ -20,11 +19,11 @@ export const SelectionCard = forwardRef<HTMLDivElement, SelectionCardProps>(
         ref={ref}
         data-no-dismiss
         {...handlers}
-        className={`${styles.selectionCard} ${
-          isHighlighted ? styles.highlight : ""
+        className={`${'selectionCard'} ${
+          isHighlighted ? 'highlight' : ""
         } ${className}`}
       >
-        {isHighlighted && <div className={styles.badge}>{label}</div>}
+        {isHighlighted && <div className={'badge'}>{label}</div>}
 
         {children}
 
@@ -42,17 +41,17 @@ export const SelectionCardMenu: React.FC<{
 
   return (
     <div
-      className={`${styles.selectionCardMainMenu} ${
-        isVisible ? "" : styles.hidden // hide instead of unmount since it cancels drag touch event
+      className={`${'selectionCardMainMenu'} ${
+        isVisible ? "" : 'hidden' // hide instead of unmount since it cancels drag touch event
       }`}
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
-      <div className={styles.mainMenuButton}>
-        <DotsVerticalIcon className={styles.mainMenuButtonIcon} />
+      <div className={'mainMenuButton'}>
+        <DotsVerticalIcon className={'mainMenuButtonIcon'} />
       </div>
 
-      <div className={`${styles.menuActions} ${open ? "" : styles.hidden}`}>
+      <div className={`${'menuActions'} ${open ? "" : 'hidden'}`}>
         {actions.map((action, i) => (
           <Fragment key={i}>{action}</Fragment>
         ))}

@@ -15,17 +15,17 @@ export function useEditorState<T>(options: UseEditorStateOptions<T>): T | null {
 
   // Usar ref para el selector - siempre usa la versión más reciente
   const selectorRef = useRef(selector);
-  selectorRef.current = selector;
 
-  const [state, setState] = useState<T | null>(() =>
-    editor ? selectorRef.current(editor) : null
-  );
+  const [state, setState] = useState<T | null>(null); // ✅ inicial con null
 
   useEffect(() => {
-    if (!editor) {
-      setState(null);
-      return;
-    }
+    selectorRef.current = selector;
+  }, [selector]);
+
+  useEffect(() => {
+    if (!editor) return;
+
+    setState(selectorRef.current(editor));
 
     // Actualizar estado inicial
     setState(selectorRef.current(editor));

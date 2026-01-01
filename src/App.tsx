@@ -1,15 +1,10 @@
 import { EditorPage } from "@/pages/Editor";
-import { ThemeProvider } from "@/theme/providers/ThemeProvider";
-import 'prosemirror-view/style/prosemirror.css';
+import "prosemirror-view/style/prosemirror.css";
 
 import "@/i18n";
 
 function App() {
-  return (
-    <ThemeProvider>
-      <EditorPage />
-    </ThemeProvider>
-  );
+  return <EditorPage />;
 }
 
 export default App;

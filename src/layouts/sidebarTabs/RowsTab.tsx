@@ -5,7 +5,7 @@ import type { DndState } from "@/dnd/core/types";
 import type { RowEntity } from "@/entities/template";
 import { AddRowCommand } from "@/history/commands/AddRowCommand";
 import { historyService } from "@/history/services/historyService";
-import styles from "@/layouts/sidebarTabs/RowsTab.module.css";
+
 import { useCanvasStore } from "@/stores/useCanvasStore";
 import { generateId } from "@/utils/generateId";
 
@@ -43,7 +43,7 @@ export const RowsTab = () => {
     historyService.executeCommand(command);
   };
   return (
-    <div className={styles.rowsTab__grid}>
+    <section className={"rowsTab__grid"}>
       {ROWS_CATALOG.map((row) => (
         <Draggable
           key={row.id}
@@ -60,6 +60,6 @@ export const RowsTab = () => {
           )}
         </Draggable>
       ))}
-    </div>
+    </section>
   );
 };

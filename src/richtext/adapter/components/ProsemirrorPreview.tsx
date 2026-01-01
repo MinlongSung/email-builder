@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import { useProsemirror } from "@/richtext/adapter/hooks/useProsemirror";
-import styles from "./ProsemirrorPreview.module.css";
 
 interface ProsemirrorPreviewProps {
   content: string;
@@ -23,7 +22,7 @@ export const ProsemirrorPreview = ({ content }: ProsemirrorPreviewProps) => {
   return (
     <div
       ref={previewRef}
-      className={`${styles.editorPreview}`}
+      className={`${'editorPreview'}`}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
       dangerouslySetInnerHTML={{ __html: content }}

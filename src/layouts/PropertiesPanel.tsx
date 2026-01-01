@@ -1,7 +1,6 @@
 import { DRAGGABLES_REGISTRY } from "@/components/blocks";
 import { useCanvasStore } from "@/stores/useCanvasStore";
 import { useUIStore } from "@/stores/useUIStore";
-import styles from "./PropertiesPanel.module.css";
 
 export const PropertiesPanel = () => {
   const selectedId = useUIStore((store) => store.selectedId);
@@ -16,12 +15,10 @@ export const PropertiesPanel = () => {
   return (
     <aside
       data-no-dismiss
-      className={`${styles.propertiesPanel} ${
-        isOpen ? styles.open : styles.close
-      }`}
+      className={`${"propertiesPanel"} ${isOpen ? "open" : "close"}`}
       aria-hidden={!isOpen}
     >
-      <div className={styles.content}>
+      <div style={{ display: "flex" }}>
         {element &&
           DRAGGABLES_REGISTRY[element.type].propertiesPanel(element as any)}
       </div>

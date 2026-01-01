@@ -5,7 +5,6 @@ import type { DndState } from "@/dnd/core/types";
 import type { BlockEntity } from "@/entities/template";
 import { AddBlockCommand } from "@/history/commands/AddBlockCommand";
 import { historyService } from "@/history/services/historyService";
-import styles from "@/layouts/sidebarTabs/BlocksTab.module.css";
 import { useCanvasStore } from "@/stores/useCanvasStore";
 import { generateId } from "@/utils/generateId";
 
@@ -50,7 +49,7 @@ export const BlocksTab = () => {
   };
 
   return (
-    <div className={styles.blocksTab__grid}>
+    <section className={"blocksTab__grid"}>
       {BLOCKS_CATALOG.map((block) => (
         <Draggable
           key={block.id}
@@ -67,6 +66,6 @@ export const BlocksTab = () => {
           )}
         </Draggable>
       ))}
-    </div>
+    </section>
   );
 };

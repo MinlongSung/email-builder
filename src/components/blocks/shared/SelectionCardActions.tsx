@@ -1,10 +1,4 @@
-import {
-  DragHandleIcon,
-  CloneIcon,
-  DeleteIcon,
-} from "@/assets/icons/MenuIcons";
-
-import styles from "./SelectionCardActions.module.css";
+import { CloneIcon, DeleteIcon, DragHandleIcon } from "@/assets/icons/Icons";
 
 interface MoveActionProps {
   label: string;
@@ -13,12 +7,12 @@ interface MoveActionProps {
 export const MoveAction = ({ label }: MoveActionProps) => {
   return (
     <div
-      className={styles.action}
+      className={"action"}
       data-drag-handle
       onClick={(e) => e.stopPropagation()}
       title={label}
     >
-      <DragHandleIcon className={styles.action__icon} />
+      <DragHandleIcon className={"action__icon"} />
     </div>
   );
 };
@@ -31,14 +25,14 @@ interface CloneActionProps {
 export function CloneAction({ label, onClick }: CloneActionProps) {
   return (
     <div
-      className={styles.action}
+      className={"action"}
       onClick={(e) => {
         e.stopPropagation();
         onClick();
       }}
       title={label}
     >
-      <CloneIcon className={styles.action__icon} />
+      <CloneIcon className={"action__icon"} />
     </div>
   );
 }
@@ -50,14 +44,14 @@ interface DeleteActionProps {
 export function DeleteAction({ label, onClick }: DeleteActionProps) {
   return (
     <div
-      className={styles.action}
+      className={"action"}
       onClick={(e) => {
         e.stopPropagation();
         onClick();
       }}
       title={label}
     >
-      <DeleteIcon className={styles.action__icon} />
+      <DeleteIcon className={"action__icon"} />
     </div>
   );
 }

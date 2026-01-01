@@ -3,7 +3,7 @@ import { ProsemirrorToolbar } from "@/richtext/adapter/components/toolbar/Prosem
 export const TextPanel = () => {
   return (
     <div>
-      <ProsemirrorToolbar />;
+      <ProsemirrorToolbar />
     </div>
   );
 };
