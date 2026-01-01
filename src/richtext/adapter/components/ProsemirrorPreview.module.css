@@ -1,0 +1,16 @@
+.editorPreview td p:empty::before,
+.editorPreview td h1:empty::before,
+.editorPreview td h2:empty::before,
+.editorPreview td h3:empty::before,
+.editorPreview td h4:empty::before,
+.editorPreview td h5:empty::before,
+.editorPreview td h6:empty::before,
+.editorPreview th p:empty::before,
+.editorPreview th h1:empty::before,
+.editorPreview th h2:empty::before,
+.editorPreview th h3:empty::before,
+.editorPreview th h4:empty::before,
+.editorPreview th h5:empty::before,
+.editorPreview th h6:empty::before {
+    content: '\00a0';
+}
