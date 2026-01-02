@@ -38,6 +38,13 @@ export class AddBlockCommand extends BaseCommand {
     const newTemplate = produce(this.template, (draft) => {
       const column = draft.rows[this.rowIndex].columns[this.columnIndex];
       column.blocks.splice(this.blockIndex, 0, this.block);
+
+      this.metadata.changes = [
+        {
+          previousValue: undefined,
+          newValue: this.block,
+        },
+      ];
     });
 
     this.setTemplate(newTemplate);

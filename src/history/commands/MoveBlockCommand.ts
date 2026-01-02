@@ -46,19 +46,37 @@ export class MoveBlockCommand extends BaseCommand {
       const [block] = blocksFrom.splice(this.fromBlock, 1);
       const blocksTo = draft.rows[this.toRow].columns[this.toCol].blocks;
       blocksTo.splice(this.toBlock, 0, block);
+
+      this.metadata.changes = [
+        {
+          previousValue: {
+            row: this.fromRow,
+            col: this.fromCol,
+            block: this.fromBlock,
+          },
+          newValue: {
+            row: this.toRow,
+            col: this.toCol,
+            block: this.toBlock,
+          },
+        },
+      ];
     });
 
     this.setTemplate(newTemplate);
   }
 
   undo() {
-    if (!this.template) return;
+    if (!this.template || !this.metadata.changes[0]) return;
+
+    const from = this.metadata.changes[0].previousValue;
+    const to = this.metadata.changes[0].newValue;
 
     const newTemplate = produce(this.template, (draft) => {
-      const blocksTo = draft.rows[this.toRow].columns[this.toCol].blocks;
-      const [block] = blocksTo.splice(this.toBlock, 1);
-      const blocksFrom = draft.rows[this.fromRow].columns[this.fromCol].blocks;
-      blocksFrom.splice(this.fromBlock, 0, block);
+      const blocksTo = draft.rows[to.row].columns[to.col].blocks;
+      const [block] = blocksTo.splice(to.block, 1);
+      const blocksFrom = draft.rows[from.row].columns[from.col].blocks;
+      blocksFrom.splice(from.block, 0, block);
     });
 
     this.setTemplate(newTemplate);

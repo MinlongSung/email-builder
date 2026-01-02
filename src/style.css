@@ -115,8 +115,6 @@ p {
 }
 
 .canvas__rootTemplate {
-  /* Fixed white background - emails are designed on white */
-  background-color: #ffffff !important;
 
   /* Complete style reset to prevent editor theme from affecting email */
   color: initial;

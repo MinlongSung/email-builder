@@ -14,7 +14,6 @@ export const exampleTemplate: Template = {
       id: "row-1",
       type: "row",
       style: {
-        backgroundColor: "#f9f9f9",
         padding: "20px",
       },
       separatorSize: 10,
@@ -166,7 +165,6 @@ export const exampleTemplate: Template = {
       id: "row-2",
       type: "row",
       style: {
-        backgroundColor: "#ffffff",
         padding: "20px",
       },
       separatorSize: 10,

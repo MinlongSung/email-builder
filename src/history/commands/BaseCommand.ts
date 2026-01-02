@@ -15,6 +15,7 @@ export abstract class BaseCommand {
       timestamp: Date.now(),
       userId,
       type,
+      changes: [],
     };
   }
 

@@ -42,6 +42,13 @@ export class CloneRowCommand extends BaseCommand {
       };
 
       draft.rows.splice(this.rowIndex + 1, 0, clonedRow);
+
+      this.metadata.changes = [
+        {
+          previousValue: undefined,
+          newValue: clonedRow,
+        },
+      ];
     });
 
     this.setTemplate(newTemplate);

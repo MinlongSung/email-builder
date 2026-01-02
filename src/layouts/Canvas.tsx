@@ -16,6 +16,7 @@ export const Canvas = ({ template }: { template: Template }) => {
             ref={setNodeRef}
             width={"100%"}
             className={"canvas__rootTemplate"}
+            style={template.styles}
           >
             <tbody>
               <tr>

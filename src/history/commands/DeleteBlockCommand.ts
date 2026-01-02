@@ -19,7 +19,6 @@ export class DeleteBlockCommand extends BaseCommand {
   private rowIndex: number;
   private columnIndex: number;
   private blockIndex: number;
-  private deletedBlock: BlockEntity | null = null;
 
   constructor(options: DeleteBlockOptions) {
     super({ type: options.type, userId: options.userId });
@@ -36,7 +35,15 @@ export class DeleteBlockCommand extends BaseCommand {
     const newTemplate = produce(this.template, (draft) => {
       const blocks =
         draft.rows[this.rowIndex].columns[this.columnIndex].blocks;
-      this.deletedBlock = blocks[this.blockIndex];
+      const deletedBlock = blocks[this.blockIndex];
+
+      this.metadata.changes = [
+        {
+          previousValue: deletedBlock,
+          newValue: undefined,
+        },
+      ];
+
       blocks.splice(this.blockIndex, 1);
     });
 
@@ -44,13 +51,15 @@ export class DeleteBlockCommand extends BaseCommand {
   }
 
   undo() {
-    if (!this.deletedBlock || !this.template) return;
+    if (!this.template || !this.metadata.changes[0]) return;
+
+    const deletedBlock = this.metadata.changes[0].previousValue;
 
     const newTemplate = produce(this.template, (draft) => {
       draft.rows[this.rowIndex].columns[this.columnIndex].blocks.splice(
         this.blockIndex,
         0,
-        this.deletedBlock!
+        deletedBlock
       );
     });
 

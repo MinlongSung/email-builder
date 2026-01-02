@@ -31,6 +31,13 @@ export class AddRowCommand extends BaseCommand {
 
     const newTemplate = produce(this.template, (draft) => {
       draft.rows.splice(this.index, 0, this.row);
+
+      this.metadata.changes = [
+        {
+          previousValue: undefined,
+          newValue: this.row,
+        },
+      ];
     });
 
     this.setTemplate(newTemplate);

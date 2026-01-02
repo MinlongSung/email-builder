@@ -9,6 +9,14 @@ export interface TemplateMetadata {
   updatedAt?: string;
 }
 
+
+/**
+ * Template Settings - Configuración de Prosemirror (colores, fuentes, etc.)
+ */
+export interface TemplateSettings {
+  // TODO: agregar configuración de prosemirror (colores de texto, enlaces, cabeceras, etc.)
+}
+
 /**
  * Template - Entidad principal del email
  */
@@ -16,6 +24,8 @@ export interface TemplateEntity {
   id: string;
   name: string;
   metadata: TemplateMetadata;
+  styles?: Record<string, any>;
+  settings?: TemplateSettings;
   rows: RowEntity[];
 }
 

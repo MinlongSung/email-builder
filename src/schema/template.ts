@@ -45,10 +45,21 @@ export const TemplateMetadataSchema = z.object({
   language: z.string().optional(),
 });
 
+export const TemplateStylesSchema = z.object({
+  width: z.number().optional(),
+  style: z.record(z.string(), z.any()).optional(),
+});
+
+export const TemplateSettingsSchema = z.object({
+  // TODO: agregar configuración de prosemirror
+});
+
 export const TemplateSchema = z.object({
   id: z.string(),
   name: z.string(),
   metadata: TemplateMetadataSchema,
+  styles: TemplateStylesSchema.optional(),
+  settings: TemplateSettingsSchema.optional(),
   rows: z.array(RowSchema),
 });
 

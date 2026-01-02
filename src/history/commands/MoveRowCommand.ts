@@ -32,17 +32,27 @@ export class MoveRowCommand extends BaseCommand {
     const newTemplate = produce(this.template, (draft) => {
       const [row] = draft.rows.splice(this.oldIndex, 1);
       draft.rows.splice(this.newIndex, 0, row);
+
+      this.metadata.changes = [
+        {
+          previousValue: this.oldIndex,
+          newValue: this.newIndex,
+        },
+      ];
     });
 
     this.setTemplate(newTemplate);
   }
 
   undo() {
-    if (!this.template) return;
+    if (!this.template || !this.metadata.changes[0]) return;
+
+    const oldIndex = this.metadata.changes[0].previousValue;
+    const newIndex = this.metadata.changes[0].newValue;
 
     const newTemplate = produce(this.template, (draft) => {
-      const [row] = draft.rows.splice(this.newIndex, 1);
-      draft.rows.splice(this.oldIndex, 0, row);
+      const [row] = draft.rows.splice(newIndex, 1);
+      draft.rows.splice(oldIndex, 0, row);
     });
 
     this.setTemplate(newTemplate);

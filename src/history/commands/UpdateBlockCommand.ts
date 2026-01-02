@@ -21,7 +21,6 @@ export class UpdateBlockCommand extends BaseCommand {
   private columnIndex: number;
   private blockIndex: number;
   private updates: Partial<BlockEntity>;
-  private previous: BlockEntity | null = null;
 
   constructor(options: UpdateBlockOptions) {
     super({ type: options.type, userId: options.userId });
@@ -42,22 +41,32 @@ export class UpdateBlockCommand extends BaseCommand {
           this.blockIndex
         ];
 
-      // Guardar estado anterior usando Immer
-      this.previous = produce(block, () => {});
+      // Store previous state
+      const previousBlock = produce(block, () => {});
 
+      // Apply updates
       Object.assign(block, this.updates);
+
+      this.metadata.changes = [
+        {
+          previousValue: previousBlock,
+          newValue: { ...block },
+        },
+      ];
     });
 
     this.setTemplate(newTemplate);
   }
 
   undo() {
-    if (!this.previous || !this.template) return;
+    if (!this.template || !this.metadata.changes[0]) return;
+
+    const previousBlock = this.metadata.changes[0].previousValue;
 
     const newTemplate = produce(this.template, (draft) => {
       draft.rows[this.rowIndex].columns[this.columnIndex].blocks[
         this.blockIndex
-      ] = this.previous!;
+      ] = previousBlock;
     });
 
     this.setTemplate(newTemplate);

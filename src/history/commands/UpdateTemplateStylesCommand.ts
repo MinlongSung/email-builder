@@ -1,42 +1,50 @@
 import { produce } from "immer";
 import { BaseCommand } from "@/history/commands/BaseCommand";
-import type { CommandType } from "@/history/types";
 import type { TemplateEntity } from "@/entities/template";
+import type { Change, CommandType } from "../types";
 
-interface DeleteRowOptions {
+interface UpdateTemplateStylesOptions {
   template: TemplateEntity | null;
   setTemplate: (t: TemplateEntity) => void;
-  rowIndex: number;
+  styles: Record<string, any>;
   type: CommandType;
   userId?: string;
 }
 
-export class DeleteRowCommand extends BaseCommand {
+export class UpdateTemplateStylesCommand extends BaseCommand {
   private template: TemplateEntity | null;
   private setTemplate: (t: TemplateEntity) => void;
-  private rowIndex: number;
+  private styles: Record<string, any>;
 
-  constructor(options: DeleteRowOptions) {
+  constructor(options: UpdateTemplateStylesOptions) {
     super({ type: options.type, userId: options.userId });
     this.template = options.template;
     this.setTemplate = options.setTemplate;
-    this.rowIndex = options.rowIndex;
+    this.styles = options.styles;
   }
 
   execute() {
     if (!this.template) return;
 
     const newTemplate = produce(this.template, (draft) => {
-      const deletedRow = draft.rows[this.rowIndex];
+      // Initialize styles if not exists
+      if (!draft.styles) {
+        draft.styles = {};
+      }
 
+      // Store previous state
+      const previousStyles = { ...draft.styles };
+
+      // Update styles
+      Object.assign(draft.styles, this.styles);
+
+      // Store changes in metadata
       this.metadata.changes = [
         {
-          previousValue: deletedRow,
-          newValue: undefined,
+          previousValue: previousStyles,
+          newValue: { ...draft.styles },
         },
       ];
-
-      draft.rows.splice(this.rowIndex, 1);
     });
 
     this.setTemplate(newTemplate);
@@ -45,10 +53,8 @@ export class DeleteRowCommand extends BaseCommand {
   undo() {
     if (!this.template || !this.metadata.changes[0]) return;
 
-    const deletedRow = this.metadata.changes[0].previousValue;
-
     const newTemplate = produce(this.template, (draft) => {
-      draft.rows.splice(this.rowIndex, 0, deletedRow);
+      draft.styles = this.metadata.changes[0].previousValue;
     });
 
     this.setTemplate(newTemplate);

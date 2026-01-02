@@ -20,7 +20,6 @@ export class CloneBlockCommand extends BaseCommand {
   private rowIndex: number;
   private columnIndex: number;
   private blockIndex: number;
-  private clonedBlockId: string | null = null;
 
   constructor(options: CloneBlockOptions) {
     super({ type: options.type, userId: options.userId });
@@ -40,25 +39,33 @@ export class CloneBlockCommand extends BaseCommand {
           this.blockIndex
         ];
       const clonedBlock: BlockEntity = { ...block, id: generateId() };
-      this.clonedBlockId = clonedBlock.id;
 
       draft.rows[this.rowIndex].columns[this.columnIndex].blocks.splice(
         this.blockIndex + 1,
         0,
         clonedBlock
       );
+
+      this.metadata.changes = [
+        {
+          previousValue: undefined,
+          newValue: clonedBlock,
+        },
+      ];
     });
 
     this.setTemplate(newTemplate);
   }
 
   undo() {
-    if (!this.clonedBlockId || !this.template) return;
+    if (!this.template || !this.metadata.changes[0]) return;
+
+    const clonedBlock = this.metadata.changes[0].newValue;
 
     const newTemplate = produce(this.template, (draft) => {
       const blocks =
         draft.rows[this.rowIndex].columns[this.columnIndex].blocks;
-      const index = blocks.findIndex((b) => b.id === this.clonedBlockId);
+      const index = blocks.findIndex((b) => b.id === clonedBlock.id);
       if (index >= 0) blocks.splice(index, 1);
     });
 
