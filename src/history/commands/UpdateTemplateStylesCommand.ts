@@ -1,7 +1,7 @@
 import { produce } from "immer";
 import { BaseCommand } from "@/history/commands/BaseCommand";
 import type { TemplateEntity } from "@/entities/template";
-import type { Change, CommandType } from "../types";
+import type { CommandType } from "../types";
 
 interface UpdateTemplateStylesOptions {
   template: TemplateEntity | null;
