@@ -31,7 +31,6 @@ export const BLOCKS_CATALOG: BlockEntity[] = [
     style: {
       fontSize: "16px",
       color: "#000000",
-      margin: "10px 0",
     },
   },
   {

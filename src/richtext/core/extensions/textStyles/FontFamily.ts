@@ -1,18 +1,22 @@
 import type { DOMOutputSpec } from "prosemirror-model";
 import type { Extension } from "@/richtext/core/types";
 import { traverseInRange } from "@/richtext/core/extensions/utils/traverseInRange";
-import { isParagraphOrHeading } from "@/richtext/core/extensions/utils/isParagraphOrHeading";
+import { isParagraphOrHeading } from "@/richtext/core/extensions/utils/textNodeChecks";
+import type { GlobalConfig, Predicate } from "@/richtext/core/extensions/types";
+import type { Level } from "@/richtext/core/extensions/nodes/Heading";
 
 declare module "@/richtext/core/types" {
   interface Commands<ReturnType> {
     fontFamily: {
       setFontFamily: (fontFamily: string) => ReturnType;
-      unsetFontFamily: () => ReturnType;
+      unsetFontFamily: (options: { predicate?: Predicate }) => ReturnType;
     };
   }
 }
 
-export const FontFamily: Extension<"fontFamily"> = {
+export const FontFamily = (
+  config: GlobalConfig = {}
+): Extension<"fontFamily"> => ({
   name: "fontFamily",
 
   marks: {
@@ -64,7 +68,16 @@ export const FontFamily: Extension<"fontFamily"> = {
           ...any[]
         ]) ?? ["div", {}, 0];
         const attrs = { ...attrsRaw };
-        const fontFamily = node.attrs.fontFamily;
+
+        // Determine fontFamily based on node type
+        let fontFamily = node.attrs.fontFamily;
+
+        if (!fontFamily && nodeName === "paragraph") {
+          fontFamily = config.paragraph;
+        } else if (!fontFamily && nodeName === "heading") {
+          const level = node.attrs.level as Level;
+          fontFamily = config.heading?.[level];
+        }
 
         if (fontFamily) {
           const existingStyle = attrs.style ?? "";
@@ -106,7 +119,7 @@ export const FontFamily: Extension<"fontFamily"> = {
           from,
           to,
           includeMarks: true,
-          predicate: ({ mark, node }) =>
+          predicate: ({ node, mark }) =>
             mark?.type.name === "fontFamily" || isParagraphOrHeading(node),
           callback: ({ mark, node, pos }) => {
             if (mark) {
@@ -157,7 +170,7 @@ export const FontFamily: Extension<"fontFamily"> = {
           from,
           to,
           includeMarks: true,
-          predicate: ({ mark, node }) =>
+          predicate: ({ node, mark }) =>
             mark?.type.name === "fontFamily" || isParagraphOrHeading(node),
           callback: ({ mark, node, pos }) => {
             if (mark) {
@@ -185,4 +198,4 @@ export const FontFamily: Extension<"fontFamily"> = {
         return changed;
       },
   }),
-};
+});

@@ -1,16 +1,16 @@
+import { AddRowCommand } from "@/commands/rows/AddRowCommand";
 import { DRAGGABLES_REGISTRY } from "@/components/blocks";
 import { ROWS_CATALOG } from "@/data/rowsCatalog";
 import { Draggable } from "@/dnd/adapter/components/Draggable";
 import type { DndState } from "@/dnd/core/types";
 import type { RowEntity } from "@/entities/template";
-import { AddRowCommand } from "@/history/commands/AddRowCommand";
 import { historyService } from "@/history/services/historyService";
 
 import { useCanvasStore } from "@/stores/useCanvasStore";
 import { generateId } from "@/utils/generateId";
 
 export const RowsTab = () => {
-  const template = useCanvasStore((store) => store.template);
+  const getTemplate = useCanvasStore((store) => store.getTemplate);
   const setTemplate = useCanvasStore((store) => store.setTemplate);
   const getRowCoordinates = useCanvasStore((store) => store.getRowCoordinates);
 
@@ -34,13 +34,17 @@ export const RowsTab = () => {
     index += state.isTopHalf ? 0 : 1;
 
     const command = new AddRowCommand({
-      template,
+      getTemplate,
       setTemplate,
-      row: newRow,
+      sourceRow,
       index,
-      type: "row.add",
+      generateId,
     });
-    historyService.executeCommand(command);
+    historyService.executeCommand(command, {
+      id: generateId(),
+      type: "row.add",
+      timestamp: Date.now(),
+    });
   };
   return (
     <section className={"rowsTab__grid"}>

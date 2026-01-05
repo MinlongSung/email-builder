@@ -3,13 +3,18 @@ import { BLOCKS_CATALOG } from "@/data/blocksCatalog";
 import { Draggable } from "@/dnd/adapter/components/Draggable";
 import type { DndState } from "@/dnd/core/types";
 import type { BlockEntity } from "@/entities/template";
-import { AddBlockCommand } from "@/history/commands/AddBlockCommand";
-import { historyService } from "@/history/services/historyService";
+
 import { useCanvasStore } from "@/stores/useCanvasStore";
 import { generateId } from "@/utils/generateId";
 
+import { AddBlockCommand } from "@/commands/blocks/AddBlockCommand";
+import { historyService } from "@/history/services/historyService";
+import { applyStylesToContent } from "@/richtext/adapter/utils/applyGlobalStyles";
+import { getOrCreateGlobalEditor } from "@/richtext/adapter/utils/globalEditor";
+import { isParagraph } from "@/richtext/core/extensions/utils/textNodeChecks";
+
 export const BlocksTab = () => {
-  const template = useCanvasStore((store) => store.template);
+  const getTemplate = useCanvasStore((store) => store.getTemplate);
   const setTemplate = useCanvasStore((store) => store.setTemplate);
 
   const getColumnCoordinates = useCanvasStore(
@@ -20,12 +25,9 @@ export const BlocksTab = () => {
   );
 
   const handleAdd = (state: DndState) => {
-    if (!state.dragged || !state.droppedOn) return;
+    const template = getTemplate();
+    if (!state.dragged || !state.droppedOn || !template) return;
     const sourceBlock = state.dragged.data.item as BlockEntity;
-    const newBlock: BlockEntity = {
-      ...sourceBlock,
-      id: generateId(),
-    };
 
     let coords = getBlockCoordinates(state.droppedOn.id);
     if (!coords) {
@@ -36,16 +38,104 @@ export const BlocksTab = () => {
 
     coords.blockIndex += state.isTopHalf ? 0 : 1;
 
-    const command = new AddBlockCommand({
-      template,
+    const addCommand = new AddBlockCommand({
+      getTemplate,
       setTemplate,
-      block: newBlock,
+      sourceBlock,
       rowIndex: coords.rowIndex,
       columnIndex: coords.columnIndex,
       blockIndex: coords.blockIndex,
-      type: "block.add",
+      generateId,
+      onBeforeAdd: (block) => {
+        // Aplicar estilos globales según el tipo de bloque
+        if (block.type === "text") {
+          // Aplicar estilos globales al contenido del bloque de texto
+          const newContent = applyStylesToContent({
+            content: block.content,
+            editor: getOrCreateGlobalEditor(template),
+            predicate: ({ node }) => isParagraph(node),
+            callback: ({ node, pos, mark, state }, tr) => {
+              const { fontFamily, fontSize, lineHeight, letterSpacing, color } =
+                template.settings.paragraph;
+
+              tr.setNodeMarkup(pos, undefined, {
+                ...node.attrs,
+                fontFamily: fontFamily ?? node.attrs.fontFamily,
+                fontSize: fontSize ?? node.attrs.fontSize,
+                lineHeight: lineHeight ?? node.attrs.lineHeight,
+                letterSpacing: letterSpacing ?? node.attrs.letterSpacing,
+                color: color ?? node.attrs.color,
+              });
+
+              if (mark) {
+                const linkType = state.schema.marks.link;
+                const start = pos;
+                const end = pos + node.nodeSize;
+                tr.removeMark(start, end, linkType);
+                tr.addMark(
+                  start,
+                  end,
+                  linkType.create({
+                    ...mark.attrs,
+                    color: template.settings.link.color ?? mark.attrs.color,
+                    isUnderlined:
+                      template.settings.link.isUnderlined ??
+                      mark.attrs.isUnderlined,
+                  })
+                );
+              }
+            },
+          });
+
+          return newContent ? { ...block, content: newContent } : block;
+        }  
+        
+        // if (block.type === "button") {
+        //   // Aplicar estilos globales al contenido del bloque de botón
+        //   const newContent = applyStylesToContent({
+        //     content: block.content,
+        //     editor: getOrCreateGlobalEditor(template),
+        //     predicate: ({ node }) => node?.type.name === "emailButton",
+        //     callback: ({ node, pos }, tr) => {
+        //       const {
+        //         fontFamily,
+        //         fontSize,
+        //         lineHeight,
+        //         letterSpacing,
+        //         color,
+        //         backgroundColor,
+        //         padding,
+        //         borderRadius,
+        //         border,
+        //       } = template.settings.button;
+
+        //       tr.setNodeMarkup(pos, undefined, {
+        //         ...node.attrs,
+        //         fontFamily: fontFamily ?? node.attrs.fontFamily,
+        //         fontSize: fontSize ?? node.attrs.fontSize,
+        //         lineHeight: lineHeight ?? node.attrs.lineHeight,
+        //         letterSpacing: letterSpacing ?? node.attrs.letterSpacing,
+        //         color: color ?? node.attrs.color,
+        //         backgroundColor: backgroundColor ?? node.attrs.backgroundColor,
+        //         padding: padding ?? node.attrs.padding,
+        //         borderRadius: borderRadius ?? node.attrs.borderRadius,
+        //         border: border ?? node.attrs.border,
+        //       });
+        //     },
+        //   });
+
+        //   return newContent ? { ...block, content: newContent } : block;
+        // }
+
+        return block;
+      },
     });
-    historyService.executeCommand(command);
+
+    historyService.executeCommand(addCommand, {
+      id: generateId(),
+      type: "block.add",
+      timestamp: Date.now(),
+    });
   };
 
   return (

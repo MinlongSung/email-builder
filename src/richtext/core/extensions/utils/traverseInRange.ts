@@ -1,4 +1,7 @@
-import type { SelectionContext, TraverseOptions } from "@/richtext/core/extensions/types";
+import type {
+  SelectionContext,
+  TraverseOptions,
+} from "@/richtext/core/extensions/types";
 
 export function traverseInRange({
   state,
@@ -14,6 +17,7 @@ export function traverseInRange({
     const baseContext: SelectionContext = {
       node,
       pos,
+      state,
       parent: parent ?? undefined,
       depth: $pos.depth,
       $pos,

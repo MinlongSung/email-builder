@@ -1,12 +1,31 @@
-import type { Template } from "@/schema/template";
+import type { TemplateEntity } from "@/entities/template";
 
-export const exampleTemplate: Template = {
+export const exampleTemplate: TemplateEntity = {
   id: "root-uid",
   name: "Demo Email Multi-Row",
   metadata: {
     createdBy: "admin",
     createdAt: new Date().toISOString(),
     language: "es",
+  },
+  styles: {},
+  settings: {
+    paragraph: {
+      fontSize: "13px",
+      color: "red",
+      fontFamily: "arial",
+    },
+    link: {},
+    heading: {
+      level: {
+        1: {},
+        2: {},
+        3: {},
+        4: {},
+        5: {},
+        6: {},
+      },
+    },
   },
   rows: [
     // Fila 1 - 2 columnas

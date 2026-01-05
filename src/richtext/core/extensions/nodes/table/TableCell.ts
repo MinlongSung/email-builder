@@ -15,9 +15,13 @@ export const TableCell: Extension = {
         rowspan: { default: 1 },
         colwidth: { default: null },
         backgroundColor: { default: null },
-        borderWidth: { default: 1 },
-        borderStyle: { default: "solid" },
-        borderColor: { default: "#000000" },
+        border: {
+          default: {
+            width: "1px",
+            style: "solid",
+            color: "#000000",
+          },
+        },
       },
       parseDOM: [
         {

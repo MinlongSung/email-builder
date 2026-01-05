@@ -1,3 +1,5 @@
+import type { Level } from "@/richtext/core/extensions/nodes/Heading";
+
 /**
  * Template Metadata
  */
@@ -9,12 +11,27 @@ export interface TemplateMetadata {
   updatedAt?: string;
 }
 
-
 /**
  * Template Settings - Configuración de Prosemirror (colores, fuentes, etc.)
  */
+
+interface TextStyle {
+  fontFamily?: string;
+  color?: string;
+  letterSpacing?: string;
+  fontSize?: string;
+  lineHeight?: string;
+}
+
 export interface TemplateSettings {
-  // TODO: agregar configuración de prosemirror (colores de texto, enlaces, cabeceras, etc.)
+  paragraph: TextStyle;
+  link: {
+    color?: string;
+    isUnderlined?: boolean;
+  };
+  heading: {
+    level: Record<Level, TextStyle>;
+  };
 }
 
 /**
@@ -25,7 +42,7 @@ export interface TemplateEntity {
   name: string;
   metadata: TemplateMetadata;
   styles?: Record<string, any>;
-  settings?: TemplateSettings;
+  settings: TemplateSettings;
   rows: RowEntity[];
 }
 

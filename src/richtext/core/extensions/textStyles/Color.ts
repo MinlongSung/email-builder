@@ -1,9 +1,10 @@
-import type { DOMOutputSpec, Node } from "prosemirror-model";
+import type { DOMOutputSpec, Mark, Node } from "prosemirror-model";
 import type { Extension } from "@/richtext/core/types";
 import { traverseInRange } from "@/richtext/core/extensions/utils/traverseInRange";
-import { isParagraphOrHeading } from "@/richtext/core/extensions/utils/isParagraphOrHeading";
+import { isParagraphOrHeading } from "@/richtext/core/extensions/utils/textNodeChecks";
 import { parseColorFromStyle } from "@/richtext/core/extensions/utils/parseColorFromStyle";
-
+import type { GlobalConfig } from "@/richtext/core/extensions/types";
+import type { Level } from "@/richtext/core/extensions/nodes/Heading";
 declare module "@/richtext/core/types" {
   interface Commands<ReturnType> {
     color: {
@@ -13,7 +14,7 @@ declare module "@/richtext/core/types" {
   }
 }
 
-export const Color: Extension<"color"> = {
+export const Color = (config: GlobalConfig = {}): Extension<"color"> => ({
   name: "color",
   marks: {
     color: {
@@ -31,10 +32,12 @@ export const Color: Extension<"color"> = {
     },
   },
   extendNodes: (nodes) => {
-    ["paragraph", "heading"].forEach((name) => {
-      const nodeSpec = nodes[name];
+    ["paragraph", "heading"].forEach((nodeName) => {
+      const nodeSpec = nodes[nodeName];
       if (!nodeSpec) return;
+
       nodeSpec.attrs = { ...nodeSpec.attrs, color: { default: null } };
+
       const originalToDOM = nodeSpec.toDOM;
       nodeSpec.toDOM = (node: Node) => {
         const [tag, attrsRaw, ...content] = (originalToDOM?.(node) as [
@@ -43,17 +46,62 @@ export const Color: Extension<"color"> = {
           ...any[]
         ]) ?? ["div", {}, 0];
         const attrs = { ...attrsRaw };
-        const color = node.attrs.color;
+
+        // Determine color based on node type
+        let color = node.attrs.color;
+
+        if (!color && nodeName === "paragraph") {
+          color = config.paragraph;
+        } else if (!color && nodeName === "heading") {
+          const level = node.attrs.level as Level;
+          color = config.heading?.[level];
+        }
+
         if (color) {
           attrs.style = attrs.style
             ? `${attrs.style}; color: ${color}`
             : `color: ${color}`;
         }
+
         return [tag, attrs, ...content] as DOMOutputSpec;
       };
     });
     return nodes;
   },
+
+  extendMarks: (marks) => {
+    ["link"].forEach((markName) => {
+      const markSpec = marks[markName];
+      if (!markSpec) return;
+
+      markSpec.attrs = { ...markSpec.attrs, color: { default: null } };
+
+      const originalToDOM = markSpec.toDOM;
+      markSpec.toDOM = (mark: Mark, inline: boolean) => {
+        const [tag, attrsRaw, ...content] = (originalToDOM?.(mark, inline) as [
+          string,
+          Record<string, any>,
+          ...any[]
+        ]) ?? ["a", {}, 0];
+        const attrs = { ...attrsRaw };
+        let color = mark.attrs.color;
+        if (!color && markName === "link") {
+          color = config.link;
+        }
+        
+        if (color) {
+          attrs.style = attrs.style
+            ? `${attrs.style}; color: ${color}`
+            : `color: ${color}`;
+        }
+
+        return [tag, attrs, ...content] as DOMOutputSpec;
+      };
+    });
+
+    return marks;
+  },
+
   commands: () => ({
     setColor:
       (color) =>
@@ -78,7 +126,7 @@ export const Color: Extension<"color"> = {
           from,
           to,
           includeMarks: true,
-          predicate: ({ mark, node }) =>
+          predicate: ({ node, mark }) =>
             mark?.type.name === "color" || isParagraphOrHeading(node),
           callback: ({ mark, node, pos }) => {
             if (mark) {
@@ -126,7 +174,7 @@ export const Color: Extension<"color"> = {
           from,
           to,
           includeMarks: true,
-          predicate: ({ mark, node }) =>
+          predicate: ({ node, mark }) =>
             mark?.type.name === "color" || isParagraphOrHeading(node),
           callback: ({ mark, node, pos }) => {
             if (mark) {
@@ -151,4 +199,4 @@ export const Color: Extension<"color"> = {
         return changed;
       },
   }),
-};
+});

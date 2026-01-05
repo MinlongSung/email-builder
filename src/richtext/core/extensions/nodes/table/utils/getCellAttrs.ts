@@ -31,7 +31,7 @@ export function getCellAttrs(dom: HTMLElement): CellAttrs {
   }
 
   const backgroundColor = parseColorFromStyle(dom, "background-color");
-  const borderWidth = parseInt(dom.style.borderWidth) || 1;
+  const borderWidth = dom.style.borderWidth || "1px";
   const borderStyle = dom.style.borderStyle || "solid";
   const borderColor = parseColorFromStyle(dom, "border-color") || "#000000";
 
@@ -40,8 +40,10 @@ export function getCellAttrs(dom: HTMLElement): CellAttrs {
     rowspan,
     colwidth,
     backgroundColor,
-    borderWidth,
-    borderStyle,
-    borderColor,
+    border: {
+      width: borderWidth,
+      style: borderStyle,
+      color: borderColor,
+    },
   };
 }

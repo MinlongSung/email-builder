@@ -20,6 +20,7 @@ export function traverseInRangeRecursively(options: TraverseOptions) {
     const baseContext: SelectionContext = {
       node,
       pos,
+      state,
       parent,
       depth: $pos.depth,
       $pos,

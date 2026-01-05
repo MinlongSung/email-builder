@@ -1,18 +1,22 @@
 import type { DOMOutputSpec } from "prosemirror-model";
 import type { Extension } from "@/richtext/core/types";
 import { traverseInRange } from "@/richtext/core/extensions/utils/traverseInRange";
-import { isParagraphOrHeading } from "@/richtext/core/extensions/utils/isParagraphOrHeading";
+import { isParagraphOrHeading } from "@/richtext/core/extensions/utils/textNodeChecks";
+import type { GlobalConfig } from "@/richtext/core/extensions/types";
+import type { Level } from "@/richtext/core/extensions/nodes/Heading";
 
 declare module "@/richtext/core/types" {
   interface Commands<ReturnType> {
     letterSpacing: {
-      setLetterSpacing: (value: string) => ReturnType;
+      setLetterSpacing: (letterSpacing: string) => ReturnType;
       unsetLetterSpacing: () => ReturnType;
     };
   }
 }
 
-export const LetterSpacing: Extension<"letterSpacing"> = {
+export const LetterSpacing = (
+  config: GlobalConfig = {}
+): Extension<"letterSpacing"> => ({
   name: "letterSpacing",
 
   marks: {
@@ -61,13 +65,24 @@ export const LetterSpacing: Extension<"letterSpacing"> = {
           ...any[]
         ]) ?? ["div", {}, 0];
         const attrs = { ...attrsRaw };
-        const value = node.attrs.letterSpacing;
-        if (value) {
+
+        // Determine letterSpacing based on node type
+        let letterSpacing = node.attrs.letterSpacing;
+
+        if (!letterSpacing && nodeName === "paragraph") {
+          letterSpacing = config.paragraph;
+        } else if (!letterSpacing && nodeName === "heading") {
+          const level = node.attrs.level as Level;
+          letterSpacing = config.heading?.[level];
+        }
+
+        if (letterSpacing) {
           const existingStyle = attrs.style ?? "";
           attrs.style = existingStyle
-            ? `${existingStyle}; letter-spacing: ${value}`
-            : `letter-spacing: ${value}`;
+            ? `${existingStyle}; letter-spacing: ${letterSpacing}`
+            : `letter-spacing: ${letterSpacing}`;
         }
+
         return [tag, attrs, ...content] as DOMOutputSpec;
       };
     });
@@ -77,14 +92,14 @@ export const LetterSpacing: Extension<"letterSpacing"> = {
 
   commands: () => ({
     setLetterSpacing:
-      (value: string) =>
+      (letterSpacing) =>
       ({ state, dispatch, tr }) => {
         const { from, to, empty } = state.selection;
         const markType = state.schema.marks.letterSpacing;
         if (!markType) return false;
 
         if (!empty) {
-          tr.addMark(from, to, markType.create({ letterSpacing: value }));
+          tr.addMark(from, to, markType.create({ letterSpacing }));
           dispatch?.(tr);
           return true;
         }
@@ -107,23 +122,19 @@ export const LetterSpacing: Extension<"letterSpacing"> = {
             if (mark) {
               const start = pos;
               const end = pos + node.nodeSize;
-              if (node.attrs.letterSpacing !== value) {
+              if (node.attrs.letterSpacing !== letterSpacing) {
                 tr.removeMark(start, end, markType);
-                tr.addMark(
-                  start,
-                  end,
-                  markType.create({ letterSpacing: value })
-                );
+                tr.addMark(start, end, markType.create({ letterSpacing }));
                 changed = true;
               }
             }
 
             if (letterSpacingMark) return;
 
-            if (node.attrs.letterSpacing !== value) {
+            if (node.attrs.letterSpacing !== letterSpacing) {
               tr.setNodeMarkup(pos, undefined, {
                 ...node.attrs,
-                letterSpacing: value,
+                letterSpacing,
               });
               changed = true;
             }
@@ -187,4 +198,4 @@ export const LetterSpacing: Extension<"letterSpacing"> = {
         return changed;
       },
   }),
-};
+});

@@ -1,18 +1,22 @@
 import type { DOMOutputSpec } from "prosemirror-model";
 import type { Extension } from "@/richtext/core/types";
 import { traverseInRange } from "@/richtext/core/extensions/utils/traverseInRange";
-import { isParagraphOrHeading } from "@/richtext/core/extensions/utils/isParagraphOrHeading";
+import { isParagraphOrHeading } from "@/richtext/core/extensions/utils/textNodeChecks";
+import type { GlobalConfig } from "@/richtext/core/extensions/types";
+import type { Level } from "@/richtext/core/extensions/nodes/Heading";
 
 declare module "@/richtext/core/types" {
   interface Commands<ReturnType> {
     lineHeight: {
-      setLineHeight: (value: string) => ReturnType;
+      setLineHeight: (lineHeight: string) => ReturnType;
       unsetLineHeight: () => ReturnType;
     };
   }
 }
 
-export const LineHeight: Extension<"lineHeight"> = {
+export const LineHeight = (
+  config: GlobalConfig = {}
+): Extension<"lineHeight"> => ({
   name: "lineHeight",
 
   marks: {
@@ -61,13 +65,24 @@ export const LineHeight: Extension<"lineHeight"> = {
           ...any[]
         ]) ?? ["div", {}, 0];
         const attrs = { ...attrsRaw };
-        const value = node.attrs.lineHeight;
-        if (value) {
+
+        // Determine lineHeight based on node type
+        let lineHeight = node.attrs.lineHeight;
+
+        if (!lineHeight && nodeName === "paragraph") {
+          lineHeight = config.paragraph;
+        } else if (!lineHeight && nodeName === "heading") {
+          const level = node.attrs.level as Level;
+          lineHeight = config.heading?.[level];
+        }
+
+        if (lineHeight) {
           const existingStyle = attrs.style ?? "";
           attrs.style = existingStyle
-            ? `${existingStyle}; line-height: ${value}`
-            : `line-height: ${value}`;
+            ? `${existingStyle}; line-height: ${lineHeight}`
+            : `line-height: ${lineHeight}`;
         }
+
         return [tag, attrs, ...content] as DOMOutputSpec;
       };
     });
@@ -77,14 +92,14 @@ export const LineHeight: Extension<"lineHeight"> = {
 
   commands: () => ({
     setLineHeight:
-      (value: string) =>
+      (lineHeight) =>
       ({ state, dispatch, tr }) => {
         const { from, to, empty } = state.selection;
         const markType = state.schema.marks.lineHeight;
         if (!markType) return false;
 
         if (!empty) {
-          tr.addMark(from, to, markType.create({ lineHeight: value }));
+          tr.addMark(from, to, markType.create({ lineHeight }));
           dispatch?.(tr);
           return true;
         }
@@ -107,19 +122,19 @@ export const LineHeight: Extension<"lineHeight"> = {
             if (mark) {
               const start = pos;
               const end = pos + node.nodeSize;
-              if (node.attrs.lineHeight !== value) {
+              if (node.attrs.lineHeight !== lineHeight) {
                 tr.removeMark(start, end, markType);
-                tr.addMark(start, end, markType.create({ lineHeight: value }));
+                tr.addMark(start, end, markType.create({ lineHeight }));
                 changed = true;
               }
             }
 
             if (lineHeightMark) return;
 
-            if (node.attrs.lineHeight !== value) {
+            if (node.attrs.lineHeight !== lineHeight) {
               tr.setNodeMarkup(pos, undefined, {
                 ...node.attrs,
-                lineHeight: value,
+                lineHeight,
               });
               changed = true;
             }
@@ -183,4 +198,4 @@ export const LineHeight: Extension<"lineHeight"> = {
         return changed;
       },
   }),
-};
+});

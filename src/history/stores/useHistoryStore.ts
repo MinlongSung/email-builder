@@ -1,42 +1,28 @@
 import { create } from "zustand";
-import type { Command } from "@/history/types";
 import { historyService } from "@/history/services/historyService";
+import type { CommandEntry } from "../CommandEntry";
 
-interface HistoryStore {
-  timeline: Command[];
-  currentIndex: number;
-  canUndo: boolean;
-  canRedo: boolean;
-
-  // Actions
-  execute: (command: Command) => void;
-  undo: () => void;
-  redo: () => void;
-  goTo: (index: number) => void;
-  clear: () => void;
-}
-
-export const useHistoryStore = create<HistoryStore>((set) => {
-  // Suscribirse a cambios del service
-  historyService.subscribe(() => {
+export const useHistoryStore = create((set) => {
+  const update = () =>
     set({
       timeline: historyService.getTimeline(),
-      currentIndex: historyService.getIndex(),
+      index: historyService.getCurrentIndex(),
       canUndo: historyService.canUndo(),
       canRedo: historyService.canRedo(),
     });
-  });
+
+  historyService.subscribe(update);
 
   return {
-    timeline: [],
-    currentIndex: -1,
-    canUndo: false,
-    canRedo: false,
-
-    execute: (command: Command) => historyService.executeCommand(command),
+    timeline: historyService.getTimeline(),
+    index: historyService.getCurrentIndex(),
+    canUndo: historyService.canUndo(),
+    canRedo: historyService.canRedo(),
+    execute: (entry: CommandEntry) =>
+      historyService.executeCommand(entry.command, entry.meta),
     undo: () => historyService.undo(),
     redo: () => historyService.redo(),
-    goTo: (index: number) => historyService.goTo(index),
+    goTo: (i: number) => historyService.goTo(i),
     clear: () => historyService.clear(),
   };
 });

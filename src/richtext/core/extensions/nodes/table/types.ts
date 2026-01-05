@@ -3,7 +3,9 @@ export interface CellAttrs {
   rowspan: number;
   colwidth: number[] | null;
   backgroundColor: string | null;
-  borderWidth: number | null;
-  borderStyle: string | null;
-  borderColor: string | null;
+  border: {
+    width: string;
+    style: string;
+    color: string;
+  } | null;
 }

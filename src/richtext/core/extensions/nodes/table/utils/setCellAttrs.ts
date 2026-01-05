@@ -28,11 +28,13 @@ export function setCellAttrs(node: {
     attrs.bgcolor = node.attrs.backgroundColor;
   }
 
-  const borderWidth = node.attrs.borderWidth || 1;
-  const borderStyle = node.attrs.borderStyle || "solid";
-  const borderColor = node.attrs.borderColor || "#000000";
+  const border = node.attrs.border || {
+    width: "1px",
+    style: "solid",
+    color: "#000000",
+  };
 
-  const borderValue = `${borderWidth}px ${borderStyle} ${borderColor}`;
+  const borderValue = `${border.width} ${border.style} ${border.color}`;
   styles.push(`border: ${borderValue}`);
   attrs.border = borderValue;
 

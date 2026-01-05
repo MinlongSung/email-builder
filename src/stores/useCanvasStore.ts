@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import type {
   BlockEntity,
+  BlockType,
   RowEntity,
   TemplateEntity,
 } from "@/entities/template";
@@ -21,11 +22,14 @@ interface State {
   rowIndexMap: Map<string, number>;
   columnIndexMap: Map<string, ColumnCoordinates>;
   blockIndexMap: Map<string, BlockCoordinates>;
+  blocksByTypeIndex: Map<BlockType, BlockCoordinates[]>;
 
+  getTemplate: () => TemplateEntity | null;
   getRowCoordinates: (id: string) => number | null;
   getColumnCoordinates: (id: string) => ColumnCoordinates | null;
   getBlockCoordinates: (id: string) => BlockCoordinates | null;
   getElementById: (id: string) => BlockEntity | RowEntity | null;
+  getBlocksByTypes: (types: BlockType[]) => BlockCoordinates[];
 }
 
 export const useCanvasStore = create<State>()((set, get) => ({
@@ -33,17 +37,13 @@ export const useCanvasStore = create<State>()((set, get) => ({
   rowIndexMap: new Map(),
   columnIndexMap: new Map(),
   blockIndexMap: new Map(),
+  blocksByTypeIndex: new Map(),
 
   setTemplate(template: TemplateEntity) {
     const rowIndexMap = new Map<string, number>();
-    const columnIndexMap = new Map<
-      string,
-      { rowIndex: number; columnIndex: number }
-    >();
-    const blockIndexMap = new Map<
-      string,
-      { rowIndex: number; columnIndex: number; blockIndex: number }
-    >();
+    const columnIndexMap = new Map<string, ColumnCoordinates>();
+    const blockIndexMap = new Map<string, BlockCoordinates>();
+    const blocksByTypeIndex = new Map<BlockType, BlockCoordinates[]>();
 
     template.rows.forEach((row, rowIndex) => {
       rowIndexMap.set(row.id, rowIndex);
@@ -52,12 +52,30 @@ export const useCanvasStore = create<State>()((set, get) => ({
         columnIndexMap.set(column.id, { rowIndex, columnIndex });
 
         column.blocks.forEach((block, blockIndex) => {
-          blockIndexMap.set(block.id, { rowIndex, columnIndex, blockIndex });
+          const coordinates = { rowIndex, columnIndex, blockIndex };
+          blockIndexMap.set(block.id, coordinates);
+
+          const indexByType = blocksByTypeIndex.get(block.type);
+          if (indexByType) {
+            indexByType.push(coordinates);
+          } else {
+            blocksByTypeIndex.set(block.type, [coordinates]);
+          }
         });
       });
     });
 
-    set({ template, rowIndexMap, columnIndexMap, blockIndexMap });
+    set({
+      template,
+      rowIndexMap,
+      columnIndexMap,
+      blockIndexMap,
+      blocksByTypeIndex,
+    });
+  },
+
+  getTemplate() {
+    return get().template;
   },
 
   getRowCoordinates(id) {
@@ -93,19 +111,25 @@ export const useCanvasStore = create<State>()((set, get) => ({
       // Bounds check each level to prevent crashes
       const row = template.rows[blockCoordinates.rowIndex];
       if (!row) {
-        console.error(`Invalid rowIndex: ${blockCoordinates.rowIndex} for block id: ${id}`);
+        console.error(
+          `Invalid rowIndex: ${blockCoordinates.rowIndex} for block id: ${id}`
+        );
         return null;
       }
 
       const column = row.columns[blockCoordinates.columnIndex];
       if (!column) {
-        console.error(`Invalid columnIndex: ${blockCoordinates.columnIndex} for block id: ${id}`);
+        console.error(
+          `Invalid columnIndex: ${blockCoordinates.columnIndex} for block id: ${id}`
+        );
         return null;
       }
 
       const block = column.blocks[blockCoordinates.blockIndex];
       if (!block) {
-        console.error(`Invalid blockIndex: ${blockCoordinates.blockIndex} for block id: ${id}`);
+        console.error(
+          `Invalid blockIndex: ${blockCoordinates.blockIndex} for block id: ${id}`
+        );
         return null;
       }
 
@@ -113,5 +137,17 @@ export const useCanvasStore = create<State>()((set, get) => ({
     }
 
     return null;
+  },
+
+  getBlocksByTypes: (types) => {
+    const index = get().blocksByTypeIndex;
+    const result: BlockCoordinates[] = [];
+
+    for (const type of types) {
+      const blocks = index.get(type);
+      if (blocks) result.push(...blocks);
+    }
+
+    return result;
   },
 }));

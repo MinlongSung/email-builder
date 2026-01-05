@@ -2,7 +2,6 @@ import type { Editor } from "@/richtext/core/Editor";
 import type { ProsemirrorState } from "./ProsemirrorToolbar";
 import { createPortal } from "react-dom";
 
-
 // TODO: MENU EN SCROLL NO SE QUEDA EN EL SITIO,
 // SI PONGO MENU EN ZONA IZQ, SE CORTA.... mantener dentro del viewport
 export const TableFormats = ({
@@ -41,28 +40,49 @@ export const TableMenu = ({
     editor.commands.setCellAttribute("backgroundColor", e.target.value);
   };
 
+  const border = editorState.table.cellAttrs?.border || {
+    width: "1px",
+    style: "solid",
+    color: "#000000",
+  };
+
   const handleBorderWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value) || 1;
-    editor.commands.setCellAttribute("borderWidth", value);
+    const value = e.target.value || "1";
+    editor.commands.setCellAttribute("border", {
+      ...border,
+      width: value.includes("px") ? value : `${value}px`,
+    });
   };
 
   const handleBorderStyleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    editor.commands.setCellAttribute("borderStyle", e.target.value);
+    editor.commands.setCellAttribute("border", {
+      ...border,
+      style: e.target.value,
+    });
   };
 
   const handleBorderColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    editor.commands.setCellAttribute("borderColor", e.target.value);
+    editor.commands.setCellAttribute("border", {
+      ...border,
+      color: e.target.value,
+    });
   };
 
   const incrementBorderWidth = () => {
-    const current = editorState.table.cellAttrs?.borderWidth || 1;
-    editor.commands.setCellAttribute("borderWidth", current + 1);
+    const currentWidth = parseInt(border.width) || 1;
+    editor.commands.setCellAttribute("border", {
+      ...border,
+      width: `${currentWidth + 1}px`,
+    });
   };
 
   const decrementBorderWidth = () => {
-    const current = editorState.table.cellAttrs?.borderWidth || 1;
-    if (current > 1) {
-      editor.commands.setCellAttribute("borderWidth", current - 1);
+    const currentWidth = parseInt(border.width) || 1;
+    if (currentWidth > 1) {
+      editor.commands.setCellAttribute("border", {
+        ...border,
+        width: `${currentWidth - 1}px`,
+      });
     }
   };
 
@@ -73,9 +93,9 @@ export const TableMenu = ({
 
   const backgroundColor =
     editorState.table.cellAttrs?.backgroundColor || "#ffffff";
-  const borderWidth = editorState.table.cellAttrs?.borderWidth || 1;
-  const borderStyle = editorState.table.cellAttrs?.borderStyle || "solid";
-  const borderColor = editorState.table.cellAttrs?.borderColor || "#000000";
+  const borderWidth = parseInt(border.width) || 1;
+  const borderStyle = border.style;
+  const borderColor = border.color;
   const tableRect = editorState.table.rect;
   const centerX = tableRect ? tableRect.left + tableRect.width / 2 : 0;
 
@@ -97,8 +117,7 @@ export const TableMenu = ({
         alignItems: "center",
         zIndex: 1000,
         fontSize: "12px",
-        flexWrap: 'wrap',
-        
+        flexWrap: "wrap",
       }}
     >
       {/* Row/Column controls */}

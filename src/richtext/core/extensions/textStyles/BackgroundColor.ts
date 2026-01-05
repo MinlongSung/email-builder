@@ -1,7 +1,7 @@
 import type { DOMOutputSpec, Node } from "prosemirror-model";
 import type { Extension } from "@/richtext/core/types";
 import { traverseInRange } from "@/richtext/core/extensions/utils/traverseInRange";
-import { isParagraphOrHeading } from "@/richtext/core/extensions/utils/isParagraphOrHeading";
+import { isParagraphOrHeading } from "@/richtext/core/extensions/utils/textNodeChecks";
 import { parseColorFromStyle } from "@/richtext/core/extensions/utils/parseColorFromStyle";
 
 declare module "@/richtext/core/types" {

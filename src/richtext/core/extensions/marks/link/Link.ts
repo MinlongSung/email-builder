@@ -4,6 +4,7 @@ import { markInputRule } from "@/richtext/core/inputRules/markInputRule";
 import { markPasteRule } from "@/richtext/core/inputRules/pasteRules";
 import { type Protocol } from "@/richtext/core/extensions/marks/link/types";
 import { traverseInRange } from "@/richtext/core/extensions/utils/traverseInRange";
+import { isLink } from "@/richtext/core/extensions/marks/link/utils/isLink";
 
 export const Protocols: Protocol[] = ["https", "mailto", "tel", "ftp"];
 
@@ -25,7 +26,9 @@ declare module "@/richtext/core/types" {
   }
 }
 
-export const Link: Extension<"link"> = {
+export const Link = (config: {
+  isUnderlined?: boolean;
+}): Extension<"link"> => ({
   name: "link",
   marks: {
     link: {
@@ -34,6 +37,7 @@ export const Link: Extension<"link"> = {
         target: { default: "_blank" },
         rel: { default: "noopener noreferrer" },
         title: { default: null },
+        isUnderlined: { default: config.isUnderlined ?? true },
       },
       inclusive: false,
       parseDOM: [
@@ -44,6 +48,7 @@ export const Link: Extension<"link"> = {
             target: dom.getAttribute("target") || "_blank",
             rel: dom.getAttribute("rel") || "noopener noreferrer",
             title: dom.getAttribute("title") || null,
+            isUnderlined: dom.style.textDecoration !== "none",
           }),
         },
       ],
@@ -54,6 +59,7 @@ export const Link: Extension<"link"> = {
           target: mark.attrs.target,
           rel: mark.attrs.rel,
           title: mark.attrs.title || undefined,
+          style: !mark.attrs.isUnderlined ? "text-decoration: none" : undefined,
         },
         0,
       ],
@@ -105,7 +111,7 @@ export const Link: Extension<"link"> = {
           from,
           to,
           includeMarks: true,
-          predicate: ({ mark }) => mark?.type.name === "link",
+          predicate: ({ mark }) => isLink(mark),
           callback: ({ mark, node, pos }) => {
             if (mark) {
               const start = pos;
@@ -165,4 +171,4 @@ export const Link: Extension<"link"> = {
       }),
     ];
   },
-};
+});

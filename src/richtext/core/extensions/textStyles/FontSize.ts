@@ -1,18 +1,20 @@
 import type { DOMOutputSpec } from "prosemirror-model";
 import type { Extension } from "@/richtext/core/types";
 import { traverseInRange } from "@/richtext/core/extensions/utils/traverseInRange";
-import { isParagraphOrHeading } from "@/richtext/core/extensions/utils/isParagraphOrHeading";
+import { isParagraphOrHeading } from "@/richtext/core/extensions/utils/textNodeChecks";
+import type { GlobalConfig } from "@/richtext/core/extensions/types";
+import type { Level } from "@/richtext/core/extensions/nodes/Heading";
 
 declare module "@/richtext/core/types" {
   interface Commands<ReturnType> {
     fontSize: {
-      setFontSize: (size: string) => ReturnType;
+      setFontSize: (fontSize: string) => ReturnType;
       unsetFontSize: () => ReturnType;
     };
   }
 }
 
-export const FontSize: Extension<"fontSize"> = {
+export const FontSize = (config: GlobalConfig = {}): Extension<"fontSize"> => ({
   name: "fontSize",
 
   marks: {
@@ -64,7 +66,16 @@ export const FontSize: Extension<"fontSize"> = {
           ...any[]
         ]) ?? ["div", {}, 0];
         const attrs = { ...attrsRaw };
-        const fontSize = node.attrs.fontSize;
+
+        // Determine fontSize based on node type
+        let fontSize = node.attrs.fontSize;
+
+        if (!fontSize && nodeName === "paragraph") {
+          fontSize = config.paragraph;
+        } else if (!fontSize && nodeName === "heading") {
+          const level = node.attrs.level as Level;
+          fontSize = config.heading?.[level];
+        }
 
         if (fontSize) {
           const existingStyle = attrs.style ?? "";
@@ -82,14 +93,14 @@ export const FontSize: Extension<"fontSize"> = {
 
   commands: () => ({
     setFontSize:
-      (size) =>
+      (fontSize) =>
       ({ state, dispatch, tr }) => {
         const { from, to, empty } = state.selection;
         const markType = state.schema.marks.fontSize;
         if (!markType) return false;
 
         if (!empty) {
-          tr.addMark(from, to, markType.create({ fontSize: size }));
+          tr.addMark(from, to, markType.create({ fontSize }));
           dispatch?.(tr);
           return true;
         }
@@ -110,19 +121,19 @@ export const FontSize: Extension<"fontSize"> = {
             if (mark) {
               const start = pos;
               const end = pos + node.nodeSize;
-              if (node.attrs.fontSize !== size) {
+              if (node.attrs.fontSize !== fontSize) {
                 tr.removeMark(start, end, markType);
-                tr.addMark(start, end, markType.create({ fontSize: size }));
+                tr.addMark(start, end, markType.create({ fontSize }));
                 changed = true;
               }
             }
 
             if (fontSizeMark) return;
 
-            if (node.attrs.fontSize !== size) {
+            if (node.attrs.fontSize !== fontSize) {
               tr.setNodeMarkup(pos, undefined, {
                 ...node.attrs,
-                fontSize: size,
+                fontSize,
               });
               changed = true;
             }
@@ -184,4 +195,4 @@ export const FontSize: Extension<"fontSize"> = {
         return changed;
       },
   }),
-};
+});

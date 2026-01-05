@@ -4,7 +4,7 @@ import type { Node, NodeType } from "prosemirror-model";
 
 import { traverseInRange } from "@/richtext/core/extensions/utils/traverseInRange";
 import { isList } from "@/richtext/core/extensions/nodes/lists/utils/isList";
-import { isParagraphOrHeading } from "@/richtext/core/extensions/utils/isParagraphOrHeading";
+import { isParagraphOrHeading } from "@/richtext/core/extensions/utils/textNodeChecks";
 import { findAncestorNode } from "@/richtext/core/extensions/utils/findAncestorNode";
 import { isRootList } from "@/richtext/core/extensions/nodes/lists/utils/isRootList";
 import { traverseInRangeRecursively } from "@/richtext/core/extensions/utils/traverseInRangeRecursively";

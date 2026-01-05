@@ -1,15 +1,17 @@
+import { CloneRowCommand } from "@/commands/rows/CloneRowCommand";
+import { DeleteRowCommand } from "@/commands/rows/DeleteRowCommand";
+import { MoveRowCommand } from "@/commands/rows/MoveRowCommand";
 import type { DndState } from "@/dnd/core/types";
 import type { RowEntity } from "@/entities/template";
-import { CloneRowCommand } from "@/history/commands/CloneRowCommand";
-import { DeleteRowCommand } from "@/history/commands/DeleteRowCommand";
-import { MoveRowCommand } from "@/history/commands/MoveRowCommand";
 import { historyService } from "@/history/services/historyService";
+
 import { useCanvasStore } from "@/stores/useCanvasStore";
 import { useUIStore } from "@/stores/useUIStore";
+import { generateId } from "@/utils/generateId";
 
 export const useRow = (row: RowEntity) => {
   const viewMode = useUIStore((state) => state.viewMode);
-  const template = useCanvasStore((state) => state.template);
+  const getTemplate = useCanvasStore((state) => state.getTemplate);
   const setTemplate = useCanvasStore((state) => state.setTemplate);
   const getRowCoordinates = useCanvasStore((state) => state.getRowCoordinates);
 
@@ -17,32 +19,39 @@ export const useRow = (row: RowEntity) => {
   const shouldStack = isMobileView && row.isResponsive;
 
   const cloneRow = () => {
-    if (!template) return;
     const rowIndex = getRowCoordinates(row.id);
     if (rowIndex === null) return;
 
     historyService.executeCommand(
       new CloneRowCommand({
-        template,
+        getTemplate,
         setTemplate,
         rowIndex,
+        generateId,
+      }),
+      {
+        id: generateId(),
         type: "row.clone",
-      })
+        timestamp: Date.now(),
+      }
     );
   };
 
   const deleteRow = () => {
-    if (!template) return;
     const rowIndex = getRowCoordinates(row.id);
     if (rowIndex === null) return;
 
     historyService.executeCommand(
       new DeleteRowCommand({
-        template,
+        getTemplate,
         setTemplate,
         rowIndex,
+      }),
+      {
+        id: generateId(),
         type: "row.delete",
-      })
+        timestamp: Date.now(),
+      }
     );
   };
 
@@ -59,12 +68,16 @@ export const useRow = (row: RowEntity) => {
 
     historyService.executeCommand(
       new MoveRowCommand({
-        template,
+        getTemplate,
         setTemplate,
         oldIndex,
         newIndex,
+      }),
+      {
+        id: generateId(),
         type: "row.move",
-      })
+        timestamp: Date.now(),
+      }
     );
   };
 

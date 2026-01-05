@@ -1,5 +1,6 @@
 import type { Mark, Node, ResolvedPos } from "prosemirror-model";
 import type { EditorState, Transaction } from "prosemirror-state";
+import type { Level } from "@/richtext/core/extensions/nodes/Heading";
 
 export type NodeCoordenates = {
   node: Node;
@@ -9,6 +10,7 @@ export type NodeCoordenates = {
 
 export type SelectionContext = NodeCoordenates & {
   $pos: ResolvedPos;
+  state: EditorState;
   parent?: Node;
   mark?: Mark;
 };
@@ -24,4 +26,10 @@ export interface TraverseOptions {
   from: number;
   to: number;
   includeMarks?: boolean;
+}
+
+export interface GlobalConfig {
+  paragraph?: string;
+  heading?: Record<Level, string>;
+  link?: string;
 }

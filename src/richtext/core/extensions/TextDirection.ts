@@ -1,7 +1,7 @@
 import type { DOMOutputSpec, Node } from "prosemirror-model";
 import type { Extension } from "@/richtext/core/types";
 import { traverseInRange } from "@/richtext/core/extensions/utils/traverseInRange";
-import { isParagraphOrHeading } from "@/richtext/core/extensions/utils/isParagraphOrHeading";
+import { isParagraphOrHeading } from "@/richtext/core/extensions/utils/textNodeChecks";
 import { isList } from "@/richtext/core/extensions/nodes/lists/utils/isList";
 import { isListItem } from "@/richtext/core/extensions/nodes/lists/utils/isListItem";
 import { findAncestorNode } from "@/richtext/core/extensions/utils/findAncestorNode";
@@ -53,7 +53,7 @@ export const TextDirection: Extension<"textDirection"> = {
         const attrs = { ...attrsRaw };
         if (node.attrs.textDirection === "rtl")
           attrs.dir = node.attrs.textDirection;
-        
+
         return [tag, attrs, ...content] as DOMOutputSpec;
       };
     });
