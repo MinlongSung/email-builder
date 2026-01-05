@@ -1,20 +1,8 @@
-export interface Change {
-  previousValue: any;
-  newValue: any;
-}
-
 export interface CommandMetadata {
-  id: string;
-  userId?: string;
-  timestamp: number;
-  type: CommandType;
-  changes: Change[];
-}
-
-export interface Command {
-  execute(): void;
-  undo(): void;
-  metadata: CommandMetadata;
+  id: string        // Identificador único del entry
+  timestamp: number // Momento de ejecución
+  type: CommandType      // Tipo de comando (ej: 'insert-text', 'delete-line')
+  userId?: string   // Usuario que ejecuta la acción
 }
 
 export type CommandType =
@@ -30,5 +18,4 @@ export type CommandType =
   | "template.update.width"
   | "template.update.backgroundColor"
   | "template.update.backgroundImage"
-  | "batch.template.settings"
-  | "batch.global.styles";
+  | "template.global.styles";
