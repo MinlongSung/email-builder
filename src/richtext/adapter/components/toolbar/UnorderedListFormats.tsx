@@ -1,13 +1,24 @@
-import type { Editor } from "@/richtext/core/Editor";
-import type { ProsemirrorState } from "./ProsemirrorToolbar";
+import { useProsemirror } from "@/richtext/adapter/hooks/useProsemirror";
+import { useEditorState } from "@/richtext/adapter/hooks/useEditorState";
 
-export const UnorderedListFormats = ({
-  editor,
-  editorState,
-}: {
-  editor: Editor;
-  editorState: ProsemirrorState;
-}) => {
+export const UnorderedListFormats = () => {
+  const { activeEditor: editor } = useProsemirror();
+
+  const editorState = useEditorState({
+    editor,
+    selector: (editor) => {
+      return {
+        bulletList: {
+          disc: editor.isActive("bulletList", { listStyleType: "disc" }),
+          circle: editor.isActive("bulletList", { listStyleType: "circle" }),
+          square: editor.isActive("bulletList", { listStyleType: "square" }),
+        },
+      };
+    },
+  });
+
+  if (!editor || !editorState) return null;
+  
   return (
     <div style={{ display: "flex", flexDirection: "row", gap: 4 }}>
       <button

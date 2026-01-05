@@ -8,6 +8,7 @@ import { useUIStore } from "@/stores/useUIStore";
 import { UpdateBlockCommand } from "@/commands/blocks/UpdateBlockCommand";
 import { historyService } from "@/history/services/historyService";
 import { generateId } from "@/utils/generateId";
+import { buildButtonExtensions } from "@/richtext/adapter/utils/buildExtensions";
 
 interface ButtonBlockProps {
   block: ButtonBlockEntity;
@@ -47,6 +48,7 @@ export const ButtonBlock: React.FC<ButtonBlockProps> = ({ block }) => {
       {selectedId === block.id ? (
         <ProsemirrorEditor
           content={block.content.json}
+          extensions={buildButtonExtensions()}
           onUpdate={handleUpdate}
         />
       ) : (

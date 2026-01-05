@@ -9,7 +9,7 @@ declare module "@/richtext/core/types" {
   interface Commands<ReturnType> {
     fontFamily: {
       setFontFamily: (fontFamily: string) => ReturnType;
-      unsetFontFamily: (options: { predicate?: Predicate }) => ReturnType;
+      unsetFontFamily: () => ReturnType;
     };
   }
 }

@@ -28,7 +28,6 @@ import { levels } from "@/richtext/core/extensions/nodes/Heading";
 import type { NodeCallback, Predicate } from "@/richtext/core/extensions/types";
 import type { Command } from "@/commands/Command";
 import { UpdateBlockCommand } from "@/commands/blocks/UpdateBlockCommand";
-import { isEmailButton } from "@/richtext/core/extensions/nodes/emailButton/utils/isEmailButton";
 
 const TEMPLATE_WIDTH = {
   min: 325,
@@ -308,6 +307,54 @@ export const SettingsTab = () => {
       historyService.executeCommand(batchCommands, {
         id: generateId(),
         type: "template.global.styles",
+        timestamp: Date.now(),
+      });
+    },
+    300
+  );
+
+  // Handler for updating button block styles
+  const handleButtonSettingsUpdate = useDebouncedCallback(
+    (newSettings: TemplateSettings, styleUpdates: React.CSSProperties) => {
+      if (!template) return;
+      const blocksCoordinates = useCanvasStore
+        .getState()
+        .getBlocksByTypes(["button"]);
+
+      const commands: Command[] = [];
+      blocksCoordinates.forEach(({ rowIndex, columnIndex, blockIndex }) => {
+        const block =
+          template.rows[rowIndex].columns[columnIndex].blocks[blockIndex];
+
+        commands.push(
+          new UpdateBlockCommand({
+            getTemplate,
+            setTemplate,
+            rowIndex,
+            columnIndex,
+            blockIndex,
+            updates: {
+              style: {
+                ...block.style,
+                ...styleUpdates,
+              },
+            },
+          })
+        );
+      });
+
+      const batchCommands = new BatchCommand([
+        new UpdateTemplateSettingsCommand({
+          getTemplate,
+          setTemplate,
+          settings: newSettings,
+        }),
+        ...commands,
+      ]);
+
+      historyService.executeCommand(batchCommands, {
+        id: generateId(),
+        type: "template.global.button.styles",
         timestamp: Date.now(),
       });
     },
@@ -1085,7 +1132,7 @@ export const SettingsTab = () => {
             </div>
 
             {/* Buttons */}
-            {/* <div style={{ border: "1px solid #ddd", borderRadius: "4px" }}>
+            <div style={{ border: "1px solid #ddd", borderRadius: "4px" }}>
               <button
                 onClick={() =>
                   setExpandedHeading(expandedHeading === -2 ? null : -2)
@@ -1123,156 +1170,29 @@ export const SettingsTab = () => {
                         marginBottom: "2px",
                       }}
                     >
-                      Font Family
-                    </label>
-                    <select
-                      value={localSettings.button.fontFamily || ""}
-                      onChange={(e) => {
-                        const newSettings = {
-                          ...localSettings,
-                          button: {
-                            ...localSettings.button,
-                            fontFamily: e.target.value,
-                          },
-                        };
-                        setLocalSettings(newSettings);
-                        handleSettingsUpdate(
-                          newSettings,
-                          ({ node }) => isEmailButton(node),
-                          ({ node, pos }, tr) => {
-                            if (node) {
-                              tr.setNodeMarkup(pos, undefined, {
-                                ...node.attrs,
-                                fontFamily: e.target.value,
-                              });
-                            }
-                          }
-                        );
-                      }}
-                      style={{ width: "100%", padding: "4px 8px" }}
-                    >
-                      {FONT_FAMILIES.map((font) => (
-                        <option key={font.value} value={font.value}>
-                          {font.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label
-                      style={{
-                        fontSize: "12px",
-                        display: "block",
-                        marginBottom: "2px",
-                      }}
-                    >
-                      Font Size
+                      Background Color
                     </label>
                     <input
-                      type="text"
-                      value={localSettings.button.fontSize || ""}
+                      type="color"
+                      value={localSettings.button?.backgroundColor || "#3498db"}
                       onChange={(e) => {
                         const newSettings = {
                           ...localSettings,
                           button: {
                             ...localSettings.button,
-                            fontSize: e.target.value,
+                            backgroundColor: e.target.value,
                           },
                         };
                         setLocalSettings(newSettings);
-                        handleSettingsUpdate(
-                          newSettings,
-                          ({ node }) => isEmailButton(node),
-                          ({ node, pos }, tr) => {
-                            if (node) {
-                              tr.setNodeMarkup(pos, undefined, {
-                                ...node.attrs,
-                                fontSize: e.target.value,
-                              });
-                            }
-                          }
-                        );
+                        handleButtonSettingsUpdate(newSettings, {
+                          backgroundColor: e.target.value,
+                        });
                       }}
-                      style={{ width: "100%", padding: "4px 8px" }}
-                      placeholder="e.g., 16px, 1em"
-                    />
-                  </div>
-                  <div>
-                    <label
                       style={{
-                        fontSize: "12px",
-                        display: "block",
-                        marginBottom: "2px",
+                        width: "100%",
+                        height: "32px",
+                        cursor: "pointer",
                       }}
-                    >
-                      Line Height
-                    </label>
-                    <input
-                      type="text"
-                      value={localSettings.button.lineHeight || ""}
-                      onChange={(e) => {
-                        const newSettings = {
-                          ...localSettings,
-                          button: {
-                            ...localSettings.button,
-                            lineHeight: e.target.value,
-                          },
-                        };
-                        setLocalSettings(newSettings);
-                        handleSettingsUpdate(
-                          newSettings,
-                          ({ node }) => isEmailButton(node),
-                          ({ node, pos }, tr) => {
-                            if (node) {
-                              tr.setNodeMarkup(pos, undefined, {
-                                ...node.attrs,
-                                lineHeight: e.target.value,
-                              });
-                            }
-                          }
-                        );
-                      }}
-                      style={{ width: "100%", padding: "4px 8px" }}
-                      placeholder="e.g., 1.5, 24px"
-                    />
-                  </div>
-                  <div>
-                    <label
-                      style={{
-                        fontSize: "12px",
-                        display: "block",
-                        marginBottom: "2px",
-                      }}
-                    >
-                      Letter Spacing
-                    </label>
-                    <input
-                      type="text"
-                      value={localSettings.button.letterSpacing || ""}
-                      onChange={(e) => {
-                        const newSettings = {
-                          ...localSettings,
-                          button: {
-                            ...localSettings.button,
-                            letterSpacing: e.target.value,
-                          },
-                        };
-                        setLocalSettings(newSettings);
-                        handleSettingsUpdate(
-                          newSettings,
-                          ({ node }) => isEmailButton(node),
-                          ({ node, pos }, tr) => {
-                            if (node) {
-                              tr.setNodeMarkup(pos, undefined, {
-                                ...node.attrs,
-                                letterSpacing: e.target.value,
-                              });
-                            }
-                          }
-                        );
-                      }}
-                      style={{ width: "100%", padding: "4px 8px" }}
-                      placeholder="e.g., 0.05em, 1px"
                     />
                   </div>
                   <div>
@@ -1287,7 +1207,7 @@ export const SettingsTab = () => {
                     </label>
                     <input
                       type="color"
-                      value={localSettings.button.color || "#ffffff"}
+                      value={localSettings.button?.color || "#ffffff"}
                       onChange={(e) => {
                         const newSettings = {
                           ...localSettings,
@@ -1297,18 +1217,9 @@ export const SettingsTab = () => {
                           },
                         };
                         setLocalSettings(newSettings);
-                        handleSettingsUpdate(
-                          newSettings,
-                          ({ node }) => isEmailButton(node),
-                          ({ node, pos }, tr) => {
-                            if (node) {
-                              tr.setNodeMarkup(pos, undefined, {
-                                ...node.attrs,
-                                color: e.target.value,
-                              });
-                            }
-                          }
-                        );
+                        handleButtonSettingsUpdate(newSettings, {
+                          color: e.target.value,
+                        });
                       }}
                       style={{
                         width: "100%",
@@ -1325,96 +1236,26 @@ export const SettingsTab = () => {
                         marginBottom: "2px",
                       }}
                     >
-                      Background Color
-                    </label>
-                    <input
-                      type="color"
-                      value={localSettings.button.backgroundColor || "#000000"}
-                      onChange={(e) => {
-                        const newSettings = {
-                          ...localSettings,
-                          button: {
-                            ...localSettings.button,
-                            backgroundColor: e.target.value,
-                          },
-                        };
-                        setLocalSettings(newSettings);
-                        console.log(newSettings);
-                        
-                        handleSettingsUpdate(
-                          newSettings,
-                          ({ node, parent }) => {
-                            console.log(parent?.type);
-                            
-                            return isEmailButton(node);
-                          },
-                          ({ node, pos }, tr) => {
-                            console.log(node);
-                            
-                            if (node) {
-                              tr.setNodeMarkup(pos, undefined, {
-                                ...node.attrs,
-                                backgroundColor: e.target.value,
-                              });
-                            }
-                          }
-                        );
-                      }}
-                      style={{
-                        width: "100%",
-                        height: "32px",
-                        cursor: "pointer",
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <label
-                      style={{
-                        fontSize: "12px",
-                        display: "block",
-                        marginBottom: "2px",
-                      }}
-                    >
-                      Padding (top right bottom left)
+                      Padding (e.g., 12px 24px)
                     </label>
                     <input
                       type="text"
-                      value={
-                        localSettings.button.padding
-                          ? `${localSettings.button.padding.top} ${localSettings.button.padding.right} ${localSettings.button.padding.bottom} ${localSettings.button.padding.left}`
-                          : ""
-                      }
+                      value={localSettings.button?.padding || ""}
                       onChange={(e) => {
-                        const values = e.target.value.split(" ");
-                        const padding = {
-                          top: values[0] || "10px",
-                          right: values[1] || values[0] || "20px",
-                          bottom: values[2] || values[0] || "10px",
-                          left: values[3] || values[1] || values[0] || "20px",
-                        };
                         const newSettings = {
                           ...localSettings,
                           button: {
                             ...localSettings.button,
-                            padding,
+                            padding: e.target.value,
                           },
                         };
                         setLocalSettings(newSettings);
-                        handleSettingsUpdate(
-                          newSettings,
-                          ({ node }) => isEmailButton(node),
-                          ({ node, pos }, tr) => {
-                            if (node) {
-                              tr.setNodeMarkup(pos, undefined, {
-                                ...node.attrs,
-                                padding,
-                              });
-                            }
-                          }
-                        );
+                        handleButtonSettingsUpdate(newSettings, {
+                          padding: e.target.value,
+                        });
                       }}
                       style={{ width: "100%", padding: "4px 8px" }}
-                      placeholder="e.g., 10px 20px 10px 20px"
+                      placeholder="e.g., 12px 24px"
                     />
                   </div>
                   <div>
@@ -1425,46 +1266,26 @@ export const SettingsTab = () => {
                         marginBottom: "2px",
                       }}
                     >
-                      Border Radius (top right bottom left)
+                      Border Radius (e.g., 4px)
                     </label>
                     <input
                       type="text"
-                      value={
-                        localSettings.button.borderRadius
-                          ? `${localSettings.button.borderRadius.top} ${localSettings.button.borderRadius.right} ${localSettings.button.borderRadius.bottom} ${localSettings.button.borderRadius.left}`
-                          : ""
-                      }
+                      value={localSettings.button?.borderRadius || ""}
                       onChange={(e) => {
-                        const values = e.target.value.split(" ");
-                        const borderRadius = {
-                          top: values[0] || "5px",
-                          right: values[1] || values[0] || "5px",
-                          bottom: values[2] || values[0] || "5px",
-                          left: values[3] || values[1] || values[0] || "5px",
-                        };
                         const newSettings = {
                           ...localSettings,
                           button: {
                             ...localSettings.button,
-                            borderRadius,
+                            borderRadius: e.target.value,
                           },
                         };
                         setLocalSettings(newSettings);
-                        handleSettingsUpdate(
-                          newSettings,
-                          ({ node }) => isEmailButton(node),
-                          ({ node, pos }, tr) => {
-                            if (node) {
-                              tr.setNodeMarkup(pos, undefined, {
-                                ...node.attrs,
-                                borderRadius,
-                              });
-                            }
-                          }
-                        );
+                        handleButtonSettingsUpdate(newSettings, {
+                          borderRadius: e.target.value,
+                        });
                       }}
                       style={{ width: "100%", padding: "4px 8px" }}
-                      placeholder="e.g., 5px 5px 5px 5px"
+                      placeholder="e.g., 4px"
                     />
                   </div>
                   <div>
@@ -1475,43 +1296,29 @@ export const SettingsTab = () => {
                         marginBottom: "2px",
                       }}
                     >
-                      Border Width
+                      Font Size
                     </label>
                     <input
                       type="text"
-                      value={localSettings.button.border?.width || ""}
+                      value={localSettings.button?.fontSize || ""}
                       onChange={(e) => {
                         const newSettings = {
                           ...localSettings,
                           button: {
                             ...localSettings.button,
-                            border: {
-                              width: e.target.value,
-                              style:
-                                localSettings.button.border?.style || "solid",
-                              color:
-                                localSettings.button.border?.color || "#000000",
-                            },
+                            fontSize: e.target.value,
                           },
                         };
                         setLocalSettings(newSettings);
-                        handleSettingsUpdate(
-                          newSettings,
-                          ({ node }) => isEmailButton(node),
-                          ({ node, pos }, tr) => {
-                            if (node) {
-                              tr.setNodeMarkup(pos, undefined, {
-                                ...node.attrs,
-                                border: newSettings.button.border,
-                              });
-                            }
-                          }
-                        );
+                        handleButtonSettingsUpdate(newSettings, {
+                          fontSize: e.target.value,
+                        });
                       }}
                       style={{ width: "100%", padding: "4px 8px" }}
-                      placeholder="e.g., 1px, 2px"
+                      placeholder="e.g., 16px"
                     />
                   </div>
+
                   <div>
                     <label
                       style={{
@@ -1520,45 +1327,64 @@ export const SettingsTab = () => {
                         marginBottom: "2px",
                       }}
                     >
-                      Border Style
+                      Font Family
                     </label>
                     <select
-                      value={localSettings.button.border?.style || "solid"}
+                      value={localSettings.button?.fontFamily || ""}
                       onChange={(e) => {
                         const newSettings = {
                           ...localSettings,
                           button: {
                             ...localSettings.button,
-                            border: {
-                              width:
-                                localSettings.button.border?.width || "0px",
-                              style: e.target.value,
-                              color:
-                                localSettings.button.border?.color || "#000000",
-                            },
+                            fontFamily: e.target.value,
                           },
                         };
                         setLocalSettings(newSettings);
-                        handleSettingsUpdate(
-                          newSettings,
-                          ({ node }) => isEmailButton(node),
-                          ({ node, pos }, tr) => {
-                            if (node) {
-                              tr.setNodeMarkup(pos, undefined, {
-                                ...node.attrs,
-                                border: newSettings.button.border,
-                              });
-                            }
-                          }
-                        );
+                        handleButtonSettingsUpdate(newSettings, {
+                          fontFamily: e.target.value,
+                        });
                       }}
                       style={{ width: "100%", padding: "4px 8px" }}
                     >
-                      <option value="solid">Solid</option>
-                      <option value="dashed">Dashed</option>
-                      <option value="dotted">Dotted</option>
-                      <option value="double">Double</option>
-                      <option value="none">None</option>
+                      {FONT_FAMILIES.map((font) => (
+                        <option key={font.value} value={font.value}>
+                          {font.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label
+                      style={{
+                        fontSize: "12px",
+                        display: "block",
+                        marginBottom: "2px",
+                      }}
+                    >
+                      Font Weight
+                    </label>
+                    <select
+                      value={localSettings.button?.fontWeight || "600"}
+                      onChange={(e) => {
+                        const newSettings = {
+                          ...localSettings,
+                          button: {
+                            ...localSettings.button,
+                            fontWeight: e.target.value,
+                          },
+                        };
+                        setLocalSettings(newSettings);
+                        handleButtonSettingsUpdate(newSettings, {
+                          fontWeight: e.target.value,
+                        });
+                      }}
+                      style={{ width: "100%", padding: "4px 8px" }}
+                    >
+                      <option value="normal">Normal</option>
+                      <option value="500">Medium</option>
+                      <option value="600">Semi Bold</option>
+                      <option value="bold">Bold</option>
                     </select>
                   </div>
                   <div>
@@ -1569,49 +1395,93 @@ export const SettingsTab = () => {
                         marginBottom: "2px",
                       }}
                     >
-                      Border Color
+                      Line Height
                     </label>
                     <input
-                      type="color"
-                      value={localSettings.button.border?.color || "#000000"}
+                      type="text"
+                      value={localSettings.button?.lineHeight || ""}
                       onChange={(e) => {
                         const newSettings = {
                           ...localSettings,
                           button: {
                             ...localSettings.button,
-                            border: {
-                              width:
-                                localSettings.button.border?.width || "0px",
-                              style:
-                                localSettings.button.border?.style || "solid",
-                              color: e.target.value,
-                            },
+                            lineHeight: e.target.value,
                           },
                         };
                         setLocalSettings(newSettings);
-                        handleSettingsUpdate(
-                          newSettings,
-                          ({ node }) => isEmailButton(node),
-                          ({ node, pos }, tr) => {
-                            if (node) {
-                              tr.setNodeMarkup(pos, undefined, {
-                                ...node.attrs,
-                                border: newSettings.button.border,
-                              });
-                            }
-                          }
-                        );
+                        handleButtonSettingsUpdate(newSettings, {
+                          lineHeight: e.target.value,
+                        });
                       }}
+                      style={{ width: "100%", padding: "4px 8px" }}
+                      placeholder="e.g., 1.2"
+                    />
+                  </div>
+                  <div>
+                    <label
                       style={{
-                        width: "100%",
-                        height: "32px",
-                        cursor: "pointer",
+                        fontSize: "12px",
+                        display: "block",
+                        marginBottom: "2px",
                       }}
+                    >
+                      Text Decoration
+                    </label>
+                    <select
+                      value={localSettings.button?.textDecoration || "none"}
+                      onChange={(e) => {
+                        const newSettings = {
+                          ...localSettings,
+                          button: {
+                            ...localSettings.button,
+                            textDecoration: e.target.value,
+                          },
+                        };
+                        setLocalSettings(newSettings);
+                        handleButtonSettingsUpdate(newSettings, {
+                          textDecoration: e.target.value,
+                        });
+                      }}
+                      style={{ width: "100%", padding: "4px 8px" }}
+                    >
+                      <option value="none">None</option>
+                      <option value="underline">Underline</option>
+                      <option value="line-through">Line Through</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label
+                      style={{
+                        fontSize: "12px",
+                        display: "block",
+                        marginBottom: "2px",
+                      }}
+                    >
+                      Border (e.g., 2px solid #000)
+                    </label>
+                    <input
+                      type="text"
+                      value={localSettings.button?.border || ""}
+                      onChange={(e) => {
+                        const newSettings = {
+                          ...localSettings,
+                          button: {
+                            ...localSettings.button,
+                            border: e.target.value,
+                          },
+                        };
+                        setLocalSettings(newSettings);
+                        handleButtonSettingsUpdate(newSettings, {
+                          border: e.target.value,
+                        });
+                      }}
+                      style={{ width: "100%", padding: "4px 8px" }}
+                      placeholder="e.g., 2px solid #000000"
                     />
                   </div>
                 </div>
               )}
-            </div> */}
+            </div>
           </div>
         )}
       </div>

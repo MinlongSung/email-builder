@@ -8,6 +8,7 @@ import { TextSidebar } from "@/components/blocks/text/TextSidebar";
 import { ButtonSidebar } from "@/components/blocks/button/ButtonSidebar";
 import { TextPanel } from "@/components/blocks/text/TextPanel";
 import { RowPanel } from "@/components/blocks/row/RowPanel";
+import { ButtonPanel } from "@/components/blocks/button/ButtonPanel";
 
 export type Draggable = BlockEntity | RowEntity;
 
@@ -28,9 +29,7 @@ export const DRAGGABLES_REGISTRY: {
   button: {
     interactable: (entity) => <ButtonBlock block={entity} />,
     sidebar: () => <ButtonSidebar />,
-    propertiesPanel: (_entity) => {
-      return <div>{"button"}</div>;
-    },
+    propertiesPanel: (entity) => <ButtonPanel block={entity} />,
   },
   row: {
     interactable: (entity) => <Row row={entity} />,

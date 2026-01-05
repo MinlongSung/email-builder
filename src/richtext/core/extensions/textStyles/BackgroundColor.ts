@@ -2,7 +2,6 @@ import type { DOMOutputSpec, Node } from "prosemirror-model";
 import type { Extension } from "@/richtext/core/types";
 import { traverseInRange } from "@/richtext/core/extensions/utils/traverseInRange";
 import { isParagraphOrHeading } from "@/richtext/core/extensions/utils/textNodeChecks";
-import { parseColorFromStyle } from "@/richtext/core/extensions/utils/parseColorFromStyle";
 
 declare module "@/richtext/core/types" {
   interface Commands<ReturnType> {
@@ -23,7 +22,7 @@ export const BackgroundColor: Extension<"backgroundColor"> = {
         {
           tag: "span",
           getAttrs: (dom) => ({
-            backgroundColor: parseColorFromStyle(dom, "background-color"),
+            backgroundColor: dom.style.backgroundColor,
           }),
         },
       ],

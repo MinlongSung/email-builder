@@ -1,5 +1,5 @@
-import type { Editor } from "@/richtext/core/Editor";
-import type { ProsemirrorState } from "./ProsemirrorToolbar";
+import { useProsemirror } from "@/richtext/adapter/hooks/useProsemirror";
+
 const COMMON_FONTS = [
   "Arial",
   "Verdana",
@@ -24,13 +24,11 @@ const LETTER_SPACING_PRESETS = [
   { label: "Wider (0.1em)", value: "0.1em" },
   { label: "Widest (0.2em)", value: "0.2em" },
 ];
-export const FontStyleFormats = ({
-  editor,
-  editorState,
-}: {
-  editor: Editor;
-  editorState: ProsemirrorState;
-}) => {
+export const FontStyleFormats = () => {
+  const { activeEditor: editor } = useProsemirror();
+
+  if (!editor) return null;
+
   return (
     <div style={{ display: "flex", flexDirection: "row", gap: 4 }}>
       <select

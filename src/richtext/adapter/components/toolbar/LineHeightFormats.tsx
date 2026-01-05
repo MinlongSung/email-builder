@@ -1,5 +1,4 @@
-import type { Editor } from "@/richtext/core/Editor";
-import type { ProsemirrorState } from "./ProsemirrorToolbar";
+import { useProsemirror } from "@/richtext/adapter/hooks/useProsemirror";
 
 const LINE_HEIGHT_PRESETS = [
   { value: "1", label: "1.0 (Compacto)" },
@@ -11,13 +10,11 @@ const LINE_HEIGHT_PRESETS = [
   { value: "2", label: "2.0 (Muy amplio)" },
 ];
 
-export const LineHeightFormats = ({
-  editor,
-  editorState,
-}: {
-  editor: Editor;
-  editorState: ProsemirrorState;
-}) => {
+export const LineHeightFormats = () => {
+  const { activeEditor: editor } = useProsemirror();
+
+  if (!editor) return null;
+
   return (
     <div style={{ display: "flex", flexDirection: "row", gap: 4 }}>
       <select

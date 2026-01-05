@@ -1,10 +1,10 @@
 import type { Extension } from "@/richtext/core/types";
 
-export const Document: Extension = {
+export const Document = (config?: { content: string }): Extension => ({
   name: "doc",
   nodes: {
     doc: {
-      content: "block+",
+      content: config?.content ?? "block+",
     },
   },
-};
+});

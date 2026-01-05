@@ -16,11 +16,11 @@ export interface TemplateMetadata {
  */
 
 interface TextStyle {
-  fontFamily?: string;
-  color?: string;
-  letterSpacing?: string;
-  fontSize?: string;
-  lineHeight?: string;
+  fontFamily: string;
+  color: string;
+  letterSpacing: string;
+  fontSize: string;
+  lineHeight: string;
 }
 
 export interface TemplateSettings {
@@ -31,6 +31,18 @@ export interface TemplateSettings {
   };
   heading: {
     level: Record<Level, TextStyle>;
+  };
+  button: {
+    backgroundColor?: string;
+    color?: string;
+    padding?: string;
+    borderRadius?: string;
+    fontSize?: string;
+    fontFamily?: string;
+    fontWeight?: string;
+    lineHeight?: string;
+    textDecoration?: string;
+    border?: string;
   };
 }
 

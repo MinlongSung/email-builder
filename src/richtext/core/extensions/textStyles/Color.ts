@@ -2,7 +2,6 @@ import type { DOMOutputSpec, Mark, Node } from "prosemirror-model";
 import type { Extension } from "@/richtext/core/types";
 import { traverseInRange } from "@/richtext/core/extensions/utils/traverseInRange";
 import { isParagraphOrHeading } from "@/richtext/core/extensions/utils/textNodeChecks";
-import { parseColorFromStyle } from "@/richtext/core/extensions/utils/parseColorFromStyle";
 import type { GlobalConfig } from "@/richtext/core/extensions/types";
 import type { Level } from "@/richtext/core/extensions/nodes/Heading";
 declare module "@/richtext/core/types" {
@@ -24,7 +23,7 @@ export const Color = (config: GlobalConfig = {}): Extension<"color"> => ({
         {
           tag: "span",
           getAttrs: (dom) => ({
-            color: parseColorFromStyle(dom, "color"),
+            color: dom.style.color,
           }),
         },
       ],

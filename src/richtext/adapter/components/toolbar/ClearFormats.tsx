@@ -1,13 +1,10 @@
-import type { Editor } from "@/richtext/core/Editor";
-import type { ProsemirrorState } from "./ProsemirrorToolbar";
+import { useProsemirror } from "@/richtext/adapter/hooks/useProsemirror";
 
-export const ClearFormats = ({
-  editor,
-  editorState,
-}: {
-  editor: Editor;
-  editorState: ProsemirrorState;
-}) => {
+export const ClearFormats = () => {
+  const { activeEditor: editor } = useProsemirror();
+
+  if (!editor) return null;
+  
   return (
     <div style={{ display: "flex", flexDirection: "row", gap: 4 }}>
       <button

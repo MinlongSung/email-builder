@@ -1,5 +1,5 @@
 import { Editor } from "@/richtext/core/Editor";
-import { buildExtensions } from "./buildExtensions";
+import { buildTextExtensions } from "@/richtext/adapter/utils/buildExtensions";
 import type { TemplateEntity } from "@/entities/template";
 
 let globalEditor: Editor | null = null;
@@ -8,7 +8,7 @@ export const getOrCreateGlobalEditor = (template: TemplateEntity) => {
   if (!globalEditor) {
     globalEditor = new Editor({
       domElement: document.createElement("div"),
-      extensions: buildExtensions(template.settings),
+      extensions: buildTextExtensions(template.settings),
       content: "",
     });
   }

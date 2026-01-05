@@ -1,13 +1,36 @@
-import type { Editor } from "@/richtext/core/Editor";
-import type { ProsemirrorState } from "./ProsemirrorToolbar";
+import { useProsemirror } from "@/richtext/adapter/hooks/useProsemirror";
+import { useEditorState } from "@/richtext/adapter/hooks/useEditorState";
 
-export const OrderedListFormats = ({
-  editor,
-  editorState,
-}: {
-  editor: Editor;
-  editorState: ProsemirrorState;
-}) => {
+export const OrderedListFormats = () => {
+  const { activeEditor: editor } = useProsemirror();
+
+  const editorState = useEditorState({
+    editor,
+    selector: (editor) => {
+      return {
+        orderedList: {
+          decimal: editor.isActive("orderedList", {
+            listStyleType: "decimal",
+          }),
+          lowerAlpha: editor.isActive("orderedList", {
+            listStyleType: "lower-alpha",
+          }),
+          upperAlpha: editor.isActive("orderedList", {
+            listStyleType: "upper-alpha",
+          }),
+          lowerRoman: editor.isActive("orderedList", {
+            listStyleType: "lower-roman",
+          }),
+          upperRoman: editor.isActive("orderedList", {
+            listStyleType: "upper-roman",
+          }),
+        },
+      };
+    },
+  });
+
+  if (!editor || !editorState) return null;
+
   return (
     <div style={{ display: "flex", flexDirection: "row", gap: 4 }}>
       <button

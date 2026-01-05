@@ -1,13 +1,25 @@
-import type { Editor } from "@/richtext/core/Editor";
-import type { ProsemirrorState } from "./ProsemirrorToolbar";
+import { useProsemirror } from "@/richtext/adapter/hooks/useProsemirror";
+import { useEditorState } from "@/richtext/adapter/hooks/useEditorState";
 
-export const BasicTextStyleFormats = ({
-  editor,
-  editorState,
-}: {
-  editor: Editor;
-  editorState: ProsemirrorState;
-}) => {
+export const BasicTextStyleFormats = () => {
+  const { activeEditor: editor } = useProsemirror();
+
+  const editorState = useEditorState({
+    editor,
+    selector: (editor) => {
+      return {
+        marks: {
+          bold: editor.isActive("bold"),
+          italic: editor.isActive("italic"),
+          strike: editor.isActive("strike"),
+          underline: editor.isActive("underline"),
+        },
+      };
+    },
+  });
+
+  if (!editor || !editorState) return null;
+  
   return (
     <div style={{ display: "flex", flexDirection: "row", gap: 4 }}>
       <button

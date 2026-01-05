@@ -1,5 +1,4 @@
 import type { CellAttrs } from "@/richtext/core/extensions/nodes/table/types";
-import { parseColorFromStyle } from "@/richtext/core/extensions/utils/parseColorFromStyle";
 
 export function getCellAttrs(dom: HTMLElement): CellAttrs {
   const colspan = Number(dom.getAttribute("colspan") || 1);
@@ -30,10 +29,10 @@ export function getCellAttrs(dom: HTMLElement): CellAttrs {
     }
   }
 
-  const backgroundColor = parseColorFromStyle(dom, "background-color");
+  const backgroundColor = dom.style.backgroundColor;
   const borderWidth = dom.style.borderWidth || "1px";
   const borderStyle = dom.style.borderStyle || "solid";
-  const borderColor = parseColorFromStyle(dom, "border-color") || "#000000";
+  const borderColor = dom.style.borderColor || "#000000";
 
   return {
     colspan,

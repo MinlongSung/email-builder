@@ -88,44 +88,46 @@ export const BlocksTab = () => {
           });
 
           return newContent ? { ...block, content: newContent } : block;
-        }  
-        
-        // if (block.type === "button") {
-        //   // Aplicar estilos globales al contenido del bloque de botón
-        //   const newContent = applyStylesToContent({
-        //     content: block.content,
-        //     editor: getOrCreateGlobalEditor(template),
-        //     predicate: ({ node }) => node?.type.name === "emailButton",
-        //     callback: ({ node, pos }, tr) => {
-        //       const {
-        //         fontFamily,
-        //         fontSize,
-        //         lineHeight,
-        //         letterSpacing,
-        //         color,
-        //         backgroundColor,
-        //         padding,
-        //         borderRadius,
-        //         border,
-        //       } = template.settings.button;
+        }
 
-        //       tr.setNodeMarkup(pos, undefined, {
-        //         ...node.attrs,
-        //         fontFamily: fontFamily ?? node.attrs.fontFamily,
-        //         fontSize: fontSize ?? node.attrs.fontSize,
-        //         lineHeight: lineHeight ?? node.attrs.lineHeight,
-        //         letterSpacing: letterSpacing ?? node.attrs.letterSpacing,
-        //         color: color ?? node.attrs.color,
-        //         backgroundColor: backgroundColor ?? node.attrs.backgroundColor,
-        //         padding: padding ?? node.attrs.padding,
-        //         borderRadius: borderRadius ?? node.attrs.borderRadius,
-        //         border: border ?? node.attrs.border,
-        //       });
-        //     },
-        //   });
+        if (block.type === "button") {
+          // Apply global button styles from template settings
+          const buttonSettings = template.settings.button || {};
+          const updatedStyles: React.CSSProperties = {
+            ...block.style,
+          };
 
-        //   return newContent ? { ...block, content: newContent } : block;
-        // }
+          // Apply each style if it's defined in global settings
+          if (buttonSettings.backgroundColor) {
+            updatedStyles.backgroundColor = buttonSettings.backgroundColor;
+          }
+          if (buttonSettings.color) {
+            updatedStyles.color = buttonSettings.color;
+          }
+          if (buttonSettings.padding) {
+            updatedStyles.padding = buttonSettings.padding;
+          }
+          if (buttonSettings.borderRadius) {
+            updatedStyles.borderRadius = buttonSettings.borderRadius;
+          }
+          if (buttonSettings.fontSize) {
+            updatedStyles.fontSize = buttonSettings.fontSize;
+          }
+          if (buttonSettings.fontWeight) {
+            updatedStyles.fontWeight = buttonSettings.fontWeight;
+          }
+          if (buttonSettings.lineHeight) {
+            updatedStyles.lineHeight = buttonSettings.lineHeight;
+          }
+          if (buttonSettings.textDecoration) {
+            updatedStyles.textDecoration = buttonSettings.textDecoration;
+          }
+          if (buttonSettings.border) {
+            updatedStyles.border = buttonSettings.border;
+          }
+
+          return { ...block, style: updatedStyles };
+        }
 
         return block;
       },

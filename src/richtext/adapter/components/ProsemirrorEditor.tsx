@@ -1,30 +1,29 @@
 import { useLayoutEffect, useRef } from "react";
 import { useProsemirror } from "@/richtext/adapter/hooks/useProsemirror";
-import type { EditorContent } from "@/richtext/core/types";
+import type { EditorContent, Extension } from "@/richtext/core/types";
 import { Editor } from "@/richtext/core/Editor";
-import { useCanvasStore } from "@/stores/useCanvasStore";
-import { buildExtensions } from "@/richtext/adapter/utils/buildExtensions";
 
 interface ProsemirrorEditorProps {
   content: EditorContent;
+  extensions: Extension[]
   onUpdate: (editor: Editor) => void;
 }
 
 export const ProsemirrorEditor = ({
   content,
+  extensions,
   onUpdate,
 }: ProsemirrorEditorProps) => {
   const { setActiveEditor, selectionCoordenates } = useProsemirror();
-  const template = useCanvasStore((store) => store.template);
   const mountRef = useRef<HTMLDivElement | null>(null);
   const editorRef = useRef<Editor | null>(null);
 
   useLayoutEffect(() => {
-    if (!mountRef.current || !template) return; 
+    if (!mountRef.current) return; 
 
     const editor = new Editor({
       domElement: mountRef.current,
-      extensions: buildExtensions(template.settings),
+      extensions,
       content,
       onUpdate: ({ editor }) => onUpdate(editor),
     });

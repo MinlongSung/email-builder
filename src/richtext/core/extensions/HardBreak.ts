@@ -1,3 +1,4 @@
+import { keymap } from "prosemirror-keymap";
 import type { Extension } from "@/richtext/core/types";
 
 export const HardBreak: Extension = {
@@ -11,4 +12,19 @@ export const HardBreak: Extension = {
       toDOM: () => ["br"],
     },
   },
+  plugins: ({ schema }) => [
+    keymap({
+      Enter: (state, dispatch) => {
+        const hardBreak = schema.nodes.hardBreak;
+        if (!hardBreak) return false;
+
+        if (dispatch) {
+          dispatch(
+            state.tr.replaceSelectionWith(hardBreak.create()).scrollIntoView()
+          );
+        }
+        return true;
+      },
+    }),
+  ],
 };
