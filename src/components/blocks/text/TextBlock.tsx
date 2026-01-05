@@ -8,6 +8,7 @@ import { useUIStore } from "@/stores/useUIStore";
 import { UpdateBlockCommand } from "@/commands/blocks/UpdateBlockCommand";
 import { historyService } from "@/history/services/historyService";
 import { generateId } from "@/utils/generateId";
+import { buildTextExtensions } from "@/richtext/adapter/utils/buildExtensions";
 
 interface TextBlockProps {
   block: TextBlockEntity;
@@ -15,6 +16,7 @@ interface TextBlockProps {
 
 export const TextBlock: React.FC<TextBlockProps> = ({ block }) => {
   const selectedId = useUIStore((store) => store.selectedId);
+  const template = useCanvasStore((store) => store.template);
 
   const handleUpdate = useDebouncedCallback((editor: Editor) => {
     const state = useCanvasStore.getState();
@@ -41,11 +43,14 @@ export const TextBlock: React.FC<TextBlockProps> = ({ block }) => {
     });
   }, 300);
 
+  if (!template) return null;
+
   return (
     <>
       {selectedId === block.id ? (
         <ProsemirrorEditor
           content={block.content.json}
+          extensions={buildTextExtensions(template.settings)}
           onUpdate={handleUpdate}
         />
       ) : (
