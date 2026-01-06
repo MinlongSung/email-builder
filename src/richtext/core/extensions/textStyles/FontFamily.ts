@@ -2,7 +2,7 @@ import type { DOMOutputSpec } from "prosemirror-model";
 import type { Extension } from "@/richtext/core/types";
 import { traverseInRange } from "@/richtext/core/extensions/utils/traverseInRange";
 import { isParagraphOrHeading } from "@/richtext/core/extensions/utils/textNodeChecks";
-import type { GlobalConfig, Predicate } from "@/richtext/core/extensions/types";
+import type { GlobalConfig } from "@/richtext/core/extensions/types";
 import type { Level } from "@/richtext/core/extensions/nodes/Heading";
 
 declare module "@/richtext/core/types" {

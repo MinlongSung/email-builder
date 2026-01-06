@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import { DRAGGABLES_REGISTRY } from "@/components/blocks";
 import { ROW_TYPES } from "@/entities/template";
 import type { Template } from "@/schema/template";
@@ -19,19 +18,19 @@ export const Canvas = ({ template }: { template: Template }) => {
             style={template.styles}
           >
             <tbody>
-              <tr>
-                <td>
-                  {template.rows.length === 0 && (
+              {template.rows.length === 0 && (
+                <tr>
+                  <td>
                     <DropPlaceholder isOver={isOver} />
-                  )}
+                  </td>
+                </tr>
+              )}
 
-                  {template.rows.map((row) => (
-                    <Fragment key={row.id}>
-                      {DRAGGABLES_REGISTRY[row.type].interactable(row)}
-                    </Fragment>
-                  ))}
-                </td>
-              </tr>
+              {template.rows.map((row) => (
+                <tr key={row.id}>
+                  <td>{DRAGGABLES_REGISTRY[row.type].interactable(row)}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         )}

@@ -10,6 +10,7 @@ export type CommandType =
   | "row.delete"
   | "row.move"
   | "row.clone"
+  | "row.update"
   | "block.add"
   | "block.delete"
   | "block.move"
@@ -18,4 +19,5 @@ export type CommandType =
   | "template.update.width"
   | "template.update.backgroundColor"
   | "template.update.backgroundImage"
-  | "template.global.styles";
+  | "template.global.styles"
+  | "template.global.button.styles";

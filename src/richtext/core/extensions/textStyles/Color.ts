@@ -4,6 +4,7 @@ import { traverseInRange } from "@/richtext/core/extensions/utils/traverseInRang
 import { isParagraphOrHeading } from "@/richtext/core/extensions/utils/textNodeChecks";
 import type { GlobalConfig } from "@/richtext/core/extensions/types";
 import type { Level } from "@/richtext/core/extensions/nodes/Heading";
+import { isLink } from "@/richtext/core/extensions/marks/link/utils/isLink";
 declare module "@/richtext/core/types" {
   interface Commands<ReturnType> {
     color: {
@@ -126,7 +127,7 @@ export const Color = (config: GlobalConfig = {}): Extension<"color"> => ({
           to,
           includeMarks: true,
           predicate: ({ node, mark }) =>
-            mark?.type.name === "color" || isParagraphOrHeading(node),
+            mark?.type.name === "color" || isParagraphOrHeading(node) ||isLink(mark),
           callback: ({ mark, node, pos }) => {
             if (mark) {
               const start = pos;
