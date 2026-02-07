@@ -70,8 +70,14 @@
 				>
 					<div class="menu">
 						<button {...props}>Mover</button>
-						<button onclickcapture={onClone}>Clonar</button>
-						<button onclickcapture={onDelete}>Borrar</button>
+						<button onclickcapture={(e) => {
+							e.stopPropagation();
+							onClone();
+						}}>Clonar</button>
+						<button onclickcapture={(e) => {
+							e.stopPropagation();
+							onDelete();
+						}}>Borrar</button>
 					</div>
 				</div>
 			{/if}
