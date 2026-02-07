@@ -1,43 +1,34 @@
 <script lang="ts">
 	import { getRichtextContext } from '../../contexts/richtextContext.svelte';
 
-	const prosemirrorContext = getRichtextContext();
-	const editor = $derived(prosemirrorContext.activeEditor);
-	const editorState = $derived.by(() => ({
-		marks: {
-			bold: editor?.isActive('bold'),
-			italic: editor?.isActive('italic'),
-			underline: editor?.isActive('underline'),
-			strike: editor?.isActive('strike')
-		}
-	}));
+	const richtextContext = getRichtextContext();
 </script>
 
 <div class="container">
 	<button
-		onclick={() => editor?.chain().focus().toggleBold().run()}
-		class:selected={editorState?.marks.bold}
+		onclick={() => richtextContext.activeEditor.editor?.chain().focus().toggleBold().run()}
+		class:selected={richtextContext.activeEditor.editor?.isActive('bold')}
 		title="Bold (Ctrl+B)"
 	>
 		B
 	</button>
 	<button
-		onclick={() => editor?.chain().focus().toggleItalic().run()}
-		class:selected={editorState?.marks.italic}
+		onclick={() => richtextContext.activeEditor.editor?.chain().focus().toggleItalic().run()}
+		class:selected={richtextContext.activeEditor.editor?.isActive('italic')}
 		title="Italic (Ctrl+I)"
 	>
 		I
 	</button>
 	<button
-		onclick={() => editor?.chain().focus().toggleUnderline().run()}
-		class:selected={editorState?.marks.underline}
+		onclick={() => richtextContext.activeEditor.editor?.chain().focus().toggleUnderline().run()}
+		class:selected={richtextContext.activeEditor.editor?.isActive('underline')}
 		title="Underline (Ctrl+U)"
 	>
 		U
 	</button>
 	<button
-		onclick={() => editor?.chain().focus().toggleStrike().run()}
-		class:selected={editorState?.marks.strike}
+		onclick={() => richtextContext.activeEditor.editor?.chain().focus().toggleStrike().run()}
+		class:selected={richtextContext.activeEditor.editor?.isActive('strike')}
 		title="Strikethrough"
 	>
 		S
@@ -46,9 +37,10 @@
 
 <style>
 	.container {
-		display: 'flex';
-		flex-direction: 'row';
-		gap: 4;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		gap: 4px;
 	}
 
 	.selected {

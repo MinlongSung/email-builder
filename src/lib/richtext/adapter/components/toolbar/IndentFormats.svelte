@@ -6,10 +6,15 @@
 
 <div class="container">
 	<button
-		onclick={() => richtextContext.activeEditor.editor?.chain().focus().unsetAllMarks().run()}
-		title="Clear Formatting"
+		onclick={() => richtextContext.activeEditor.editor?.chain().focus().setIndentation(30).run()}
 	>
-		CLEAR
+		INDENT
+	</button>
+	<button
+		onclick={() => richtextContext.activeEditor.editor?.chain().focus().setIndentation(-15).run()}
+		disabled={!richtextContext.activeEditor.editor?.can().setIndentation?.(-15)}
+	>
+		OUTDENT
 	</button>
 </div>
 

@@ -11,7 +11,7 @@
 		onUpdate: (editor: Editor) => void;
 	}
 	const { content, extensions, onUpdate }: Props = $props();
-	let { activeEditor, selectionCoordinates } = getRichtextContext();
+	const richtextContext = getRichtextContext();
 
 	let element: HTMLElement;
 	let editor = $state<Editor | null>(null);
@@ -21,14 +21,17 @@
 			extensions,
 			content,
 			onCreate: ({ editor }) => {
-				activeEditor = editor;
-				const { start, end } = selectionCoordinates;
+				richtextContext.activeEditor = { editor };
+				const { start, end } = richtextContext.selectionCoordinates;
 				const from = editor.view.posAtCoords({ left: start.x, top: start.y })?.pos;
 				const to = editor.view.posAtCoords({ left: end.x, top: end.y })?.pos;
 				if (from && to) editor.commands.setTextSelection({ from, to });
 				editor.commands.focus();
 			},
-			onUpdate: ({ editor }) => onUpdate(editor)
+			onUpdate: ({ editor }) => onUpdate(editor),
+			onTransaction: ({ editor }) => {
+				richtextContext.activeEditor = { editor }
+			}
 		});
 
 		const syncContent = async () => {
@@ -45,7 +48,7 @@
 			historyService.off('goto', syncContent);
 			editor?.destroy();
 			editor = null;
-			activeEditor = null;
+			richtextContext.activeEditor = { editor: null };
 		};
 	});
 </script>

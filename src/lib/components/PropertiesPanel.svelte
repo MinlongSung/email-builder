@@ -4,23 +4,24 @@
 	import { getUIContext } from '$lib/template/contexts/uiContext.svelte';
 	import { ignoreclickoutside } from '$lib/clickOutside/attachments/ignoreClickOutside.svelte';
 	import { getClickOutsideContext } from '$lib/clickOutside/contexts/clickOutsideContext.svelte';
+	import NodeRenderer from '$lib/template/nodes/shared/NodeRenderer.svelte';
 
 	const uiContext = getUIContext();
 	const templateContext = getTemplateContext();
 	const clickOutsideContext = getClickOutsideContext();
-	let selectedNode = $derived(
-		uiContext.selectedId ? templateContext.getNode(uiContext.selectedId) : null
-	);
+	const node = $derived(uiContext.selectedId ? templateContext.getNode(uiContext.selectedId) : null);
 </script>
 
-{#if selectedNode}
+{#if node}
 	<aside
 		{@attach ignoreclickoutside({
 			store: clickOutsideContext
 		})}
 		class="propertiesPanel"
 		transition:fly={{ x: 320, duration: 250 }}
-	></aside>
+	>
+		<NodeRenderer entity={node} format="propertiesPanel" />
+	</aside>
 {/if}
 
 <style>

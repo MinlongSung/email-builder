@@ -9,6 +9,7 @@ import ButtonBlock from './blocks/button/ButtonBlock.svelte';
 import TextCard from './blocks/text/TextCard.svelte';
 import ButtonCard from './blocks/button/ButtonCard.svelte';
 import RowCard from './structures/row/RowCard.svelte';
+import TextPanel from './blocks/text/TextPanel.svelte';
 
 export type RenderFormat = 'canvas' | 'card' | 'sidebar' | 'propertiesPanel';
 
@@ -73,7 +74,7 @@ nodeRegistry.register('column', {
 nodeRegistry.register('text', {
 	canvas: TextBlock,
 	card: TextCard,
-	// propertiesPanel: TextPanel,
+	propertiesPanel: TextPanel,
 });
 
 nodeRegistry.register('button', {
