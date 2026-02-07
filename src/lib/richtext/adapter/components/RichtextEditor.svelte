@@ -4,6 +4,7 @@
 	import { onMount, tick } from 'svelte';
 	import { getRichtextContext } from '../contexts/richtextContext.svelte';
 	import { historyService } from '$lib/commands/history/HistoryService.svelte';
+	import { createSubscriber } from 'svelte/reactivity';
 
 	interface Props {
 		content: EditorContent;
@@ -14,24 +15,31 @@
 	const richtextContext = getRichtextContext();
 
 	let element: HTMLElement;
-	let editor = $state<Editor | null>(null);
+	let editor: Editor | null = null;
 	onMount(() => {
 		editor = new Editor({
 			element,
 			extensions,
 			content,
 			onCreate: ({ editor }) => {
-				richtextContext.activeEditor = { editor };
 				const { start, end } = richtextContext.selectionCoordinates;
 				const from = editor.view.posAtCoords({ left: start.x, top: start.y })?.pos;
 				const to = editor.view.posAtCoords({ left: end.x, top: end.y })?.pos;
 				if (from && to) editor.commands.setTextSelection({ from, to });
 				editor.commands.focus();
+
+				const subscribe = createSubscriber((update) => {
+					editor.on('transaction', update);
+					return () => editor.off('transaction', update);
+				});
+				richtextContext.activeEditor = new Proxy(editor, {
+					get(editor, property, receiver) {
+						subscribe();
+						return Reflect.get(editor, property, receiver);
+					}
+				});
 			},
-			onUpdate: ({ editor }) => onUpdate(editor),
-			onTransaction: ({ editor }) => {
-				richtextContext.activeEditor = { editor }
-			}
+			onUpdate: ({ editor }) => onUpdate(editor)
 		});
 
 		const syncContent = async () => {
@@ -48,7 +56,7 @@
 			historyService.off('goto', syncContent);
 			editor?.destroy();
 			editor = null;
-			richtextContext.activeEditor = { editor: null };
+			richtextContext.activeEditor = null;
 		};
 	});
 </script>

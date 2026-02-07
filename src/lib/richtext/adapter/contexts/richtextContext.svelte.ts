@@ -3,7 +3,7 @@ import { getContext, setContext } from "svelte";
 import type { SelectionCoordinates } from "../types";
 
 export class RichtextStore {
-    public activeEditor = $state<{ editor: Editor | null }>({ editor: null });
+    public activeEditor = $state<Editor | null>(null);
     public selectionCoordinates = $state<SelectionCoordinates>({
         start: { x: 0, y: 0 },
         end: { x: 0, y: 0 },

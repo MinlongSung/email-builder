@@ -12,6 +12,7 @@
 	];
 
 	const richtextContext = getRichtextContext();
+  const editor = $derived(richtextContext.activeEditor);
 </script>
 
 <div class="container">
@@ -19,9 +20,9 @@
 		onchange={(e) => {
 			const value = e.currentTarget.value;
 			if (value) {
-				richtextContext.activeEditor.editor?.chain().focus().setLineHeight(value).run();
+				editor?.chain().focus().setLineHeight(value).run();
 			} else {
-				richtextContext.activeEditor.editor?.chain().focus().unsetLineHeight().run();
+				editor?.chain().focus().unsetLineHeight().run();
 			}
 		}}
 		title="Line Height"

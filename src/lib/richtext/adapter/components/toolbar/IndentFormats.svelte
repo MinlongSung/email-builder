@@ -2,17 +2,16 @@
 	import { getRichtextContext } from '../../contexts/richtextContext.svelte';
 
 	const richtextContext = getRichtextContext();
+  const editor = $derived(richtextContext.activeEditor);
 </script>
 
 <div class="container">
-	<button
-		onclick={() => richtextContext.activeEditor.editor?.chain().focus().setIndentation(30).run()}
-	>
+	<button onclick={() => editor?.chain().focus().setIndentation(30).run()}>
 		INDENT
 	</button>
 	<button
-		onclick={() => richtextContext.activeEditor.editor?.chain().focus().setIndentation(-15).run()}
-		disabled={!richtextContext.activeEditor.editor?.can().setIndentation?.(-15)}
+		onclick={() => editor?.chain().focus().setIndentation(-15).run()}
+		disabled={!editor?.can().setIndentation?.(-15)}
 	>
 		OUTDENT
 	</button>

@@ -6,6 +6,10 @@
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import Topbar from '$lib/components/Topbar.svelte';
 	import { getUIContext } from '$lib/template/contexts/uiContext.svelte';
+	
+	import "prosemirror-view/style/prosemirror.css";
+	import "$lib/richtext/core/extensions/nodes/table/table.css";
+	import "$lib/richtext/core/extensions/marks/link/link.css";
 
 	const clickOutsideContext = getClickOutsideContext();
 	const uiContext = getUIContext();

@@ -2,6 +2,7 @@
 	import { getRichtextContext } from '../../contexts/richtextContext.svelte';
 
 	const richtextContext = getRichtextContext();
+	const editor = $derived(richtextContext.activeEditor);
 </script>
 
 <div class="container">
@@ -9,19 +10,19 @@
 		onclick={() => {
 			const url = window.prompt('Enter URL:');
 			if (url) {
-				richtextContext.activeEditor.editor?.chain().focus().setLink({ href: url }).run();
+				editor?.chain().focus().setLink({ href: url }).run();
 			}
 		}}
-		class:selected={richtextContext.activeEditor.editor?.isActive('link')}
+		class:selected={editor?.isActive('link')}
 		title="Insert Link"
 	>
 		LINK
 	</button>
 
 	<button
-		onclick={() => richtextContext.activeEditor.editor?.chain().focus().unsetLink().run()}
+		onclick={() => editor?.chain().focus().unsetLink().run()}
 		title="Remove Link"
-		disabled={richtextContext.activeEditor.editor?.isActive('link')}
+		disabled={editor?.isActive('link')}
 	>
 		UNLINK
 	</button>

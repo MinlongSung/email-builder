@@ -27,6 +27,7 @@
 	];
 
 	const richtextContext = getRichtextContext();
+  const editor = $derived(richtextContext.activeEditor);
 </script>
 
 <div class="container">
@@ -34,9 +35,9 @@
 		onchange={(e) => {
 			const value = e.currentTarget.value;
 			if (value) {
-				richtextContext.activeEditor.editor?.chain().focus().setFontSize(value).run();
+				editor?.chain().focus().setFontSize(value).run();
 			} else {
-				richtextContext.activeEditor.editor?.chain().focus().unsetFontSize().run();
+				editor?.chain().focus().unsetFontSize().run();
 			}
 		}}
 		title="Font Size"
@@ -57,9 +58,9 @@
 		onchange={(e) => {
 			const value = e.currentTarget.value;
 			if (value) {
-				richtextContext.activeEditor.editor?.chain().focus().setFontFamily(value).run();
+				editor?.chain().focus().setFontFamily(value).run();
 			} else {
-				richtextContext.activeEditor.editor?.chain().focus().unsetFontFamily().run();
+				editor?.chain().focus().unsetFontFamily().run();
 			}
 		}}
 		title="Font Family"
@@ -76,9 +77,9 @@
 		onchange={(e) => {
 			const value = e.currentTarget.value;
 			if (value) {
-				richtextContext.activeEditor.editor?.chain().focus().setLetterSpacing(value).run();
+				editor?.chain().focus().setLetterSpacing(value).run();
 			} else {
-				richtextContext.activeEditor.editor?.chain().focus().unsetLetterSpacing().run();
+				editor?.chain().focus().unsetLetterSpacing().run();
 			}
 		}}
 		title="Letter spacing"
@@ -94,12 +95,12 @@
 	<input
 		type="color"
 		oninput={(e) =>
-			richtextContext.activeEditor.editor?.chain().focus().setColor(e.currentTarget.value).run()}
+			editor?.chain().focus().setColor(e.currentTarget.value).run()}
 		title="Text Color"
 	/>
 	<button
 		type="button"
-		onclick={() => richtextContext.activeEditor.editor?.chain().focus().unsetColor().run()}
+		onclick={() => editor?.chain().focus().unsetColor().run()}
 		title="Clear Text Color"
 	>
 		clear color
@@ -108,17 +109,12 @@
 	<input
 		type="color"
 		oninput={(e) =>
-			richtextContext.activeEditor.editor
-				?.chain()
-				.focus()
-				.setBackgroundColor(e.currentTarget.value)
-				.run()}
+			editor?.chain().focus().setBackgroundColor(e.currentTarget.value).run()}
 		title="Background Color"
 	/>
 	<button
 		type="button"
-		onclick={() =>
-			richtextContext.activeEditor.editor?.chain().focus().unsetBackgroundColor().run()}
+		onclick={() => editor?.chain().focus().unsetBackgroundColor().run()}
 		title="Clear Background Color"
 	>
 		clear bg

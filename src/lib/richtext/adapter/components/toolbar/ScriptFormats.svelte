@@ -2,19 +2,20 @@
 	import { getRichtextContext } from '../../contexts/richtextContext.svelte';
 
 	const richtextContext = getRichtextContext();
+  const editor = $derived(richtextContext.activeEditor);
 </script>
 
 <div class="container">
 	<button
-		onclick={() => richtextContext.activeEditor.editor?.chain().focus().toggleSuperscript().run()}
-		class:selected={richtextContext.activeEditor.editor?.isActive('subscript')}
+		onclick={() => editor?.chain().focus().toggleSuperscript().run()}
+		class:selected={editor?.isActive('subscript')}
 		title="Superscript"
 	>
 		Super
 	</button>
 	<button
-		onclick={() => richtextContext.activeEditor.editor?.chain().focus().toggleSubscript().run()}
-		class:selected={richtextContext.activeEditor.editor?.isActive('superscript')}
+		onclick={() => editor?.chain().focus().toggleSubscript().run()}
+		class:selected={editor?.isActive('superscript')}
 		title="Subscript"
 	>
 		Sub
