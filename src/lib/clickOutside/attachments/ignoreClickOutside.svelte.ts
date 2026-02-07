@@ -6,7 +6,7 @@ interface Props {
 }
 
 export const ignoreclickoutside = ({
-    store,
+    store
 }: Props): Attachment => (node: Element) => {
     if (!(node instanceof HTMLElement)) return;
 

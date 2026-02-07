@@ -1,5 +1,5 @@
 import { SvelteMap } from "svelte/reactivity";
-import { type BlockCoordinates, type ColumnCoordinates, type TemplateEntity } from "../types";
+import { type BlockCoordinates, type ColumnCoordinates, type NodeEntity, type TemplateEntity } from "../types";
 import { getContext, setContext } from "svelte";
 
 export class TemplateStore {
@@ -17,8 +17,8 @@ export class TemplateStore {
         return this._template;
     }
 
-    set template(t: TemplateEntity) {
-        this._template = t;
+    set template(template: TemplateEntity) {
+        this._template = template;
     }
 
     mapNodes() {
@@ -49,6 +49,22 @@ export class TemplateStore {
 
     getBlockCoordinates(blockId: string): BlockCoordinates | undefined {
         return this._blocksIndex.get(blockId);
+    }
+
+    getNode(id: string): NodeEntity | null {
+        const rows = this._template.root.rows;
+
+        const rowIndex = this.getRowCoordinates(id);
+        if (rowIndex !== undefined) return rows[rowIndex];
+
+        const colCoords = this.getColumnCoordinates(id);
+        if (colCoords) return rows[colCoords.rowIndex].columns[colCoords.columnIndex];
+
+        const blockCoords = this.getBlockCoordinates(id);
+        if (blockCoords)
+            return rows[blockCoords.rowIndex].columns[blockCoords.columnIndex].blocks[blockCoords.blockIndex];
+
+        return null;
     }
 }
 
