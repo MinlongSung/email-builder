@@ -1,0 +1,12 @@
+import type { Command } from "../Command";
+import type { CommandMetadata } from "./types";
+
+export class CommandEntry {
+  readonly id: string;
+  readonly timestamp: number;
+
+  constructor(public command: Command, public meta: CommandMetadata) {
+    this.id = meta.id;
+    this.timestamp = meta.timestamp;
+  }
+}
