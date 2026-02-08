@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { MoveRowCommand } from '../structures/MoveRowCommand';
+import { MoveRowCommand } from '../structures/rows/MoveRowCommand';
 import { createMockStore, createTemplate, createRow } from './helpers';
 
 describe('MoveRowCommand', () => {

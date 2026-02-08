@@ -9,8 +9,9 @@
 	import NodeWrapper from '../../shared/NodeWrapper.svelte';
 	import { getTemplateContext } from '$lib/template/contexts/templateContext.svelte';
 	import { historyService } from '$lib/commands/history/HistoryService.svelte';
-	import { CloneRowCommand } from '$lib/commands/structures/CloneRowCommand';
-	import { DeleteRowCommand } from '$lib/commands/structures/DeleteRowCommand';
+	import { CloneRowCommand } from '$lib/commands/structures/rows/CloneRowCommand';
+	import { DeleteRowCommand } from '$lib/commands/structures/rows/DeleteRowCommand';
+	import { stringifyCssObject } from '$lib/template/utils/stringifyCssObject';
 
 	interface Props {
 		entity: RootEntity;
@@ -43,10 +44,14 @@
 			type: 'row.delete'
 		});
 	};
+
+	const width = $derived(entity.width);
+	const style = $derived(stringifyCssObject(entity.style));
 </script>
 
 <table
-	width={entity.width}
+	{width}
+	{style}
 	{@attach droppable({
 		manager: dndContext.manager,
 		id: entity.id,

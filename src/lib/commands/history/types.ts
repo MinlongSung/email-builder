@@ -18,9 +18,9 @@ export type CommandType =
   | "block.move"
   | "block.clone"
   | "block.update"
-  | "template.update.width"
-  | "template.update.backgroundColor"
-  | "template.update.backgroundImage"
+  | "root.update.width"
+  | "root.update.backgroundColor"
+  | "root.update.backgroundImage"
   | "template.global.styles"
   | "template.global.button.styles";
 

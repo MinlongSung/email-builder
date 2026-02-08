@@ -19,9 +19,9 @@
 	import { setUIContext } from '$lib/template/contexts/uiContext.svelte';
 	import { setClickOutsideContext } from '$lib/clickOutside/contexts/clickOutsideContext.svelte';
 	import { historyService } from '$lib/commands/history/HistoryService.svelte';
-	import { AddRowCommand } from '$lib/commands/structures/AddRowCommand';
+	import { AddRowCommand } from '$lib/commands/structures/rows/AddRowCommand';
 	import { AddBlockCommand } from '$lib/commands/blocks/AddBlockCommand';
-	import { MoveRowCommand } from '$lib/commands/structures/MoveRowCommand';
+	import { MoveRowCommand } from '$lib/commands/structures/rows/MoveRowCommand';
 	import { MoveBlockCommand } from '$lib/commands/blocks/MoveBlockCommand';
 
 	interface Props {

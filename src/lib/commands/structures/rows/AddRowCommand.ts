@@ -2,7 +2,7 @@ import type { TemplateStore } from "$lib/template/contexts/templateContext.svelt
 import type { RowEntity } from "$lib/template/types";
 import { generateId } from "$lib/template/utils/generateId";
 import { clone } from "$lib/template/utils/clone";
-import { Command } from "../Command";
+import { Command } from "../../Command";
 
 interface AddRowParams {
     store: TemplateStore;

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { CloneRowCommand } from '../structures/CloneRowCommand';
+import { CloneRowCommand } from '../structures/rows/CloneRowCommand';
 import { createMockStore, createTemplate, createRow, createColumn, createTextBlock } from './helpers';
 
 describe('CloneRowCommand', () => {

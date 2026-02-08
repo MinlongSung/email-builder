@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { DeleteRowCommand } from '../structures/DeleteRowCommand';
+import { DeleteRowCommand } from '../structures/rows/DeleteRowCommand';
 import { createMockStore, createTemplate, createRow } from './helpers';
 
 describe('DeleteRowCommand', () => {
