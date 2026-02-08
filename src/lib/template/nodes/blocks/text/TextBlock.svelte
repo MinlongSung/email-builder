@@ -17,6 +17,7 @@
 	const { entity, ...props }: Props = $props();
 	const uiContext = getUIContext();
 	const templateContext = getTemplateContext();
+	const templateConfig = $derived(templateContext.template.config);
 
 	const handleUpdate = debounce((editor: Editor) => {
 		const coordinates = templateContext.getBlockCoordinates(entity.id);
@@ -41,7 +42,7 @@
 	{#if uiContext.selectedId === entity.id}
 		<ProsemirrorEditor
 			content={entity.content.json}
-			extensions={buildTextExtensions()}
+			extensions={buildTextExtensions(templateConfig)}
 			onUpdate={handleUpdate}
 		/>
 		<TableMenu />
