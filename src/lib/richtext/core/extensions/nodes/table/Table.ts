@@ -13,8 +13,8 @@ import {
 } from "prosemirror-tables";
 import { keymap } from "prosemirror-keymap";
 import { percentageColumnResizing } from "../../../extensions/nodes/table/plugins/columnResizing";
-import { tableCoordinatesPlugin } from "../../../extensions/nodes/table/plugins/tableCoordinates";
 import { cellSelectionPlugin } from "../../../extensions/nodes/table/plugins/cellSelection";
+import { tableContextPlugin } from "../../../extensions/nodes/table/plugins/tableContext";
 import type { Extension } from "../../../types";
 import { TableView } from "../../../extensions/nodes/table/nodeViews/TableView";
 import { insertTable } from "../../../extensions/nodes/table/utils/insertTable";
@@ -133,8 +133,8 @@ export const Table: Extension<"table"> = {
   plugins: () => [
     tableEditing(),
     percentageColumnResizing(),
-    tableCoordinatesPlugin(),
     cellSelectionPlugin(),
+    tableContextPlugin(),
     keymap({
       Tab: goToNextCell(1),
       "Shift-Tab": goToNextCell(-1),

@@ -12,17 +12,17 @@ export const gap = (options: Props): Middleware => {
             const { placement, elements } = state;
 
             const paddingMap: Record<Placement, string> = {
-                top: `${padding}px ${padding}px 0 ${padding}px`,
-                'right-end': `${padding}px ${padding}px 0 ${padding}px`,
-                'left-end': `${padding}px ${padding}px 0 ${padding}px`,
-
+                top: `0 ${padding}px ${padding}px ${padding}px`,
+                'right-start': `0 ${padding}px ${padding}px ${padding}px`,
+                'left-start': `0 ${padding}px ${padding}px ${padding}px`,
+                
                 right: `${padding}px 0 ${padding}px ${padding}px`,
                 'top-end': `${padding}px 0 ${padding}px ${padding}px`,
                 'bottom-end': `${padding}px 0 ${padding}px ${padding}px`,
                 
-                bottom: `0 ${padding}px ${padding}px ${padding}px`,
-                'right-start': `0 ${padding}px ${padding}px ${padding}px`,
-                'left-start': `0 ${padding}px ${padding}px ${padding}px`,
+                bottom: `${padding}px ${padding}px 0 ${padding}px`,
+                'right-end': `${padding}px ${padding}px 0 ${padding}px`,
+                'left-end': `${padding}px ${padding}px 0 ${padding}px`,
                 
                 left: `${padding}px ${padding}px ${padding}px 0`,
                 'top-start': `${padding}px ${padding}px ${padding}px 0`,

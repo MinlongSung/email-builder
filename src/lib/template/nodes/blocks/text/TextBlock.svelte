@@ -3,6 +3,7 @@
 	import { historyService } from '$lib/commands/history/HistoryService.svelte';
 	import ProsemirrorEditor from '$lib/richtext/adapter/components/RichtextEditor.svelte';
 	import ProsemirrorPreview from '$lib/richtext/adapter/components/RichtextPreview.svelte';
+	import TableMenu from '$lib/richtext/adapter/components/toolbar/TableMenu.svelte';
 	import { buildTextExtensions } from '$lib/richtext/adapter/utils/buildExtensions';
 	import type { Editor } from '$lib/richtext/core/Editor';
 	import { getTemplateContext } from '$lib/template/contexts/templateContext.svelte';
@@ -43,6 +44,7 @@
 			extensions={buildTextExtensions()}
 			onUpdate={handleUpdate}
 		/>
+		<TableMenu />
 	{:else}
 		<ProsemirrorPreview content={entity.content.html} />
 	{/if}
