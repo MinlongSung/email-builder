@@ -30,6 +30,6 @@ export interface TraverseOptions {
 
 export interface GlobalConfig {
   paragraph?: string;
-  heading?: Record<Level, string>;
+  heading?: Partial<Record<Level, string | undefined>>;
   link?: string;
 }

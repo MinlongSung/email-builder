@@ -28,8 +28,29 @@ import { Link } from "../../core/extensions/marks/link/Link";
 import { EmojiSymbols } from "../../core/extensions/EmojiSymbols";
 import type { Extension } from "../../core/types";
 import { HardBreak } from "../../core/extensions/HardBreak";
+import { levels, type Level, type TemplateConfig } from "$lib/template/types";
+import type { GlobalConfig } from "$lib/richtext/core/extensions/types";
 
-export function buildTextExtensions(): Extension[] {
+function extractExtensionConfig(config: Partial<TemplateConfig>, prop: string) {
+  const extracted: GlobalConfig = {};
+  const paragraphValue = (config?.paragraph as any)?.[prop] ?? undefined;
+  if (paragraphValue !== undefined) extracted.paragraph = paragraphValue;
+
+  const headings: Partial<Record<Level, string>> = {};
+  levels.forEach(level => {
+    const headingValue = (config.heading?.level as any)?.[level]?.[prop];
+
+    if (headingValue !== undefined) headings[level] = headingValue;
+  });
+  if (Object.keys(headings).length) extracted.heading = headings;
+
+  const linkValue = (config.link as any)?.[prop];
+  if (linkValue !== undefined) extracted.link = linkValue;
+
+  return Object.keys(extracted).length ? extracted : undefined;
+}
+
+export function buildTextExtensions(config: Partial<TemplateConfig>): Extension[] {
   const marks: Extension[] = [
     Bold,
     Italic,
@@ -37,7 +58,7 @@ export function buildTextExtensions(): Extension[] {
     Subscript,
     Superscript,
     Underline,
-    Link({}),
+    Link({ isUnderlined: config?.link?.isUnderlined }),
   ];
 
   const nodes: Extension[] = [
@@ -58,11 +79,11 @@ export function buildTextExtensions(): Extension[] {
     TextAlign,
     TextDirection,
     Indentation,
-    FontSize({}),
-    FontFamily({}),
-    LineHeight({}),
-    LetterSpacing({}),
-    Color({}),
+    FontSize(extractExtensionConfig(config, "font-size")),
+    FontFamily(extractExtensionConfig(config, "font-family")),
+    LineHeight(extractExtensionConfig(config, "line-height")),
+    LetterSpacing(extractExtensionConfig(config, "letter-spacing")),
+    Color(extractExtensionConfig(config, "color")),
     BackgroundColor,
     EmojiSymbols,
   ];

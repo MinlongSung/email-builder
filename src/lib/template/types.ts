@@ -1,5 +1,44 @@
+export type Level = 1 | 2 | 3 | 4 | 5 | 6;
+export const levels: Level[] = [1, 2, 3, 4, 5, 6];
+
+interface TypographyConfig {
+  color: string;
+  ["font-size"]: string;
+  ["font-family"]: string;
+  ["letter-spacing"]: string;
+  ["line-height"]: string;
+}
+
+interface LinkConfig {
+  color: string;
+  isUnderlined: boolean;
+}
+
+interface ButtonConfig {
+  color: string;
+  ["background-color"]: string;
+  ["font-size"]: string;
+  ["font-family"]: string;
+  ["font-weight"]: string;
+  ["line-height"]: string;
+  ["text-decoration"]: string;
+  padding: string;
+  border: string;
+  ["border-radius"]: string;
+}
+
+export interface TemplateConfig {
+  heading: {
+    level: Partial<Record<Level, Partial<TypographyConfig>>>;
+  }
+  paragraph: Partial<TypographyConfig>;
+  link: Partial<LinkConfig>;
+  button: Partial<ButtonConfig>;
+}
+
 export interface TemplateEntity {
   root: RootEntity;
+  config: Partial<TemplateConfig>;
 }
 
 export type NodeEntity = StructureEntity | BlockEntity;
