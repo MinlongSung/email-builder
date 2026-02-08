@@ -6,9 +6,6 @@ interface Props {
     isVisible: boolean;
     arrowElement?: HTMLElement;
     options: Partial<ComputePositionConfig>;
-    onClick?: (e: MouseEvent) => void;
-    onMouseOver?: (e: MouseEvent) => void;
-    onMouseLeave?: (e: MouseEvent) => void;
 }
 
 type Side = Extract<Placement, "top" | "right" | "bottom" | "left">;
@@ -18,9 +15,6 @@ export const floating = ({
     arrowElement,
     isVisible,
     options = {},
-    onClick,
-    onMouseOver,
-    onMouseLeave
 }: Props): Attachment => (node: Element) => {
     if (!(node instanceof HTMLElement)) return;
     node.style.display = isVisible ? '' : 'none';
@@ -56,39 +50,8 @@ export const floating = ({
             });
         }
     });
-
-    const attachEvent = <K extends keyof HTMLElementEventMap>(
-        type: K,
-        handler: (e: HTMLElementEventMap[K]) => void,
-        enabled = true
-    ): (() => void) => {
-        if (!enabled) return () => { };
-        referenceElement.addEventListener(type, handler);
-        node.addEventListener(type, handler);
-        return () => {
-            referenceElement.removeEventListener(type, handler);
-            node.removeEventListener(type, handler);
-        };
-    };
-
-    const cleanupClick = attachEvent("click", e => {
-        e.stopPropagation();
-        onClick?.(e);
-    }, !!onClick);
-
-    const cleanupMouseOver = attachEvent("mouseover", e => {
-        e.stopPropagation();
-        onMouseOver?.(e);
-    }, !!onMouseOver);
-
-    const cleanupMouseLeave = attachEvent("mouseleave", e => {
-        onMouseLeave?.(e);
-    }, !!onMouseLeave);
-
+    
     return () => {
         cleanup();
-        cleanupClick();
-        cleanupMouseOver();
-        cleanupMouseLeave();
     };
 };
