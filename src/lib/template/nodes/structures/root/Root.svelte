@@ -8,7 +8,7 @@
 	import NodeRenderer from '../../shared/NodeRenderer.svelte';
 	import NodeWrapper from '../../shared/NodeWrapper.svelte';
 	import { getTemplateContext } from '$lib/template/contexts/templateContext.svelte';
-	import { historyService } from '$lib/commands/history/HistoryService.svelte';
+	import { historyService } from '$lib/history/HistoryService.svelte';
 	import { CloneRowCommand } from '$lib/commands/structures/rows/CloneRowCommand';
 	import { DeleteRowCommand } from '$lib/commands/structures/rows/DeleteRowCommand';
 	import { stringifyCssObject } from '$lib/template/utils/stringifyCssObject';

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { ignoreclickoutside } from '$lib/clickOutside/attachments/ignoreClickOutside.svelte';
 	import { getClickOutsideContext } from '$lib/clickOutside/contexts/clickOutsideContext.svelte';
-	import { historyService } from '$lib/commands/history/HistoryService.svelte';
+	import { historyService } from '$lib/history/HistoryService.svelte';
 	import { getUIContext } from '$lib/template/contexts/uiContext.svelte';
 
 	const uiContext = getUIContext();

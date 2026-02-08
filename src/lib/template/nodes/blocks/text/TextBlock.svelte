@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { UpdateBlockCommand } from '$lib/commands/blocks/UpdateBlockCommand';
-	import { historyService } from '$lib/commands/history/HistoryService.svelte';
+	import { historyService } from '$lib/history/HistoryService.svelte';
 	import ProsemirrorEditor from '$lib/richtext/adapter/components/RichtextEditor.svelte';
 	import ProsemirrorPreview from '$lib/richtext/adapter/components/RichtextPreview.svelte';
 	import TableMenu from '$lib/richtext/adapter/components/toolbar/TableMenu.svelte';

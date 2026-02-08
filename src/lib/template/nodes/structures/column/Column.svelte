@@ -12,7 +12,7 @@
 	import NodeRenderer from '../../shared/NodeRenderer.svelte';
 	import NodeWrapper from '../../shared/NodeWrapper.svelte';
 	import { getTemplateContext } from '$lib/template/contexts/templateContext.svelte';
-	import { historyService } from '$lib/commands/history/HistoryService.svelte';
+	import { historyService } from '$lib/history/HistoryService.svelte';
 	import { CloneBlockCommand } from '$lib/commands/blocks/CloneBlockCommand';
 	import { DeleteBlockCommand } from '$lib/commands/blocks/DeleteBlockCommand';
 

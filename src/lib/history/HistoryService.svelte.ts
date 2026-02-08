@@ -1,11 +1,11 @@
 import { EventEmitter } from "./EventEmitter";
-import { CommandEntry } from "./CommandEntry";
+import { HistoryEntry } from "./HistoryEntry";
 import type { Events, CommandMetadata } from "./types";
-import type { Command } from "../Command";
+import type { Command } from "../commands/Command";
 import { generateId } from "$lib/template/utils/generateId";
 
 export class HistoryService extends EventEmitter<Events> {
-  private _timeline: CommandEntry[] = $state([]);
+  private _timeline: HistoryEntry[] = $state([]);
   private _currentIndex = $state(-1);
   private readonly MAX_CHANGES = 200;
 
@@ -18,7 +18,7 @@ export class HistoryService extends EventEmitter<Events> {
   }
 
   executeCommand(command: Command, meta: Omit<CommandMetadata, "id" | "timestamp">) {
-    const entry = new CommandEntry(command, {
+    const entry = new HistoryEntry(command, {
       ...meta,
       id: generateId(),
       timestamp: Date.now(),
@@ -27,7 +27,7 @@ export class HistoryService extends EventEmitter<Events> {
     this.execute(entry);
   }
 
-  private execute(entry: CommandEntry) {
+  private execute(entry: HistoryEntry) {
     this._timeline = this._timeline.slice(0, this._currentIndex + 1);
 
     entry.command.execute();
@@ -87,7 +87,7 @@ export class HistoryService extends EventEmitter<Events> {
     return this._currentIndex;
   }
 
-  getTimeline(): readonly CommandEntry[] {
+  getTimeline(): readonly HistoryEntry[] {
     return this._timeline;
   }
 

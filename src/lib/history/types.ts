@@ -1,4 +1,4 @@
-import type { CommandEntry } from "./CommandEntry";
+import type { HistoryEntry } from "./HistoryEntry";
 
 export interface CommandMetadata {
   id: string;
@@ -26,9 +26,9 @@ export type CommandType =
 
 
 export type Events = {
-  execute: { entry: CommandEntry };
-  undo: { entry: CommandEntry; index: number };
-  redo: { entry: CommandEntry; index: number };
+  execute: { entry: HistoryEntry };
+  undo: { entry: HistoryEntry; index: number };
+  redo: { entry: HistoryEntry; index: number };
   goto: { from: number; to: number };
   change: { currentIndex: number; canUndo: boolean; canRedo: boolean };
 };

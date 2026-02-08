@@ -2,7 +2,7 @@ import type { Editor } from "$lib/richtext/core/Editor";
 import { tick } from "svelte";
 import { getRichtextContext } from "../contexts/richtextContext.svelte";
 import { createSubscriber } from "svelte/reactivity";
-import { historyService } from "$lib/commands/history/HistoryService.svelte";
+import { historyService } from "$lib/history/HistoryService.svelte";
 import type { EditorContent } from "$lib/richtext/core/types";
 import type { Transaction } from "prosemirror-state";
 

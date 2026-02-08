@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { HistoryService } from '../history/HistoryService.svelte';
-import type { Command } from '../Command';
+import { HistoryService } from '../HistoryService.svelte';
+import type { Command } from '../../commands/Command';
 
 function createSpyCommand(): Command & { executeCalls: number; undoCalls: number } {
     const cmd = {

@@ -1,7 +1,7 @@
-import type { Command } from "../Command";
+import type { Command } from "../commands/Command";
 import type { CommandMetadata } from "./types";
 
-export class CommandEntry {
+export class HistoryEntry {
   readonly id: string;
   readonly timestamp: number;
 

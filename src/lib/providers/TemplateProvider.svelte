@@ -18,7 +18,7 @@
 	import { setRichtextContext } from '$lib/richtext/adapter/contexts/richtextContext.svelte';
 	import { setUIContext } from '$lib/template/contexts/uiContext.svelte';
 	import { setClickOutsideContext } from '$lib/clickOutside/contexts/clickOutsideContext.svelte';
-	import { historyService } from '$lib/commands/history/HistoryService.svelte';
+	import { historyService } from '$lib/history/HistoryService.svelte';
 	import { AddRowCommand } from '$lib/commands/structures/rows/AddRowCommand';
 	import { AddBlockCommand } from '$lib/commands/blocks/AddBlockCommand';
 	import { MoveRowCommand } from '$lib/commands/structures/rows/MoveRowCommand';

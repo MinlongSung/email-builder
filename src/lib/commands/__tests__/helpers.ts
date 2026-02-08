@@ -40,6 +40,7 @@ export function createTemplate(rows: RowEntity[] = []): TemplateEntity {
             width: 600,
             rows,
         },
+        config: {}
     };
 }
 
