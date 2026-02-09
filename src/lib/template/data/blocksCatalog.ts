@@ -57,7 +57,7 @@ export const BLOCKS_CATALOG: BlockEntity[] = [
       ["font-style"]: "normal",
       ["line-height"]: "120%",
       color: "#ffffff",
-      ["text-decoration"]: "none !important",
+      ["text-decoration"]: "none",
       width: "auto",
     },
   },

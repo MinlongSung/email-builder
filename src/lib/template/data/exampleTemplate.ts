@@ -1,6 +1,18 @@
 import type { TemplateEntity } from "../types";
 
 export const exampleTemplate: TemplateEntity = {
+    config: {
+        paragraph: {
+            color: 'red'
+        },
+        heading: {
+            level: {
+                2: {
+                    color: 'blue'
+                }
+            }
+        }
+    },
     root: {
         id: "root",
         type: "root",
@@ -199,7 +211,7 @@ export const exampleTemplate: TemplateEntity = {
                                     ["font-style"]: "normal",
                                     ["line-height"]: "120%",
                                     color: "#ffffff",
-                                    ["text-decoration"]: "none !important",
+                                    ["text-decoration"]: "none",
                                     width: "auto",
                                 },
                             },
