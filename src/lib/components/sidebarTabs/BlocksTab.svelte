@@ -3,7 +3,7 @@
 	import { getDndContext } from '$lib/dnd/adapter/contexts/dndContext.svelte';
 	import { BLOCKS_CATALOG } from '$lib/template/data/blocksCatalog';
 	import NodeRenderer from '$lib/template/nodes/shared/NodeRenderer.svelte';
-	const dndContext = getDndContext();
+	const dndStore = getDndContext();
 </script>
 
 <div class="panel">
@@ -12,7 +12,7 @@
 			entity={block}
 			format="card"
 			{@attach draggable({
-				manager: dndContext.manager,
+				manager: dndStore.manager,
 				id: block.id,
 				data: { type: block.type, item: block }
 			})}

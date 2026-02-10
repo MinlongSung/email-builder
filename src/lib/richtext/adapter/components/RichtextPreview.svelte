@@ -5,14 +5,14 @@
 		content: string;
 	}
 	const { content }: Props = $props();
-	const prosemirrorContext = getRichtextContext();
+	const richtextContext = getRichtextContext();
 
 	const handlePointerDown = (e: PointerEvent) => {
-		prosemirrorContext.selectionCoordinates.start = { x: e.clientX, y: e.clientY };
+		richtextContext.selectionCoordinates.start = { x: e.clientX, y: e.clientY };
 	};
 
 	const handlePointerUp = (e: PointerEvent) => {
-		prosemirrorContext.selectionCoordinates.end = { x: e.clientX, y: e.clientY };
+		richtextContext.selectionCoordinates.end = { x: e.clientX, y: e.clientY };
 	};
 </script>
 

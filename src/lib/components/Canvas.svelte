@@ -4,12 +4,12 @@
 	import { getTemplateContext } from '$lib/template/contexts/templateContext.svelte';
 	import { getDndContext } from '$lib/dnd/adapter/contexts/dndContext.svelte';
 
-	const templateContext = getTemplateContext();
-	const dndContext = getDndContext();
+	const templateStore = getTemplateContext();
+	const dndStore = getDndContext();
 </script>
 
-<main class="canvas" {@attach scrollable({ manager: dndContext.manager, id: 'canvas' })}>
-	<NodeRenderer entity={templateContext.template.root} />
+<main class="canvas" {@attach scrollable({ manager: dndStore.manager, id: 'canvas' })}>
+	<NodeRenderer entity={templateStore.template.root} />
 </main>
 
 <style>

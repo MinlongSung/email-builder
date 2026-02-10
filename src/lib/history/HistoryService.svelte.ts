@@ -99,6 +99,3 @@ export class HistoryService extends EventEmitter<Events> {
     return this._currentIndex < this._timeline.length - 1;
   }
 }
-
-export const historyService = new HistoryService();
-

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { UpdateBlockCommand } from '$lib/commands/blocks/UpdateBlockCommand';
-	import { historyService } from '$lib/history/HistoryService.svelte';
+	import { getHistoryContext } from '$lib/history/contexts/historyContext.svelte';
 	import ProsemirrorEditor from '$lib/richtext/adapter/components/RichtextEditor.svelte';
 	import ProsemirrorPreview from '$lib/richtext/adapter/components/RichtextPreview.svelte';
 	import TableMenu from '$lib/richtext/adapter/components/toolbar/TableMenu.svelte';
@@ -16,16 +16,18 @@
 		entity: TextBlockEntity;
 	}
 	const { entity, ...props }: Props = $props();
-	const uiContext = getUIContext();
-	const templateContext = getTemplateContext();
-	const templateConfig = $derived(templateContext.template.config);
+	const uiStore = getUIContext();
+	const templateStore = getTemplateContext();
+	const historyService = getHistoryContext();
+	const templateConfig = $derived(templateStore.template.config);
 	const { handleCreate, handleUpdate, handleDestroy } = createRichtextBlockHandlers({
+		historyService,
 		getContent: () => entity.content.json,
 		onUpdate: debounce((editor: Editor) => {
-			const coordinates = templateContext.getBlockCoordinates(entity.id);
+			const coordinates = templateStore.getBlockCoordinates(entity.id);
 			if (!coordinates) return;
 			const command = new UpdateBlockCommand({
-				store: templateContext,
+				store: templateStore,
 				coordinates,
 				updates: {
 					content: {
@@ -42,7 +44,7 @@
 </script>
 
 <div {...props}>
-	{#if uiContext.selectedId === entity.id}
+	{#if uiStore.selectedId === entity.id}
 		<ProsemirrorEditor
 			content={entity.content.json}
 			extensions={buildTextExtensions(templateConfig)}

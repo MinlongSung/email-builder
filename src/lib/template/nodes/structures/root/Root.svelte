@@ -8,7 +8,7 @@
 	import NodeRenderer from '../../shared/NodeRenderer.svelte';
 	import NodeWrapper from '../../shared/NodeWrapper.svelte';
 	import { getTemplateContext } from '$lib/template/contexts/templateContext.svelte';
-	import { historyService } from '$lib/history/HistoryService.svelte';
+	import { getHistoryContext } from '$lib/history/contexts/historyContext.svelte';
 	import { CloneRowCommand } from '$lib/commands/structures/rows/CloneRowCommand';
 	import { DeleteRowCommand } from '$lib/commands/structures/rows/DeleteRowCommand';
 	import { stringifyCssObject } from '$lib/template/utils/stringifyCssObject';
@@ -17,14 +17,15 @@
 		entity: RootEntity;
 	}
 	const { entity }: Props = $props();
-	const dndContext = getDndContext();
-	const templateContext = getTemplateContext();
+	const dndStore = getDndContext();
+	const templateStore = getTemplateContext();
+	const historyService = getHistoryContext();
 
 	const handleClone = (id: string) => {
-		const index = templateContext.getRowCoordinates(id);
+		const index = templateStore.getRowCoordinates(id);
 		if (index === undefined) return;
 		const command = new CloneRowCommand({
-			store: templateContext,
+			store: templateStore,
 			sourceIndex: index,
 			targetIndex: index + 1
 		});
@@ -34,10 +35,10 @@
 	};
 
 	const handleDelete = (id: string) => {
-		const index = templateContext.getRowCoordinates(id);
+		const index = templateStore.getRowCoordinates(id);
 		if (index === undefined) return;
 		const command = new DeleteRowCommand({
-			store: templateContext,
+			store: templateStore,
 			index
 		});
 		historyService.executeCommand(command, {
@@ -53,7 +54,7 @@
 	{width}
 	{style}
 	{@attach droppable({
-		manager: dndContext.manager,
+		manager: dndStore.manager,
 		id: entity.id,
 		data: { accepts: ROW_TYPES }
 	})}
@@ -63,12 +64,12 @@
 			<tr>
 				<td
 					style:position="relative"
-					style:opacity={dndContext.isDragging && dndContext.draggableId === row.id ? 0.7 : 1}
+					style:opacity={dndStore.isDragging && dndStore.draggableId === row.id ? 0.7 : 1}
 				>
 					<NodeWrapper
 						entity={row}
 						{@attach draggable({
-							manager: dndContext.manager,
+							manager: dndStore.manager,
 							id: row.id,
 							data: { type: row.type, item: row }
 						})}
@@ -78,22 +79,22 @@
 						<NodeRenderer
 							entity={row}
 							{@attach droppable({
-								manager: dndContext.manager,
+								manager: dndStore.manager,
 								id: row.id,
 								data: { accepts: ROW_TYPES }
 							})}
 						/>
 					</NodeWrapper>
 
-					{#if dndContext.isDragging && dndContext.droppableId === row.id && dndContext.draggableId !== dndContext.droppableId}
-						<DropIndicator isTopHalf={dndContext.isTopHalf} />
+					{#if dndStore.isDragging && dndStore.droppableId === row.id && dndStore.draggableId !== dndStore.droppableId}
+						<DropIndicator isTopHalf={dndStore.isTopHalf} />
 					{/if}
 				</td>
 			</tr>
 		{:else}
 			<tr>
 				<td>
-					<DropPlaceholder isOver={entity.id === dndContext.droppableId} />
+					<DropPlaceholder isOver={entity.id === dndStore.droppableId} />
 				</td>
 			</tr>
 		{/each}

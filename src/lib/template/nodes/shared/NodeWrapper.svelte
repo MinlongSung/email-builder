@@ -13,11 +13,11 @@
 	}
 	const { entity, children, onClone, onDelete, ...props }: Props = $props();
 
-	const uiContext = getUIContext();
-	const dndContext = getDndContext();
-	const isDragging = $derived(dndContext.isDragging);
-	const isSelected = $derived(!isDragging && uiContext.selectedId === entity.id);
-	const isHovered = $derived(!isDragging && uiContext.hoveredId === entity.id);
+	const uiStore = getUIContext();
+	const dndStore = getDndContext();
+	const isDragging = $derived(dndStore.isDragging);
+	const isSelected = $derived(!isDragging && uiStore.selectedId === entity.id);
+	const isHovered = $derived(!isDragging && uiStore.hoveredId === entity.id);
 
 	let referenceEl: HTMLElement | undefined = $state();
 </script>
@@ -28,27 +28,27 @@
 	class:hovered={isHovered}
 	onclick={(e) => {
 		e.stopPropagation();
-		uiContext.selectedId = entity.id;
+		uiStore.selectedId = entity.id;
 	}}
 	role="button"
 	tabindex="0"
 	onkeydown={(e) => {
 		if (e.key === 'Enter' || e.key === ' ') {
 			e.stopPropagation();
-			uiContext.selectedId = entity.id;
+			uiStore.selectedId = entity.id;
 		}
 	}}
 	onmouseover={(e) => {
 		e.stopPropagation();
-		uiContext.hoveredId = entity.id;
+		uiStore.hoveredId = entity.id;
 	}}
 	onmouseleave={(e) => {
 		e.stopPropagation();
-		uiContext.hoveredId = null;
+		uiStore.hoveredId = null;
 	}}
 	onfocus={(e) => {
 		e.stopPropagation();
-		uiContext.hoveredId = entity.id;
+		uiStore.hoveredId = entity.id;
 	}}
 >
 	{@render children()}

@@ -4,7 +4,7 @@
 	import { ROWS_CATALOG } from '$lib/template/data/rowsCatalog';
 	import NodeRenderer from '$lib/template/nodes/shared/NodeRenderer.svelte';
 	
-	const dndContext = getDndContext();
+	const dndStore = getDndContext();
 </script>
 
 <div class="panel">
@@ -13,7 +13,7 @@
 			entity={row}
 			format="card"
 			{@attach draggable({
-				manager: dndContext.manager,
+				manager: dndStore.manager,
 				id: row.id,
 				data: { type: row.type, item: row },
 			})}

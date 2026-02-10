@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { historyService } from '$lib/history/HistoryService.svelte';
+	import { getHistoryContext } from '$lib/history/contexts/historyContext.svelte';
 	import { UpdateRootCommand } from '$lib/commands/structures/root/UpdateRootCommand';
 	import { PRESETS } from '$lib/richtext/adapter/types';
 	import { getTemplateContext } from '$lib/template/contexts/templateContext.svelte';
@@ -18,10 +18,11 @@
 	import LinkControls from './settingsTab/LinkControls.svelte';
 	import ButtonControls from './settingsTab/ButtonControls.svelte';
 
-	const templateContext = getTemplateContext();
-	const templateConfig = $derived(templateContext.template.config);
+	const templateStore = getTemplateContext();
+	const historyContext = getHistoryContext();
+	const templateConfig = $derived(templateStore.template.config);
 
-	const root = $derived(templateContext.template.root);
+	const root = $derived(templateStore.template.root);
 	let width = $derived(root.width || 600);
 	let backgroundColor = $derived(root.style?.['background-color'] || '#ffffff');
 
@@ -31,7 +32,7 @@
 
 	const handleRootUpdate = debounce((updates: Partial<RootEntity>) => {
 		const command = new UpdateRootCommand({
-			store: templateContext,
+			store: templateStore,
 			updates
 		});
 		historyService.executeCommand(command, {
@@ -63,7 +64,7 @@
 			}
 		};
 
-		const blocks = templateContext.getBlocksByTypes(['text']);
+		const blocks = templateStore.getBlocksByTypes(['text']);
 		const commands: Command[] = [];
 		blocks.forEach(({ entity, coordinates }) => {
 			const newContent = richtextService.applyTransform(
@@ -78,7 +79,7 @@
 				}
 			);
 			const command = new UpdateBlockCommand({
-				store: templateContext,
+				store: templateStore,
 				coordinates,
 				updates: { content: newContent }
 			});
@@ -88,7 +89,7 @@
 
 		const batchCommands = new BatchCommand([
 			new UpdateTemplateConfigCommand({
-				store: templateContext,
+				store: templateStore,
 				updates: updatedConfig
 			}),
 			...commands
@@ -115,7 +116,7 @@
 			}
 		};
 
-		const blocks = templateContext.getBlocksByTypes(['text']);
+		const blocks = templateStore.getBlocksByTypes(['text']);
 		const commands: Command[] = [];
 		blocks.forEach(({ entity, coordinates }) => {
 			const newContent = richtextService.applyTransform(
@@ -130,7 +131,7 @@
 				}
 			);
 			const command = new UpdateBlockCommand({
-				store: templateContext,
+				store: templateStore,
 				coordinates,
 				updates: { content: newContent }
 			});
@@ -140,7 +141,7 @@
 
 		const batchCommands = new BatchCommand([
 			new UpdateTemplateConfigCommand({
-				store: templateContext,
+				store: templateStore,
 				updates: updatedConfig
 			}),
 			...commands
@@ -162,7 +163,7 @@
 			}
 		};
 
-		const blocks = templateContext.getBlocksByTypes(['text']);
+		const blocks = templateStore.getBlocksByTypes(['text']);
 		const commands: Command[] = [];
 		blocks.forEach(({ entity, coordinates }) => {
 			const newContent = richtextService.applyTransform(
@@ -187,7 +188,7 @@
 				}
 			);
 			const command = new UpdateBlockCommand({
-				store: templateContext,
+				store: templateStore,
 				coordinates,
 				updates: { content: newContent }
 			});
@@ -197,7 +198,7 @@
 
 		const batchCommands = new BatchCommand([
 			new UpdateTemplateConfigCommand({
-				store: templateContext,
+				store: templateStore,
 				updates: updatedConfig
 			}),
 			...commands
@@ -217,12 +218,12 @@
 			}
 		};
 
-		const blocks = templateContext.getBlocksByTypes(['button']);
+		const blocks = templateStore.getBlocksByTypes(['button']);
 		const commands: Command[] = [];
 
 		blocks.forEach(({ entity, coordinates }) => {
 			const command = new UpdateBlockCommand({
-				store: templateContext,
+				store: templateStore,
 				coordinates,
 				updates: {
 					style: {
@@ -238,7 +239,7 @@
 
 		const batchCommands = new BatchCommand([
 			new UpdateTemplateConfigCommand({
-				store: templateContext,
+				store: templateStore,
 				updates: updatedConfig
 			}),
 			...commands

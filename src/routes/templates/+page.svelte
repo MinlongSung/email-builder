@@ -12,7 +12,7 @@
 	import "$lib/richtext/core/extensions/marks/link/link.css";
 
 	const clickOutsideContext = getClickOutsideContext();
-	const uiContext = getUIContext();
+	const uiStore = getUIContext();
 </script>
 
 <div
@@ -20,7 +20,7 @@
 	{@attach clickoutside({
 		store: clickOutsideContext,
 		onClick: () => {
-			uiContext.selectedId = null;
+			uiStore.selectedId = null;
 		}
 	})}
 >

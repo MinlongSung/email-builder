@@ -15,7 +15,7 @@
 		{ id: 'settings', label: 'Settings' }
 	]);
 
-	const dndContext = getDndContext();
+	const dndStore = getDndContext();
 </script>
 
 <aside class="sidebar">
@@ -27,7 +27,7 @@
 		{/each}
 	</div>
 
-	<div class="tab-content" {@attach scrollable({ manager: dndContext.manager, id: 'sidebar' })}>
+	<div class="tab-content" {@attach scrollable({ manager: dndStore.manager, id: 'sidebar' })}>
 		{#if activeTab === 'blocks'}
 			<BlocksTab />
 		{:else if activeTab === 'rows'}

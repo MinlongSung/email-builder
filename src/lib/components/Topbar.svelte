@@ -1,16 +1,17 @@
 <script lang="ts">
 	import { ignoreclickoutside } from '$lib/clickOutside/attachments/ignoreClickOutside.svelte';
 	import { getClickOutsideContext } from '$lib/clickOutside/contexts/clickOutsideContext.svelte';
-	import { historyService } from '$lib/history/HistoryService.svelte';
+	import { getHistoryContext } from '$lib/history/contexts/historyContext.svelte';
 	import { getUIContext } from '$lib/template/contexts/uiContext.svelte';
 
-	const uiContext = getUIContext();
+	const uiStore = getUIContext();
 	const clickOutsideContext = getClickOutsideContext();
+	const historyService = getHistoryContext();
 </script>
 
 <header class="topbar" {@attach ignoreclickoutside({ store: clickOutsideContext })}>
-	<button onclick={() => (uiContext.viewMode = 'desktop')}>Desktop</button>
-	<button onclick={() => (uiContext.viewMode = 'mobile')}>Mobile</button>
+	<button onclick={() => (uiStore.viewMode = 'desktop')}>Desktop</button>
+	<button onclick={() => (uiStore.viewMode = 'mobile')}>Mobile</button>
 	<button onclick={() => historyService.undo()} disabled={!historyService.canUndo()}>Undo</button>
 	<button onclick={() => historyService.redo()} disabled={!historyService.canRedo()}>Redo</button>
 </header>

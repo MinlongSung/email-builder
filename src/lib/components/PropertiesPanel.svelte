@@ -6,10 +6,10 @@
 	import { getClickOutsideContext } from '$lib/clickOutside/contexts/clickOutsideContext.svelte';
 	import NodeRenderer from '$lib/template/nodes/shared/NodeRenderer.svelte';
 
-	const uiContext = getUIContext();
-	const templateContext = getTemplateContext();
+	const uiStore = getUIContext();
+	const templateStore = getTemplateContext();
 	const clickOutsideContext = getClickOutsideContext();
-	const node = $derived(uiContext.selectedId ? templateContext.getNode(uiContext.selectedId) : null);
+	const node = $derived(uiStore.selectedId ? templateStore.getNode(uiStore.selectedId) : null);
 </script>
 
 {#if node}

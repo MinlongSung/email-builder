@@ -18,7 +18,7 @@
 	import { setRichtextContext } from '$lib/richtext/adapter/contexts/richtextContext.svelte';
 	import { setUIContext } from '$lib/template/contexts/uiContext.svelte';
 	import { setClickOutsideContext } from '$lib/clickOutside/contexts/clickOutsideContext.svelte';
-	import { historyService } from '$lib/history/HistoryService.svelte';
+	import { setHistoryContext, getHistoryContext } from '$lib/history/contexts/historyContext.svelte';
 	import { AddRowCommand } from '$lib/commands/structures/rows/AddRowCommand';
 	import { AddBlockCommand } from '$lib/commands/blocks/AddBlockCommand';
 	import { MoveRowCommand } from '$lib/commands/structures/rows/MoveRowCommand';
@@ -35,12 +35,14 @@
 	setUIContext();
 	setClickOutsideContext();
 	setDndContext();
+	setHistoryContext();
 
-	const templateContext = getTemplateContext();
+	const templateStore = getTemplateContext();
+	const historyService = getHistoryContext();
 	
 	const addRow = (row: RowEntity, index: number) => {
 		const command = new AddRowCommand({
-			store: templateContext,
+			store: templateStore,
 			row,
 			index
 		});
@@ -51,7 +53,7 @@
 
 	const moveRow = (from: number, to: number) => {
 		const command = new MoveRowCommand({
-			store: templateContext,
+			store: templateStore,
 			from,
 			to
 		});
@@ -62,7 +64,7 @@
 
 	const addBlock = (block: BlockEntity, coordinates: BlockCoordinates) => {
 		const command = new AddBlockCommand({
-			store: templateContext,
+			store: templateStore,
 			block,
 			coordinates
 		});
@@ -73,7 +75,7 @@
 
 	const moveBlock = (from: BlockCoordinates, to: BlockCoordinates) => {
 		const command = new MoveBlockCommand({
-			store: templateContext,
+			store: templateStore,
 			from,
 			to
 		});
@@ -86,8 +88,8 @@
 		if (!draggable || !droppable) return;
 
 		if (ROW_TYPES.includes(draggable?.data.type)) {
-			const from = templateContext.getRowCoordinates(draggable.id);
-			let to = templateContext.getRowCoordinates(droppable.id);
+			const from = templateStore.getRowCoordinates(draggable.id);
+			let to = templateStore.getRowCoordinates(droppable.id);
 			if (from !== undefined) {
 				if (to === undefined) return;
 
@@ -103,11 +105,11 @@
 			return;
 		}
 
-		const from = templateContext.getBlockCoordinates(draggable.id);
-		let to = templateContext.getBlockCoordinates(droppable.id);
+		const from = templateStore.getBlockCoordinates(draggable.id);
+		let to = templateStore.getBlockCoordinates(droppable.id);
 		let columnCoordinates;
 		if (!to) {
-			columnCoordinates = templateContext.getColumnCoordinates(droppable.id);
+			columnCoordinates = templateStore.getColumnCoordinates(droppable.id);
 			if (!columnCoordinates) return;
 			to = { ...columnCoordinates, blockIndex: 0 };
 		}
@@ -124,18 +126,18 @@
 		addBlock(draggable.data.item as BlockEntity, to);
 	};
 
-	const dndContext = getDndContext();
-	dndContext.manager.on('drop', handleDrop);
+	const dndStore = getDndContext();
+	dndStore.manager.on('drop', handleDrop);
 
 	onDestroy(() => {
-		dndContext.manager.off('drop', handleDrop);
+		dndStore.manager.off('drop', handleDrop);
 	});
 </script>
 
 {@render children()}
 
 <DragOverlay>
-	{#if dndContext.transferredData}
-		<NodeRenderer entity={dndContext.transferredData} format="card" />
+	{#if dndStore.transferredData}
+		<NodeRenderer entity={dndStore.transferredData} format="card" />
 	{/if}
 </DragOverlay>

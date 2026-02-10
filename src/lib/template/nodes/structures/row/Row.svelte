@@ -8,8 +8,8 @@
 	}
 	const { entity, ...props }: Props = $props();
 	
-	const uiContext = getUIContext();
-	const shouldStack = $derived(uiContext.viewMode === 'mobile' && entity.isResponsive);
+	const uiStore = getUIContext();
+	const shouldStack = $derived(uiStore.viewMode === 'mobile' && entity.isResponsive);
 </script>
 
 <table width="100%" {...props}>

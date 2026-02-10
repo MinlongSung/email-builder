@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { UpdateBlockCommand } from '$lib/commands/blocks/UpdateBlockCommand';
-	import { historyService } from '$lib/history/HistoryService.svelte';
+	import { getHistoryContext } from '$lib/history/contexts/historyContext.svelte';
 	import ProsemirrorEditor from '$lib/richtext/adapter/components/RichtextEditor.svelte';
 	import ProsemirrorPreview from '$lib/richtext/adapter/components/RichtextPreview.svelte';
 	import { buildButtonExtensions } from '$lib/richtext/adapter/utils/buildExtensions';
@@ -16,18 +16,20 @@
 		entity: ButtonBlockEntity;
 	}
 	const { entity, ...props }: Props = $props();
-	const uiContext = getUIContext();
-	const templateContext = getTemplateContext();
+	const uiStore = getUIContext();
+	const templateStore = getTemplateContext();
+	const historyService = getHistoryContext();
 
 	const style = $derived(stringifyCssObject(entity.style));
 
 	const { handleCreate, handleUpdate, handleDestroy } = createRichtextBlockHandlers({
+		historyService,
 		getContent: () => entity.content.json,
 		onUpdate: debounce((editor: Editor) => {
-			const coordinates = templateContext.getBlockCoordinates(entity.id);
+			const coordinates = templateStore.getBlockCoordinates(entity.id);
 			if (!coordinates) return;
 			const command = new UpdateBlockCommand({
-				store: templateContext,
+				store: templateStore,
 				coordinates,
 				updates: {
 					content: {
@@ -44,7 +46,7 @@
 </script>
 
 <a href="https://example.com" {style} onclick={(e) => e.preventDefault()} {...props}>
-	{#if uiContext.selectedId === entity.id}
+	{#if uiStore.selectedId === entity.id}
 		<ProsemirrorEditor
 			content={entity.content.json}
 			extensions={buildButtonExtensions()}

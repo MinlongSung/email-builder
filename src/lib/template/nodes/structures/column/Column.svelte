@@ -12,7 +12,7 @@
 	import NodeRenderer from '../../shared/NodeRenderer.svelte';
 	import NodeWrapper from '../../shared/NodeWrapper.svelte';
 	import { getTemplateContext } from '$lib/template/contexts/templateContext.svelte';
-	import { historyService } from '$lib/history/HistoryService.svelte';
+	import { getHistoryContext } from '$lib/history/contexts/historyContext.svelte';
 	import { CloneBlockCommand } from '$lib/commands/blocks/CloneBlockCommand';
 	import { DeleteBlockCommand } from '$lib/commands/blocks/DeleteBlockCommand';
 
@@ -20,18 +20,19 @@
 		entity: ColumnEntity;
 	}
 	const { entity }: Props = $props();
-	const dndContext = getDndContext();
-	const templateContext = getTemplateContext();
+	const dndStore = getDndContext();
+	const templateStore = getTemplateContext();
+	const historyService = getHistoryContext();
 
 	const handleClone = (id: string) => {
-		const coordinates = templateContext.getBlockCoordinates(id);
+		const coordinates = templateStore.getBlockCoordinates(id);
 		if (!coordinates) return;
 		const targetCoordinates: BlockCoordinates = {
 			...coordinates,
 			blockIndex: coordinates.blockIndex + 1
 		};
 		const command = new CloneBlockCommand({
-			store: templateContext,
+			store: templateStore,
 			sourceCoordinates: coordinates,
 			targetCoordinates
 		});
@@ -41,10 +42,10 @@
 	};
 
 	const handleDelete = (id: string) => {
-		const coordinates = templateContext.getBlockCoordinates(id);
+		const coordinates = templateStore.getBlockCoordinates(id);
 		if (!coordinates) return;
 		const command = new DeleteBlockCommand({
-			store: templateContext,
+			store: templateStore,
 			coordinates
 		});
 		historyService.executeCommand(command, {
@@ -56,7 +57,7 @@
 <table
 	width="100%"
 	{@attach droppable({
-		manager: dndContext.manager,
+		manager: dndStore.manager,
 		id: entity.id,
 		data: { accepts: BLOCK_TYPES }
 	})}
@@ -66,12 +67,12 @@
 			<tr>
 				<td
 					style:position="relative"
-					style:opacity={dndContext.isDragging && dndContext.draggableId === block.id ? 0.7 : 1}
+					style:opacity={dndStore.isDragging && dndStore.draggableId === block.id ? 0.7 : 1}
 				>
 					<NodeWrapper
 						entity={block}
 						{@attach draggable({
-							manager: dndContext.manager,
+							manager: dndStore.manager,
 							id: block.id,
 							data: { type: block.type, item: block }
 						})}
@@ -81,22 +82,22 @@
 						<NodeRenderer
 							entity={block}
 							{@attach droppable({
-								manager: dndContext.manager,
+								manager: dndStore.manager,
 								id: block.id,
 								data: { accepts: BLOCK_TYPES }
 							})}
 						/>
 					</NodeWrapper>
 
-					{#if dndContext.isDragging && dndContext.droppableId === block.id && dndContext.draggableId !== dndContext.droppableId}
-						<DropIndicator isTopHalf={dndContext.isTopHalf} />
+					{#if dndStore.isDragging && dndStore.droppableId === block.id && dndStore.draggableId !== dndStore.droppableId}
+						<DropIndicator isTopHalf={dndStore.isTopHalf} />
 					{/if}
 				</td>
 			</tr>
 		{:else}
 			<tr>
 				<td>
-					<DropPlaceholder isOver={entity.id === dndContext.droppableId} />
+					<DropPlaceholder isOver={entity.id === dndStore.droppableId} />
 				</td>
 			</tr>
 		{/each}

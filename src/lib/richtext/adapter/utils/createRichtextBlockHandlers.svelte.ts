@@ -2,18 +2,19 @@ import type { Editor } from "$lib/richtext/core/Editor";
 import { tick } from "svelte";
 import { getRichtextContext } from "../contexts/richtextContext.svelte";
 import { createSubscriber } from "svelte/reactivity";
-import { historyService } from "$lib/history/HistoryService.svelte";
+import { HistoryService } from "$lib/history/HistoryService.svelte";
 import type { EditorContent } from "$lib/richtext/core/types";
 import type { Transaction } from "prosemirror-state";
 
 interface RichtextBlockHandlersOptions {
     getContent: () => EditorContent;
     onUpdate: (editor: Editor, transaction: Transaction) => void;
+    historyService: HistoryService;
 }
 
 export function createRichtextBlockHandlers(options: RichtextBlockHandlersOptions) {
     const richtextContext = getRichtextContext();
-    const { getContent, onUpdate } = options;
+    const { historyService, getContent, onUpdate } = options;
 
     const syncContent = async () => {
         await tick();
