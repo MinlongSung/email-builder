@@ -3,10 +3,10 @@ export const levels: Level[] = [1, 2, 3, 4, 5, 6];
 
 interface TypographyConfig {
   color: string;
-  ["font-size"]: string;
-  ["font-family"]: string;
-  ["letter-spacing"]: string;
-  ["line-height"]: string;
+  fontSize: string;
+  fontFamily: string;
+  letterSpacing: string;
+  lineHeight: string;
 }
 
 interface LinkConfig {
@@ -16,15 +16,15 @@ interface LinkConfig {
 
 interface ButtonConfig {
   color: string;
-  ["background-color"]: string;
-  ["font-size"]: string;
-  ["font-family"]: string;
-  ["font-weight"]: string;
-  ["line-height"]: string;
-  ["text-decoration"]: string;
+  backgroundColor: string;
+  fontSize: string;
+  fontFamily: string;
+  fontWeight: string;
+  lineHeight: string;
+  textDecoration: string;
   padding: string;
   border: string;
-  ["border-radius"]: string;
+  borderRadius: string;
 }
 
 export interface TemplateConfig {

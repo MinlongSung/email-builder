@@ -1,22 +1,6 @@
 <script lang="ts">
 	import { getRichtextContext } from '../../contexts/richtextContext.svelte';
-
-	const COMMON_FONTS = [
-		'Arial',
-		'Verdana',
-		'Helvetica',
-		'Tahoma',
-		'Trebuchet MS',
-		'Times New Roman',
-		'Georgia',
-		'Garamond',
-		'Courier New',
-		'Brush Script MT',
-		'Comic Sans MS',
-		'Impact',
-		'Lucida Sans Unicode',
-		'Palatino Linotype'
-	];
+	import { PRESETS } from '../../types';
 
 	const LETTER_SPACING_PRESETS = [
 		{ label: 'Normal', value: 'normal' },
@@ -27,7 +11,7 @@
 	];
 
 	const richtextContext = getRichtextContext();
-  const editor = $derived(richtextContext.activeEditor);
+	const editor = $derived(richtextContext.activeEditor);
 </script>
 
 <div class="container">
@@ -66,9 +50,9 @@
 		title="Font Family"
 	>
 		<option value="">Font</option>
-		{#each COMMON_FONTS as font}
-			<option value={font}>
-				{font}
+		{#each PRESETS.FONT_FAMILY as fontFamily}
+			<option value={fontFamily}>
+				{fontFamily}
 			</option>
 		{/each}
 	</select>
@@ -94,8 +78,7 @@
 
 	<input
 		type="color"
-		oninput={(e) =>
-			editor?.chain().focus().setColor(e.currentTarget.value).run()}
+		oninput={(e) => editor?.chain().focus().setColor(e.currentTarget.value).run()}
 		title="Text Color"
 	/>
 	<button
@@ -108,8 +91,7 @@
 
 	<input
 		type="color"
-		oninput={(e) =>
-			editor?.chain().focus().setBackgroundColor(e.currentTarget.value).run()}
+		oninput={(e) => editor?.chain().focus().setBackgroundColor(e.currentTarget.value).run()}
 		title="Background Color"
 	/>
 	<button
