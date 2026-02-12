@@ -5,8 +5,7 @@
 	import ProsemirrorPreview from '$lib/richtext/adapter/components/RichtextPreview.svelte';
 	import TableMenu from '$lib/richtext/adapter/components/toolbar/TableMenu.svelte';
 	import { buildTextExtensions } from '$lib/richtext/adapter/utils/buildExtensions';
-	import { createRichtextBlockHandlers } from '$lib/richtext/adapter/utils/createRichtextBlockHandlers.svelte';
-	import type { Editor } from '$lib/richtext/core/Editor';
+	import { createRichtextHandlers } from '$lib/richtext/adapter/utils/createRichtextHandlers.svelte';
 	import { getTemplateContext } from '$lib/template/contexts/templateContext.svelte';
 	import { getUIContext } from '$lib/template/contexts/uiContext.svelte';
 	import { type TextBlockEntity } from '$lib/template/types';
@@ -20,10 +19,10 @@
 	const templateStore = getTemplateContext();
 	const historyService = getHistoryContext();
 	const templateConfig = $derived(templateStore.template.config);
-	const { handleCreate, handleUpdate, handleDestroy } = createRichtextBlockHandlers({
+	const { handleCreate, handleUpdate, handleDestroy } = createRichtextHandlers({
 		historyService,
 		getContent: () => entity.content.json,
-		onUpdate: debounce((editor: Editor) => {
+		onUpdate: debounce(({ editor }) => {
 			const coordinates = templateStore.getBlockCoordinates(entity.id);
 			if (!coordinates) return;
 			const command = new UpdateBlockCommand({

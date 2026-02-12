@@ -1,18 +1,16 @@
-import type { Editor } from "$lib/richtext/core/Editor";
 import { tick } from "svelte";
 import { getRichtextContext } from "../contexts/richtextContext.svelte";
 import { createSubscriber } from "svelte/reactivity";
 import { HistoryService } from "$lib/history/HistoryService.svelte";
-import type { EditorContent } from "$lib/richtext/core/types";
-import type { Transaction } from "prosemirror-state";
+import type { EditorContent, EditorEvents } from "$lib/richtext/core/types";
 
-interface RichtextBlockHandlersOptions {
+interface RichtextHandlersOptions {
     getContent: () => EditorContent;
-    onUpdate: (editor: Editor, transaction: Transaction) => void;
+    onUpdate: (props: EditorEvents["update"]) => void;
     historyService: HistoryService;
 }
 
-export function createRichtextBlockHandlers(options: RichtextBlockHandlersOptions) {
+export function createRichtextHandlers(options: RichtextHandlersOptions) {
     const richtextContext = getRichtextContext();
     const { historyService, getContent, onUpdate } = options;
 
@@ -22,7 +20,7 @@ export function createRichtextBlockHandlers(options: RichtextBlockHandlersOption
         richtextContext.activeEditor?.commands.setContent(content, { emitUpdate: false });
     };
 
-    const handleCreate = (editor: Editor) => {
+    const handleCreate = ({ editor }: EditorEvents["create"]) => {
         const { start, end } = richtextContext.selectionCoordinates;
         const from = editor.view.posAtCoords({ left: start.x, top: start.y })?.pos;
         const to = editor.view.posAtCoords({ left: end.x, top: end.y })?.pos;
@@ -46,8 +44,8 @@ export function createRichtextBlockHandlers(options: RichtextBlockHandlersOption
         historyService.on('goto', syncContent);
     };
 
-    const handleUpdate = (editor: Editor, transaction: Transaction) => {
-        onUpdate(editor, transaction);
+    const handleUpdate = (props: EditorEvents["update"]) => {
+        onUpdate(props);
     };
 
     const handleDestroy = () => {

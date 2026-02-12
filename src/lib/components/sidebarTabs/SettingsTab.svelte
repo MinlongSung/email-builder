@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { getHistoryContext } from '$lib/history/contexts/historyContext.svelte';
 	import { UpdateRootCommand } from '$lib/commands/structures/root/UpdateRootCommand';
-	import { PRESETS } from '$lib/richtext/adapter/types';
 	import { getTemplateContext } from '$lib/template/contexts/templateContext.svelte';
 	import { levels, type RootEntity, type TemplateConfig } from '$lib/template/types';
 	import { debounce } from '$lib/template/utils/debounce';
@@ -9,26 +8,23 @@
 	import { UpdateBlockCommand } from '$lib/commands/blocks/UpdateBlockCommand';
 	import { BatchCommand } from '$lib/commands/BatchCommands';
 	import { UpdateTemplateConfigCommand } from '$lib/commands/config/UpdateTemplateConfigCommand';
-	import { richtextService } from '$lib/richtext/adapter/services/RichtextService.svelte';
+
 	import { isParagraph, isHeadingLevel } from '$lib/richtext/core/extensions/utils/textNodeChecks';
 	import { isLink } from '$lib/richtext/core/extensions/marks/link/utils/isLink';
 	import type { Level } from '$lib/template/types';
-	import { onMount } from 'svelte';
 	import TypographyControls from './settingsTab/TypographyControls.svelte';
 	import LinkControls from './settingsTab/LinkControls.svelte';
 	import ButtonControls from './settingsTab/ButtonControls.svelte';
+	import { getRichtextContext } from '$lib/richtext/adapter/contexts/richtextContext.svelte';
 
 	const templateStore = getTemplateContext();
-	const historyContext = getHistoryContext();
+	const historyService = getHistoryContext();
+	const richtextStore = getRichtextContext();
 	const templateConfig = $derived(templateStore.template.config);
 
 	const root = $derived(templateStore.template.root);
 	let width = $derived(root.width || 600);
 	let backgroundColor = $derived(root.style?.['background-color'] || '#ffffff');
-
-	onMount(() => {
-		richtextService.initialize(templateConfig);
-	});
 
 	const handleRootUpdate = debounce((updates: Partial<RootEntity>) => {
 		const command = new UpdateRootCommand({
@@ -40,11 +36,19 @@
 		});
 	}, 300);
 
-	const handleWidthUpdate = (e: Event) => {
+	const handleWidthUpdate = (
+		e: Event & {
+			currentTarget: EventTarget & HTMLInputElement;
+		}
+	) => {
 		handleRootUpdate({ width: +e.currentTarget.value });
 	};
 
-	const handleBackgroundColorUpdate = (e: Event) => {
+	const handleBackgroundColorUpdate = (
+		e: Event & {
+			currentTarget: EventTarget & HTMLInputElement;
+		}
+	) => {
 		handleRootUpdate({
 			style: {
 				...root.style,
@@ -54,8 +58,6 @@
 	};
 
 	const handleParagraphConfigUpdate = debounce((name: string, value: string) => {
-		if (!richtextService.isReady) return;
-
 		const updatedConfig: Partial<TemplateConfig> = {
 			...templateConfig,
 			paragraph: {
@@ -67,7 +69,7 @@
 		const blocks = templateStore.getBlocksByTypes(['text']);
 		const commands: Command[] = [];
 		blocks.forEach(({ entity, coordinates }) => {
-			const newContent = richtextService.applyTransform(
+			const newContent = richtextStore.applyTransform(
 				entity.content,
 				({ node }) => isParagraph(node),
 				({ node, pos }, tr) => {
@@ -101,8 +103,6 @@
 	}, 300);
 
 	const handleHeadingBlockConfigUpdate = debounce((level: Level, name: string, value: string) => {
-		if (!richtextService.isReady) return;
-
 		const updatedConfig: Partial<TemplateConfig> = {
 			...templateConfig,
 			heading: {
@@ -119,7 +119,7 @@
 		const blocks = templateStore.getBlocksByTypes(['text']);
 		const commands: Command[] = [];
 		blocks.forEach(({ entity, coordinates }) => {
-			const newContent = richtextService.applyTransform(
+			const newContent = richtextStore.applyTransform(
 				entity.content,
 				({ node }) => isHeadingLevel(node, level),
 				({ node, pos }, tr) => {
@@ -153,8 +153,6 @@
 	}, 300);
 
 	const handleLinkConfigUpdate = debounce((name: string, value: string | boolean) => {
-		if (!richtextService.isReady) return;
-
 		const updatedConfig: Partial<TemplateConfig> = {
 			...templateConfig,
 			link: {
@@ -166,7 +164,7 @@
 		const blocks = templateStore.getBlocksByTypes(['text']);
 		const commands: Command[] = [];
 		blocks.forEach(({ entity, coordinates }) => {
-			const newContent = richtextService.applyTransform(
+			const newContent = richtextStore.applyTransform(
 				entity.content,
 				({ mark }) => isLink(mark),
 				({ mark, node, pos, state }, tr) => {

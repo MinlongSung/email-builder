@@ -1,14 +1,13 @@
 <script lang="ts">
 	import { Editor } from '$lib/richtext/core/Editor';
-	import type { EditorContent, Extension } from '$lib/richtext/core/types';
+	import type { EditorContent, EditorEvents, Extension } from '$lib/richtext/core/types';
 	import { onMount } from 'svelte';
-	import type { Transaction } from 'prosemirror-state';
 
 	interface Props {
 		content: EditorContent;
 		extensions: Extension[];
-		onCreate?: (editor: Editor) => void;
-		onUpdate?: (editor: Editor, transaction: Transaction) => void;
+		onCreate?: (props: EditorEvents['create']) => void;
+		onUpdate?: (props: EditorEvents['update']) => void;
 		onDestroy?: () => void;
 	}
 	const { content, extensions, onCreate, onUpdate, onDestroy }: Props = $props();
@@ -20,9 +19,9 @@
 			element,
 			extensions,
 			content,
-			onCreate: ({ editor }) => onCreate?.(editor),
-			onUpdate: ({ editor, transaction }) => onUpdate?.(editor, transaction),
-			onDestroy: () => onDestroy?.()
+			onCreate,
+			onUpdate,
+			onDestroy
 		});
 
 		return () => {

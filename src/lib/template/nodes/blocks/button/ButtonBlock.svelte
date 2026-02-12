@@ -4,13 +4,12 @@
 	import ProsemirrorEditor from '$lib/richtext/adapter/components/RichtextEditor.svelte';
 	import ProsemirrorPreview from '$lib/richtext/adapter/components/RichtextPreview.svelte';
 	import { buildButtonExtensions } from '$lib/richtext/adapter/utils/buildExtensions';
-	import type { Editor } from '$lib/richtext/core/Editor';
 	import { getTemplateContext } from '$lib/template/contexts/templateContext.svelte';
 	import { getUIContext } from '$lib/template/contexts/uiContext.svelte';
 	import { type ButtonBlockEntity } from '$lib/template/types';
 	import { stringifyCssObject } from '$lib/template/utils/stringifyCssObject';
 	import { debounce } from '$lib/template/utils/debounce';
-	import { createRichtextBlockHandlers } from '$lib/richtext/adapter/utils/createRichtextBlockHandlers.svelte';
+	import { createRichtextHandlers } from '$lib/richtext/adapter/utils/createRichtextHandlers.svelte';
 
 	interface Props {
 		entity: ButtonBlockEntity;
@@ -22,10 +21,10 @@
 
 	const style = $derived(stringifyCssObject(entity.style));
 
-	const { handleCreate, handleUpdate, handleDestroy } = createRichtextBlockHandlers({
+	const { handleCreate, handleUpdate, handleDestroy } = createRichtextHandlers({
 		historyService,
 		getContent: () => entity.content.json,
-		onUpdate: debounce((editor: Editor) => {
+		onUpdate: debounce(({ editor }) => {
 			const coordinates = templateStore.getBlockCoordinates(entity.id);
 			if (!coordinates) return;
 			const command = new UpdateBlockCommand({

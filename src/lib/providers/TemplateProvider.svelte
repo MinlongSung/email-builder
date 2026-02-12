@@ -18,11 +18,15 @@
 	import { setRichtextContext } from '$lib/richtext/adapter/contexts/richtextContext.svelte';
 	import { setUIContext } from '$lib/template/contexts/uiContext.svelte';
 	import { setClickOutsideContext } from '$lib/clickOutside/contexts/clickOutsideContext.svelte';
-	import { setHistoryContext, getHistoryContext } from '$lib/history/contexts/historyContext.svelte';
+	import {
+		setHistoryContext,
+		getHistoryContext
+	} from '$lib/history/contexts/historyContext.svelte';
 	import { AddRowCommand } from '$lib/commands/structures/rows/AddRowCommand';
 	import { AddBlockCommand } from '$lib/commands/blocks/AddBlockCommand';
 	import { MoveRowCommand } from '$lib/commands/structures/rows/MoveRowCommand';
 	import { MoveBlockCommand } from '$lib/commands/blocks/MoveBlockCommand';
+	import { buildTextExtensions } from '$lib/richtext/adapter/utils/buildExtensions';
 
 	interface Props {
 		template: TemplateEntity;
@@ -31,7 +35,6 @@
 	const { template, children }: Props = $props();
 
 	setTemplateContext(() => template);
-	setRichtextContext();
 	setUIContext();
 	setClickOutsideContext();
 	setDndContext();
@@ -39,7 +42,8 @@
 
 	const templateStore = getTemplateContext();
 	const historyService = getHistoryContext();
-	
+	setRichtextContext(buildTextExtensions(templateStore.template.config));
+
 	const addRow = (row: RowEntity, index: number) => {
 		const command = new AddRowCommand({
 			store: templateStore,
