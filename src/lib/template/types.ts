@@ -21,7 +21,6 @@ interface ButtonConfig {
   fontFamily: string;
   fontWeight: string;
   lineHeight: string;
-  textDecoration: string;
   padding: string;
   border: string;
   borderRadius: string;

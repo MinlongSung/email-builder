@@ -5,8 +5,8 @@
 		fontFamily?: string;
 		fontSize?: string;
 		fontWeight?: string;
+		fontStyle?: string;
 		lineHeight?: string;
-		textDecoration?: string;
 		color?: string;
 		backgroundColor?: string;
 		padding?: string;
@@ -20,7 +20,23 @@
 	}
 
 	let { config, onUpdate }: Props = $props();
+
+	// Estados derivados para bold/italic
+	const isBold = $derived(config?.fontWeight === 'bold');
+	const isItalic = $derived(config?.fontStyle === 'italic');
+
+	// Toggle handlers
+	const toggleBold = () => {
+		onUpdate('fontWeight', isBold ? 'normal' : 'bold');
+	};
+
+	const toggleItalic = () => {
+		onUpdate('fontStyle', isItalic ? 'normal' : 'italic');
+	};
 </script>
+
+<button onclick={toggleBold} class:selected={isBold}> B </button>
+<button onclick={toggleItalic} class:selected={isItalic}> I </button>
 
 <p>Font family</p>
 <select
@@ -28,7 +44,7 @@
 	onchange={(e) => onUpdate('fontFamily', e.currentTarget.value)}
 >
 	<option value="">Default</option>
-	{#each PRESETS.FONT_FAMILY as fontFamily}
+	{#each PRESETS.FONT_FAMILY as fontFamily (fontFamily)}
 		<option value={fontFamily}>{fontFamily}</option>
 	{/each}
 </select>
@@ -41,14 +57,6 @@
 	placeholder="e.g., 16px, 1em"
 />
 
-<p>Font weight</p>
-<input
-	type="text"
-	value={config?.fontWeight || ''}
-	oninput={(e) => onUpdate('fontWeight', e.currentTarget.value)}
-	placeholder="e.g., 400, 700, bold"
-/>
-
 <p>Line height</p>
 <input
 	type="text"
@@ -56,16 +64,6 @@
 	oninput={(e) => onUpdate('lineHeight', e.currentTarget.value)}
 	placeholder="e.g., 1.5, 24px"
 />
-
-<p>Text decoration</p>
-<select
-	value={config?.textDecoration || 'none'}
-	onchange={(e) => onUpdate('textDecoration', e.currentTarget.value)}
->
-	<option value="none">None</option>
-	<option value="underline">Underline</option>
-	<option value="line-through">Line-through</option>
-</select>
 
 <p>Color</p>
 <input
@@ -133,6 +131,27 @@
 	select:focus,
 	input:focus {
 		outline: none;
+		border-color: #3b82f6;
+	}
+
+	button {
+		padding: 8px 16px;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		background: white;
+		cursor: pointer;
+		font-weight: bold;
+		font-size: 14px;
+		transition: all 0.2s;
+	}
+
+	button:hover {
+		background: #f5f5f5;
+	}
+
+	button.selected {
+		background: #3b82f6;
+		color: white;
 		border-color: #3b82f6;
 	}
 </style>
