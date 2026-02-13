@@ -33,8 +33,8 @@
 	import { buildTextExtensions } from '$lib/richtext/adapter/utils/buildExtensions';
 	import { BatchCommand } from '$lib/commands/BatchCommands';
 	import {
-		transformTextBlock,
-		transformButtonBlock,
+		transformParagraph,
+		transformButton,
 		type BlockTransformer
 	} from '$lib/template/nodes/utils/blockTransformers.svelte';
 
@@ -88,8 +88,8 @@
 		]);
 
 		const blockTransformers: Record<BlockType, BlockTransformer> = {
-			text: transformTextBlock,
-			button: transformButtonBlock
+			text: transformParagraph,
+			button: transformButton
 		};
 
 		const command = blockTransformers[block.type]?.({

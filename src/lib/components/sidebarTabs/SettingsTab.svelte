@@ -5,20 +5,18 @@
 	import { levels, type RootEntity, type TemplateConfig } from '$lib/template/types';
 	import { debounce } from '$lib/template/utils/debounce';
 	import type { Command } from '$lib/commands/Command';
-	import { UpdateBlockCommand } from '$lib/commands/blocks/UpdateBlockCommand';
 	import { BatchCommand } from '$lib/commands/BatchCommands';
 	import { UpdateTemplateConfigCommand } from '$lib/commands/config/UpdateTemplateConfigCommand';
-
-	import { isHeadingLevel } from '$lib/richtext/core/extensions/utils/textNodeChecks';
-	import { isLink } from '$lib/richtext/core/extensions/marks/link/utils/isLink';
 	import type { Level } from '$lib/template/types';
 	import TypographyControls from './settingsTab/TypographyControls.svelte';
 	import LinkControls from './settingsTab/LinkControls.svelte';
 	import ButtonControls from './settingsTab/ButtonControls.svelte';
 	import { getRichtextContext } from '$lib/richtext/adapter/contexts/richtextContext.svelte';
 	import {
-		transformTextBlock,
-		transformButtonBlock
+		transformParagraph,
+		transformButton,
+		transformHeading,
+		transformLink
 	} from '$lib/template/nodes/utils/blockTransformers.svelte';
 
 	const templateStore = getTemplateContext();
@@ -74,7 +72,7 @@
 		const commands: Command[] = [];
 
 		blocks.forEach(({ entity, coordinates }) => {
-			const command = transformTextBlock({
+			const command = transformParagraph({
 				block: entity,
 				coordinates,
 				templateStore,
@@ -115,25 +113,19 @@
 
 		const blocks = templateStore.getBlocksByTypes(['text']);
 		const commands: Command[] = [];
+
 		blocks.forEach(({ entity, coordinates }) => {
-			const newContent = richtextStore.applyTransform(
-				entity.content,
-				({ node }) => isHeadingLevel(node, level),
-				({ node, pos }, tr) => {
-					if (!node) return;
-					tr.setNodeMarkup(pos, undefined, {
-						...node.attrs,
-						[name]: value
-					});
-				}
-			);
-			const command = new UpdateBlockCommand({
-				store: templateStore,
+			const command = transformHeading({
+				block: entity,
 				coordinates,
-				updates: { content: newContent }
+				templateStore,
+				richtextStore,
+				templateConfig: updatedConfig,
+				level
 			});
-			commands.push(command);
+			if (command) commands.push(command);
 		});
+
 		if (!commands.length) return;
 
 		const batchCommands = new BatchCommand([
@@ -160,35 +152,18 @@
 
 		const blocks = templateStore.getBlocksByTypes(['text']);
 		const commands: Command[] = [];
+
 		blocks.forEach(({ entity, coordinates }) => {
-			const newContent = richtextStore.applyTransform(
-				entity.content,
-				({ mark }) => isLink(mark),
-				({ mark, node, pos, state }, tr) => {
-					if (!mark || !node || !state) return;
-
-					const linkType = state.schema.marks.link;
-					const start = pos;
-					const end = pos + node.nodeSize;
-
-					tr.removeMark(start, end, linkType);
-					tr.addMark(
-						start,
-						end,
-						linkType.create({
-							...mark.attrs,
-							[name]: value
-						})
-					);
-				}
-			);
-			const command = new UpdateBlockCommand({
-				store: templateStore,
+			const command = transformLink({
+				block: entity,
 				coordinates,
-				updates: { content: newContent }
+				templateStore,
+				richtextStore,
+				templateConfig: updatedConfig
 			});
-			commands.push(command);
+			if (command) commands.push(command);
 		});
+
 		if (!commands.length) return;
 
 		const batchCommands = new BatchCommand([
@@ -217,7 +192,7 @@
 		const commands: Command[] = [];
 
 		blocks.forEach(({ entity, coordinates }) => {
-			const command = transformButtonBlock({
+			const command = transformButton({
 				block: entity,
 				coordinates,
 				templateStore,
