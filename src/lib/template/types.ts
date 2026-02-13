@@ -1,7 +1,7 @@
 export type Level = 1 | 2 | 3 | 4 | 5 | 6;
 export const levels: Level[] = [1, 2, 3, 4, 5, 6];
 
-interface TypographyConfig {
+export interface TypographyConfig {
   color: string;
   fontSize: string;
   fontFamily: string;
