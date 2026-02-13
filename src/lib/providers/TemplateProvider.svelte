@@ -4,6 +4,7 @@
 		ROW_TYPES,
 		type BlockCoordinates,
 		type BlockEntity,
+		type BlockType,
 		type RowEntity,
 		type TemplateEntity
 	} from '$lib/template/types';
@@ -15,7 +16,10 @@
 	import type { DndState } from '$lib/dnd/core/types';
 	import DragOverlay from '$lib/dnd/adapter/components/DragOverlay.svelte';
 	import NodeRenderer from '$lib/template/nodes/shared/NodeRenderer.svelte';
-	import { setRichtextContext } from '$lib/richtext/adapter/contexts/richtextContext.svelte';
+	import {
+		getRichtextContext,
+		setRichtextContext
+	} from '$lib/richtext/adapter/contexts/richtextContext.svelte';
 	import { setUIContext } from '$lib/template/contexts/uiContext.svelte';
 	import { setClickOutsideContext } from '$lib/clickOutside/contexts/clickOutsideContext.svelte';
 	import {
@@ -27,6 +31,12 @@
 	import { MoveRowCommand } from '$lib/commands/structures/rows/MoveRowCommand';
 	import { MoveBlockCommand } from '$lib/commands/blocks/MoveBlockCommand';
 	import { buildTextExtensions } from '$lib/richtext/adapter/utils/buildExtensions';
+	import { BatchCommand } from '$lib/commands/BatchCommands';
+	import {
+		transformTextBlock,
+		transformButtonBlock,
+		type BlockTransformer
+	} from '$lib/template/nodes/utils/blockTransformers.svelte';
 
 	interface Props {
 		template: TemplateEntity;
@@ -41,8 +51,10 @@
 	setHistoryContext();
 
 	const templateStore = getTemplateContext();
+	const templateConfig = $derived(templateStore.template.config);
 	const historyService = getHistoryContext();
 	setRichtextContext(buildTextExtensions(templateStore.template.config));
+	const richtextStore = getRichtextContext();
 
 	const addRow = (row: RowEntity, index: number) => {
 		const command = new AddRowCommand({
@@ -67,12 +79,29 @@
 	};
 
 	const addBlock = (block: BlockEntity, coordinates: BlockCoordinates) => {
-		const command = new AddBlockCommand({
-			store: templateStore,
+		const batchCommand = new BatchCommand([
+			new AddBlockCommand({
+				store: templateStore,
+				block,
+				coordinates
+			})
+		]);
+
+		const blockTransformers: Record<BlockType, BlockTransformer> = {
+			text: transformTextBlock,
+			button: transformButtonBlock
+		};
+
+		const command = blockTransformers[block.type]?.({
 			block,
-			coordinates
+			coordinates,
+			richtextStore,
+			templateConfig,
+			templateStore
 		});
-		historyService.executeCommand(command, {
+		if (command) batchCommand.add(command);
+
+		historyService.executeCommand(batchCommand, {
 			type: 'block.add'
 		});
 	};
