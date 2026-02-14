@@ -3,7 +3,7 @@ import type { RowEntity } from "../types";
 export const ROWS_CATALOG: RowEntity[] = [
   {
     id: "row-100",
-    style: {},
+    style: { padding: '20px 20px 0 20px' },
     separatorSize: 20,
     type: "row",
     isResponsive: true,
@@ -19,7 +19,7 @@ export const ROWS_CATALOG: RowEntity[] = [
   },
   {
     id: "row-50-50",
-    style: {},
+    style: { padding: '20px 20px 0 20px' },
     separatorSize: 20,
     type: "row",
     isResponsive: true,
@@ -42,7 +42,7 @@ export const ROWS_CATALOG: RowEntity[] = [
   },
   {
     id: "row-33-34-33",
-    style: {},
+    style: { padding: '20px 20px 0 20px' },
     separatorSize: 20,
     type: "row",
     isResponsive: true,
@@ -72,7 +72,7 @@ export const ROWS_CATALOG: RowEntity[] = [
   },
   {
     id: "row-25-25-25-25",
-    style: {},
+    style: { padding: '20px 20px 0 20px' },
     separatorSize: 20,
     type: "row",
     isResponsive: true,
@@ -109,7 +109,7 @@ export const ROWS_CATALOG: RowEntity[] = [
   },
   {
     id: "row-66-34",
-    style: {},
+    style: { padding: '20px 20px 0 20px' },
     separatorSize: 20,
     type: "row",
     isResponsive: true,
@@ -132,7 +132,7 @@ export const ROWS_CATALOG: RowEntity[] = [
   },
   {
     id: "row-34-66",
-    style: {},
+    style: { padding: '20px 20px 0 20px' },
     separatorSize: 20,
     type: "row",
     isResponsive: true,
@@ -155,7 +155,7 @@ export const ROWS_CATALOG: RowEntity[] = [
   },
   {
     id: "row-75-25",
-    style: {},
+    style: { padding: '20px 20px 0 20px' },
     separatorSize: 20,
     type: "row",
     isResponsive: true,
@@ -178,7 +178,7 @@ export const ROWS_CATALOG: RowEntity[] = [
   },
   {
     id: "row-25-75",
-    style: {},
+    style: { padding: '20px 20px 0 20px' },
     separatorSize: 20,
     type: "row",
     isResponsive: true,
@@ -201,7 +201,7 @@ export const ROWS_CATALOG: RowEntity[] = [
   },
   {
     id: "row-20-60-20",
-    style: {},
+    style: { padding: '20px 20px 0 20px' },
     separatorSize: 20,
     type: "row",
     isResponsive: true,
@@ -231,7 +231,7 @@ export const ROWS_CATALOG: RowEntity[] = [
   },
   {
     id: "row-40-20-40",
-    style: {},
+    style: { padding: '20px 20px 0 20px' },
     separatorSize: 20,
     type: "row",
     isResponsive: true,
@@ -261,7 +261,7 @@ export const ROWS_CATALOG: RowEntity[] = [
   },
   {
     id: "row-40-60",
-    style: {},
+    style: { padding: '20px 20px 0 20px' },
     separatorSize: 20,
     type: "row",
     isResponsive: true,
@@ -284,7 +284,7 @@ export const ROWS_CATALOG: RowEntity[] = [
   },
   {
     id: "row-20-20-60",
-    style: {},
+    style: { padding: '20px 20px 0 20px' },
     separatorSize: 20,
     type: "row",
     isResponsive: true,
@@ -314,7 +314,7 @@ export const ROWS_CATALOG: RowEntity[] = [
   },
   {
     id: "row-20-20-20-20-20",
-    style: {},
+    style: { padding: '20px 20px 0 20px' },
     separatorSize: 20,
     type: "row",
     isResponsive: true,
@@ -358,7 +358,7 @@ export const ROWS_CATALOG: RowEntity[] = [
   },
   {
     id: "row-16-17-17-17-17-16",
-    style: {},
+    style: { padding: '20px 20px 0 20px' },
     separatorSize: 20,
     type: "row",
     isResponsive: true,
