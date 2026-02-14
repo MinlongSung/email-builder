@@ -13,13 +13,13 @@ export const exampleTemplate: TemplateEntity = {
         id: "root",
         type: "root",
         width: 550,
-        style: { padding: "0px" },
+        style: {},
         rows: [
             {
                 id: "row-1",
                 type: "row",
                 style: {
-                    padding: "20px",
+                    padding: "20px 20px 0 20px",
                 },
                 separatorSize: 10,
                 isResponsive: true,
@@ -172,7 +172,7 @@ export const exampleTemplate: TemplateEntity = {
                 id: "row-2",
                 type: "row",
                 style: {
-                    padding: "20px",
+                    padding: "20px 20px 0 20px",
                 },
                 separatorSize: 10,
                 isResponsive: true,
