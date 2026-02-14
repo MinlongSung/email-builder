@@ -1,5 +1,30 @@
+export type Heading = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+export const headings: Heading[] = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+
+// Level type from ProseMirror
 export type Level = 1 | 2 | 3 | 4 | 5 | 6;
-export const levels: Level[] = [1, 2, 3, 4, 5, 6];
+
+// Bidirectional converters between Level (ProseMirror) and Heading (TemplateConfig)
+export const HEADING_BY_LEVEL = {
+	1: 'h1',
+	2: 'h2',
+	3: 'h3',
+	4: 'h4',
+	5: 'h5',
+	6: 'h6'
+} as const satisfies Record<Level, Heading>;
+
+export const LEVEL_BY_HEADING = {
+	h1: 1,
+	h2: 2,
+	h3: 3,
+	h4: 4,
+	h5: 5,
+	h6: 6
+} as const satisfies Record<Heading, Level>;
+
+export const levelToHeading = (level: Level): Heading => HEADING_BY_LEVEL[level];
+export const headingToLevel = (heading: Heading): Level => LEVEL_BY_HEADING[heading];
 
 export interface TypographyConfig {
   color: string;
@@ -27,10 +52,13 @@ interface ButtonConfig {
 }
 
 export interface TemplateConfig {
-  heading: {
-    level: Partial<Record<Level, Partial<TypographyConfig>>>;
-  }
   paragraph: Partial<TypographyConfig>;
+  h1: Partial<TypographyConfig>;
+  h2: Partial<TypographyConfig>;
+  h3: Partial<TypographyConfig>;
+  h4: Partial<TypographyConfig>;
+  h5: Partial<TypographyConfig>;
+  h6: Partial<TypographyConfig>;
   link: Partial<LinkConfig>;
   button: Partial<ButtonConfig>;
 }

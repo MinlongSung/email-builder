@@ -20,13 +20,9 @@ describe('UpdateTemplateConfigCommand', () => {
                     color: '#000000',
                     fontSize: '14px'
                 },
-                heading: {
-                    level: {
-                        1: {
-                            color: '#333333',
-                            fontSize: '24px'
-                        }
-                    }
+                h1: {
+                    color: '#333333',
+                    fontSize: '24px'
                 },
                 link: {
                     color: '#0000ff',
@@ -75,21 +71,17 @@ describe('UpdateTemplateConfigCommand', () => {
         const command = new UpdateTemplateConfigCommand({
             store,
             updates: {
-                heading: {
-                    level: {
-                        2: {
-                            color: '#666666',
-                            fontSize: '20px'
-                        }
-                    }
+                h2: {
+                    color: '#666666',
+                    fontSize: '20px'
                 }
             }
         });
 
         command.execute();
 
-        expect(store.template.config.heading?.level[2]?.color).toBe('#666666');
-        expect(store.template.config.heading?.level[1]?.color).toBe('#333333'); // No modificado
+        expect(store.template.config.h2?.color).toBe('#666666');
+        expect(store.template.config.h1?.color).toBe('#333333'); // No modificado
     });
 
     it('should update multiple config sections at once', () => {
@@ -138,12 +130,8 @@ describe('UpdateTemplateConfigCommand', () => {
                     color: '#ff0000',
                     fontSize: '20px'
                 },
-                heading: {
-                    level: {
-                        3: {
-                            color: '#999999'
-                        }
-                    }
+                h3: {
+                    color: '#999999'
                 }
             }
         });

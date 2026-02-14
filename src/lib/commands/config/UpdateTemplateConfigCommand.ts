@@ -39,35 +39,16 @@ export class UpdateTemplateConfigCommand extends Command {
     ): Partial<TemplateConfig> {
         const merged = { ...current };
 
-        if (updates.heading) {
-            merged.heading = {
-                level: {
-                    ...current.heading?.level,
-                    ...updates.heading.level
-                }
-            };
-        }
+        const keys: (keyof TemplateConfig)[] = ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'link', 'button'];
 
-        if (updates.paragraph) {
-            merged.paragraph = {
-                ...current.paragraph,
-                ...updates.paragraph
-            };
-        }
-
-        if (updates.link) {
-            merged.link = {
-                ...current.link,
-                ...updates.link
-            };
-        }
-
-        if (updates.button) {
-            merged.button = {
-                ...current.button,
-                ...updates.button
-            };
-        }
+        keys.forEach(key => {
+            if (updates[key]) {
+                merged[key] = {
+                    ...current[key],
+                    ...updates[key]
+                };
+            }
+        });
 
         return merged;
     }

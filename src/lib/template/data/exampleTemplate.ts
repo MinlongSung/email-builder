@@ -5,12 +5,8 @@ export const exampleTemplate: TemplateEntity = {
         paragraph: {
             color: '#FF0000'
         },
-        heading: {
-            level: {
-                2: {
-                    color: '#0000FF'
-                }
-            }
+        h2: {
+            color: '#0000FF'
         }
     },
     root: {

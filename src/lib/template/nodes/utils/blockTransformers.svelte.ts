@@ -4,8 +4,9 @@ import { isParagraph, isParagraphOrHeading, isHeading } from "$lib/richtext/core
 import { isLink } from "$lib/richtext/core/extensions/marks/link/utils/isLink";
 import type { RichtextStore } from "$lib/richtext/adapter/contexts/richtextContext.svelte";
 import type { TemplateStore } from "$lib/template/contexts/templateContext.svelte";
-import type { BlockCoordinates, BlockEntity, TemplateConfig, Level, TypographyConfig } from "$lib/template/types";
+import { headings, levelToHeading, type BlockCoordinates, type BlockEntity, type TemplateConfig, type TypographyConfig } from "$lib/template/types";
 import type { Attrs } from "prosemirror-model";
+import type { Level } from "$lib/richtext/core/extensions/nodes/Heading";
 
 export interface TransformContext {
 	block: BlockEntity;
@@ -20,9 +21,12 @@ export type BlockTransformer = (context: TransformContext) => Command | null;
 export const transformText = (context: TransformContext): Command | null => {
 	const { block, coordinates, templateStore, richtextStore, templateConfig } = context;
 
-	const { paragraph, heading, link } = templateConfig;
+	const { paragraph, link } = templateConfig;
 	const hasParagraphConfig = paragraph && Object.keys(paragraph).length > 0;
-	const hasHeadingConfig = heading?.level && Object.keys(heading.level).length > 0;
+	const hasHeadingConfig = headings.some(heading => {
+		const config = templateConfig[heading];
+		return config && Object.keys(config).length > 0;
+	});
 	const hasLinkConfig = link && Object.keys(link).length > 0;
 
 	if (!hasParagraphConfig && !hasHeadingConfig && !hasLinkConfig) return null;
@@ -53,7 +57,8 @@ export const transformText = (context: TransformContext): Command | null => {
 
 			if (node && isHeading(node) && hasHeadingConfig) {
 				const level = node.attrs.level as Level;
-				const headingConfig = heading?.level?.[level];
+				const heading = levelToHeading(level);
+				const headingConfig = templateConfig[heading];
 				if (headingConfig) {
 					const attrs = applyTypographyAttrs(node.attrs, headingConfig);
 					tr.setNodeMarkup(pos, undefined, attrs);
