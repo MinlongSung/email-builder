@@ -13,10 +13,8 @@
 	import ButtonControls from './settingsTab/ButtonControls.svelte';
 	import { getRichtextContext } from '$lib/richtext/adapter/contexts/richtextContext.svelte';
 	import {
-		transformParagraph,
-		transformButton,
-		transformHeading,
-		transformLink
+		transformText,
+		transformButton
 	} from '$lib/template/nodes/utils/blockTransformers.svelte';
 
 	const templateStore = getTemplateContext();
@@ -72,7 +70,7 @@
 		const commands: Command[] = [];
 
 		blocks.forEach(({ entity, coordinates }) => {
-			const command = transformParagraph({
+			const command = transformText({
 				block: entity,
 				coordinates,
 				templateStore,
@@ -115,13 +113,12 @@
 		const commands: Command[] = [];
 
 		blocks.forEach(({ entity, coordinates }) => {
-			const command = transformHeading({
+			const command = transformText({
 				block: entity,
 				coordinates,
 				templateStore,
 				richtextStore,
-				templateConfig: updatedConfig,
-				level
+				templateConfig: updatedConfig
 			});
 			if (command) commands.push(command);
 		});
@@ -154,7 +151,7 @@
 		const commands: Command[] = [];
 
 		blocks.forEach(({ entity, coordinates }) => {
-			const command = transformLink({
+			const command = transformText({
 				block: entity,
 				coordinates,
 				templateStore,

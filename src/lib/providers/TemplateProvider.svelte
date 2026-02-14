@@ -33,7 +33,7 @@
 	import { buildTextExtensions } from '$lib/richtext/adapter/utils/buildExtensions';
 	import { BatchCommand } from '$lib/commands/BatchCommands';
 	import {
-		transformParagraph,
+		transformText,
 		transformButton,
 		type BlockTransformer
 	} from '$lib/template/nodes/utils/blockTransformers.svelte';
@@ -88,7 +88,7 @@
 		]);
 
 		const blockTransformers: Record<BlockType, BlockTransformer> = {
-			text: transformParagraph,
+			text: transformText,
 			button: transformButton
 		};
 
