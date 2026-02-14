@@ -34,11 +34,11 @@ export const transformText = (context: TransformContext): Command | null => {
 	const applyTypographyAttrs = (nodeAttrs: Attrs, config: Partial<TypographyConfig>) => {
 		const attrs = { ...nodeAttrs };
 		const { fontFamily, fontSize, lineHeight, letterSpacing, color } = config;
-		if (fontFamily) attrs.fontFamily = fontFamily;
-		if (fontSize) attrs.fontSize = fontSize;
-		if (lineHeight) attrs.lineHeight = lineHeight;
-		if (letterSpacing) attrs.letterSpacing = letterSpacing;
-		if (color) attrs.color = color;
+		attrs.fontFamily = fontFamily ?? null;
+		attrs.fontSize = fontSize ?? null;
+		attrs.lineHeight = lineHeight ?? null;
+		attrs.letterSpacing = letterSpacing ?? null;
+		attrs.color = color ?? null;
 		return attrs;
 	};
 
@@ -67,16 +67,19 @@ export const transformText = (context: TransformContext): Command | null => {
 				return;
 			}
 
-			if (mark && node && state && isLink(mark) && hasLinkConfig) {
+			if (mark && node && state && isLink(mark)) {
 				const linkType = state.schema.marks.link;
 				const start = pos;
 				const end = pos + node.nodeSize;
 
-				tr.removeMark(start, end, linkType);
-				tr.addMark(start, end, linkType.create({
+				const attrs = {
 					...mark.attrs,
-					...link
-				}));
+					color: link?.color ?? null,
+					isUnderlined: link?.isUnderlined ?? null
+				};
+
+				tr.removeMark(start, end, linkType);
+				tr.addMark(start, end, linkType.create(attrs));
 				hasChanges = true;
 			}
 		}
