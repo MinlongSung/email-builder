@@ -11,14 +11,14 @@
 	import "$lib/richtext/core/extensions/nodes/table/table.css";
 	import "$lib/richtext/core/extensions/marks/link/link.css";
 
-	const clickOutsideContext = getClickOutsideContext();
+	const clickOutsideStore = getClickOutsideContext();
 	const uiStore = getUIContext();
 </script>
 
 <div
 	class="editor"
 	{@attach clickoutside({
-		store: clickOutsideContext,
+		store: clickOutsideStore,
 		onClick: () => {
 			uiStore.selectedId = null;
 		}

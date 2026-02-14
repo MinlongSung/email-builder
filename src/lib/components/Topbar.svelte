@@ -5,11 +5,11 @@
 	import { getUIContext } from '$lib/template/contexts/uiContext.svelte';
 
 	const uiStore = getUIContext();
-	const clickOutsideContext = getClickOutsideContext();
+	const clickOutsideStore = getClickOutsideContext();
 	const historyService = getHistoryContext();
 </script>
 
-<header class="topbar" {@attach ignoreclickoutside({ store: clickOutsideContext })}>
+<header class="topbar" {@attach ignoreclickoutside({ store: clickOutsideStore })}>
 	<button onclick={() => (uiStore.viewMode = 'desktop')}>Desktop</button>
 	<button onclick={() => (uiStore.viewMode = 'mobile')}>Mobile</button>
 	<button onclick={() => historyService.undo()} disabled={!historyService.canUndo()}>Undo</button>

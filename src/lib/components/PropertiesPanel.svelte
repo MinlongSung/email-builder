@@ -8,14 +8,14 @@
 
 	const uiStore = getUIContext();
 	const templateStore = getTemplateContext();
-	const clickOutsideContext = getClickOutsideContext();
+	const clickOutsideStore = getClickOutsideContext();
 	const node = $derived(uiStore.selectedId ? templateStore.getNode(uiStore.selectedId) : null);
 </script>
 
 {#if node}
 	<aside
 		{@attach ignoreclickoutside({
-			store: clickOutsideContext
+			store: clickOutsideStore
 		})}
 		class="propertiesPanel"
 		transition:fly={{ x: 320, duration: 250 }}
