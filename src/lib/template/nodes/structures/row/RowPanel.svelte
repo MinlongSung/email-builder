@@ -29,6 +29,7 @@
 	} from '$lib/template/nodes/utils/columnWidth';
 	import { SvelteSet } from 'svelte/reactivity';
 	import DragOverlay from '$lib/dnd/adapter/components/DragOverlay.svelte';
+	import PaddingControl from '$lib/components/ui/PaddingControl.svelte';
 	import NodeRenderer from '../../shared/NodeRenderer.svelte';
 
 	// ─── Props ────────────────────────────────────────────
@@ -229,6 +230,36 @@
 
 	const debouncedUpdateSeparatorSize = debounce(updateSeparatorSize, 300);
 
+	// ─── Padding ─────────────────────────────────────────
+	function parsePadding(style?: Record<string, string | number>): [number, number, number, number] {
+		const raw = style?.padding;
+		if (!raw || typeof raw !== 'string') return [0, 0, 0, 0];
+
+		const parts = raw.split(/\s+/).map((v) => parseInt(v, 10) || 0);
+		if (parts.length === 1) return [parts[0], parts[0], parts[0], parts[0]];
+		if (parts.length === 2) return [parts[0], parts[1], parts[0], parts[1]];
+		if (parts.length === 3) return [parts[0], parts[1], parts[2], parts[1]];
+		return [parts[0], parts[1], parts[2], parts[3]];
+	}
+
+	const paddingValues = $derived(parsePadding(entity.style));
+
+	function handlePaddingChange(values: [number, number, number, number]) {
+		const rowIndex = getRowIndex();
+		if (rowIndex === undefined) return;
+
+		const padding = `${values[0]}px ${values[1]}px ${values[2]}px ${values[3]}px`;
+
+		historyService.executeCommand(
+			new UpdateRowCommand({
+				store: templateStore,
+				rowIndex,
+				updates: { style: { ...entity.style, padding } }
+			}),
+			{ type: 'row.update' }
+		);
+	}
+
 	function toggleResponsive() {
 		const rowIndex = getRowIndex();
 		if (rowIndex === undefined) return;
@@ -302,6 +333,9 @@
 		+{SEPARATOR_STEP}
 	</button>
 </label>
+
+<PaddingControl values={paddingValues} onchange={handlePaddingChange} />
+
 <div {@attach scrollable({ manager: dndStore.manager, id: entity.id })}>
 	<button onclick={addColumn} disabled={!canAddColumn}> Add Column </button>
 
