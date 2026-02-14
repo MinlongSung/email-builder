@@ -7,14 +7,15 @@
 	import type { Command } from '$lib/commands/Command';
 	import { BatchCommand } from '$lib/commands/BatchCommands';
 	import { UpdateTemplateConfigCommand } from '$lib/commands/config/UpdateTemplateConfigCommand';
-	import type { Level } from '$lib/template/types';
+	import type { BlockType, Level } from '$lib/template/types';
 	import TypographyControls from './settingsTab/TypographyControls.svelte';
 	import LinkControls from './settingsTab/LinkControls.svelte';
 	import ButtonControls from './settingsTab/ButtonControls.svelte';
 	import { getRichtextContext } from '$lib/richtext/adapter/contexts/richtextContext.svelte';
 	import {
 		transformText,
-		transformButton
+		transformButton,
+		type TransformContext
 	} from '$lib/template/nodes/utils/blockTransformers.svelte';
 
 	const templateStore = getTemplateContext();
@@ -35,6 +36,44 @@
 			type: 'root.update.width'
 		});
 	}, 300);
+
+	const applyTemplateConfig = ({
+		updatedConfig,
+		blockTypes,
+		transformer
+	}: {
+		updatedConfig: Partial<TemplateConfig>;
+		blockTypes: BlockType[];
+		transformer: (context: TransformContext) => Command | null;
+	}) => {
+		const blocks = templateStore.getBlocksByTypes(blockTypes);
+		const commands: Command[] = [];
+
+		blocks.forEach(({ entity, coordinates }) => {
+			const command = transformer({
+				block: entity,
+				coordinates,
+				templateStore,
+				richtextStore,
+				templateConfig: updatedConfig
+			});
+			if (command) commands.push(command);
+		});
+
+		if (!commands.length) return;
+
+		const batchCommands = new BatchCommand([
+			new UpdateTemplateConfigCommand({
+				store: templateStore,
+				updates: updatedConfig
+			}),
+			...commands
+		]);
+
+		historyService.executeCommand(batchCommands, {
+			type: 'template.global.styles'
+		});
+	};
 
 	const handleWidthUpdate = (
 		e: Event & {
@@ -65,33 +104,10 @@
 				[name]: value
 			}
 		};
-
-		const blocks = templateStore.getBlocksByTypes(['text']);
-		const commands: Command[] = [];
-
-		blocks.forEach(({ entity, coordinates }) => {
-			const command = transformText({
-				block: entity,
-				coordinates,
-				templateStore,
-				richtextStore,
-				templateConfig: updatedConfig
-			});
-			if (command) commands.push(command);
-		});
-
-		if (!commands.length) return;
-
-		const batchCommands = new BatchCommand([
-			new UpdateTemplateConfigCommand({
-				store: templateStore,
-				updates: updatedConfig
-			}),
-			...commands
-		]);
-
-		historyService.executeCommand(batchCommands, {
-			type: 'template.global.styles'
+		applyTemplateConfig({
+			updatedConfig,
+			blockTypes: ['text'],
+			transformer: transformText
 		});
 	}, 300);
 
@@ -108,33 +124,10 @@
 				}
 			}
 		};
-
-		const blocks = templateStore.getBlocksByTypes(['text']);
-		const commands: Command[] = [];
-
-		blocks.forEach(({ entity, coordinates }) => {
-			const command = transformText({
-				block: entity,
-				coordinates,
-				templateStore,
-				richtextStore,
-				templateConfig: updatedConfig
-			});
-			if (command) commands.push(command);
-		});
-
-		if (!commands.length) return;
-
-		const batchCommands = new BatchCommand([
-			new UpdateTemplateConfigCommand({
-				store: templateStore,
-				updates: updatedConfig
-			}),
-			...commands
-		]);
-
-		historyService.executeCommand(batchCommands, {
-			type: 'template.global.styles'
+		applyTemplateConfig({
+			updatedConfig,
+			blockTypes: ['text'],
+			transformer: transformText
 		});
 	}, 300);
 
@@ -146,33 +139,10 @@
 				[name]: value
 			}
 		};
-
-		const blocks = templateStore.getBlocksByTypes(['text']);
-		const commands: Command[] = [];
-
-		blocks.forEach(({ entity, coordinates }) => {
-			const command = transformText({
-				block: entity,
-				coordinates,
-				templateStore,
-				richtextStore,
-				templateConfig: updatedConfig
-			});
-			if (command) commands.push(command);
-		});
-
-		if (!commands.length) return;
-
-		const batchCommands = new BatchCommand([
-			new UpdateTemplateConfigCommand({
-				store: templateStore,
-				updates: updatedConfig
-			}),
-			...commands
-		]);
-
-		historyService.executeCommand(batchCommands, {
-			type: 'template.global.styles'
+		applyTemplateConfig({
+			updatedConfig,
+			blockTypes: ['text'],
+			transformer: transformText
 		});
 	}, 300);
 
@@ -184,33 +154,10 @@
 				[name]: value
 			}
 		};
-
-		const blocks = templateStore.getBlocksByTypes(['button']);
-		const commands: Command[] = [];
-
-		blocks.forEach(({ entity, coordinates }) => {
-			const command = transformButton({
-				block: entity,
-				coordinates,
-				templateStore,
-				richtextStore,
-				templateConfig: updatedConfig
-			});
-			if (command) commands.push(command);
-		});
-
-		if (!commands.length) return;
-
-		const batchCommands = new BatchCommand([
-			new UpdateTemplateConfigCommand({
-				store: templateStore,
-				updates: updatedConfig
-			}),
-			...commands
-		]);
-
-		historyService.executeCommand(batchCommands, {
-			type: 'template.global.styles'
+		applyTemplateConfig({
+			updatedConfig,
+			blockTypes: ['button'],
+			transformer: transformButton
 		});
 	}, 300);
 </script>
