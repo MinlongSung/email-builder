@@ -13,6 +13,7 @@ export type CommandType =
   | "row.move"
   | "row.clone"
   | "row.update"
+  | "column.move"
   | "block.add"
   | "block.delete"
   | "block.move"

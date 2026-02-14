@@ -5,7 +5,7 @@ import { TouchSensor } from "../../core/sensors/TouchSensor";
 import type { DndState } from "../../core/types";
 import { pointerWithin } from "../../core/utils";
 
-class DndStore {
+export class DndStore {
     private _state: DndState = $state({
         draggable: null,
         droppable: null,
