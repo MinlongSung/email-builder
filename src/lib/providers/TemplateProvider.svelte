@@ -161,10 +161,7 @@
 
 	const dndStore = getDndContext();
 	dndStore.manager.on('drop', handleDrop);
-
-	onDestroy(() => {
-		dndStore.manager.off('drop', handleDrop);
-	});
+	onDestroy(() => dndStore.manager.off('drop', handleDrop));
 </script>
 
 {@render children()}
