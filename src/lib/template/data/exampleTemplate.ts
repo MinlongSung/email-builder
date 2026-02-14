@@ -3,12 +3,12 @@ import type { TemplateEntity } from "../types";
 export const exampleTemplate: TemplateEntity = {
     config: {
         paragraph: {
-            color: 'red'
+            color: '#FF0000'
         },
         heading: {
             level: {
                 2: {
-                    color: 'blue'
+                    color: '#0000FF'
                 }
             }
         }
