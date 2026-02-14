@@ -28,6 +28,8 @@
 		COLUMN_WIDTH_STEP
 	} from '$lib/template/nodes/utils/columnWidth';
 	import { SvelteSet } from 'svelte/reactivity';
+	import DragOverlay from '$lib/dnd/adapter/components/DragOverlay.svelte';
+	import NodeRenderer from '../../shared/NodeRenderer.svelte';
 
 	// ─── Props ────────────────────────────────────────────
 	interface Props {
@@ -273,11 +275,7 @@
 <div>
 	<label>
 		Responsive:
-		<input
-			type="checkbox"
-			checked={entity.isResponsive}
-			onchange={toggleResponsive}
-		/>
+		<input type="checkbox" checked={entity.isResponsive} onchange={toggleResponsive} />
 	</label>
 </div>
 
@@ -378,5 +376,8 @@
 	{/each}
 </div>
 
-<style>
-</style>
+<DragOverlay store={dndStore}>
+	{#if dndStore.transferredData}
+		<NodeRenderer entity={dndStore.transferredData} format="card" />
+	{/if}
+</DragOverlay>

@@ -1,13 +1,18 @@
 <script lang="ts">
-	import { getDndContext } from '../contexts/dndContext.svelte';
-	const { children } = $props();
-	const dndStore = getDndContext();
+	import type { DndStore } from '../contexts/dndContext.svelte';
+	import type { Snippet } from 'svelte';
+
+	interface Props {
+		store: DndStore;
+		children?: Snippet;
+	}
+	const { store, children }: Props = $props();
 </script>
 
-{#if dndStore.isDragging}
+{#if store.isDragging}
 	<div
 		class="drag-overlay"
-		style:transform="translate3d({dndStore.clientX}px, {dndStore.clientY}px, 0)"
+		style:transform="translate3d({store.clientX}px, {store.clientY}px, 0)"
 	>
 		{@render children?.()}
 	</div>

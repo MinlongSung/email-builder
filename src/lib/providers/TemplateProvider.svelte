@@ -169,7 +169,7 @@
 
 {@render children()}
 
-<DragOverlay>
+<DragOverlay store={dndStore}>
 	{#if dndStore.transferredData}
 		<NodeRenderer entity={dndStore.transferredData} format="card" />
 	{/if}
