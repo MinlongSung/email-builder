@@ -8,10 +8,10 @@
 		entity: RowEntity;
 	}
 	const { entity, ...props }: Props = $props();
-	
+
 	const uiStore = getUIContext();
 	const shouldStack = $derived(uiStore.viewMode === 'mobile' && entity.isResponsive);
-	const style = $derived(stringifyCssObject(entity.style))
+	const style = $derived(stringifyCssObject(entity.style));
 </script>
 
 <table width="100%" {style} {...props}>
@@ -28,7 +28,7 @@
 				{#if i < entity.columns.length - 1}
 					<td
 						style:min-width={shouldStack ? 'auto' : entity.separatorSize + 'px'}
-						style:min-height={shouldStack ? 'auto' : entity.separatorSize + 'px'}
+						style:min-height={shouldStack ? entity.separatorSize + 'px' : 'auto'}
 						style:display={shouldStack ? 'block' : 'table-cell'}
 						style:width={shouldStack ? '100%' : entity.separatorSize + 'px'}
 					>

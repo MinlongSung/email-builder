@@ -14,6 +14,7 @@
 	import { AddColumnCommand } from '$lib/commands/structures/columns/AddColumnCommand';
 	import { DeleteColumnCommand } from '$lib/commands/structures/columns/DeleteColumnCommand';
 	import { BatchCommand } from '$lib/commands/BatchCommands';
+	import { UpdateRowCommand } from '$lib/commands/structures/rows/UpdateRowCommand';
 	import { COLUMN_TYPES, type ColumnEntity, type RowEntity } from '$lib/template/types';
 	import { generateId } from '$lib/template/utils/generateId';
 	import { debounce } from '$lib/template/utils/debounce';
@@ -32,7 +33,7 @@
 	interface Props {
 		entity: RowEntity;
 	}
-	const { entity }: Props = $props();
+	const { entity = $bindable() }: Props = $props();
 
 	// ─── Contexts & Stores ────────────────────────────────
 	const templateStore = getTemplateContext();
@@ -202,6 +203,41 @@
 		historyService.executeCommand(batch, { type: 'column.update' });
 	}
 
+	// ─── Row Operations ──────────────────────────────────
+	const SEPARATOR_STEP = 5;
+	const SEPARATOR_MIN = 0;
+	const SEPARATOR_MAX = 50;
+
+	function updateSeparatorSize(newSize: number) {
+		const rowIndex = getRowIndex();
+		if (rowIndex === undefined) return;
+
+		const clamped = Math.max(SEPARATOR_MIN, Math.min(Math.round(newSize), SEPARATOR_MAX));
+		if (clamped === entity.separatorSize) return;
+
+		historyService.executeCommand(
+			new UpdateRowCommand({
+				store: templateStore,
+				rowIndex,
+				updates: { separatorSize: clamped }
+			}),
+			{ type: 'row.update' }
+		);
+	}
+
+	const debouncedUpdateSeparatorSize = debounce(updateSeparatorSize, 300);
+
+	function toggleResponsive() {
+		const rowIndex = getRowIndex();
+		if (rowIndex === undefined) return;
+
+		new UpdateRowCommand({
+			store: templateStore,
+			rowIndex,
+			updates: { isResponsive: !entity.isResponsive }
+		}).execute();
+	}
+
 	function moveColumn(rowIndex: number, fromIndex: number, toIndex: number) {
 		historyService.executeCommand(
 			new MoveColumnCommand({
@@ -234,6 +270,40 @@
 	onDestroy(() => dndStore.manager.off('drop', handleDrop));
 </script>
 
+<div>
+	<label>
+		Responsive:
+		<input
+			type="checkbox"
+			checked={entity.isResponsive}
+			onchange={toggleResponsive}
+		/>
+	</label>
+</div>
+
+<label>
+	Separator (px):
+	<button
+		onclick={() => updateSeparatorSize(entity.separatorSize - SEPARATOR_STEP)}
+		disabled={entity.separatorSize - SEPARATOR_STEP < SEPARATOR_MIN}
+	>
+		-{SEPARATOR_STEP}
+	</button>
+	<input
+		type="number"
+		min={SEPARATOR_MIN}
+		max={SEPARATOR_MAX}
+		step="1"
+		value={entity.separatorSize}
+		oninput={(e) => debouncedUpdateSeparatorSize(+e.currentTarget.value)}
+	/>
+	<button
+		onclick={() => updateSeparatorSize(entity.separatorSize + SEPARATOR_STEP)}
+		disabled={entity.separatorSize + SEPARATOR_STEP > SEPARATOR_MAX}
+	>
+		+{SEPARATOR_STEP}
+	</button>
+</label>
 <div {@attach scrollable({ manager: dndStore.manager, id: entity.id })}>
 	<button onclick={addColumn} disabled={!canAddColumn}> Add Column </button>
 
