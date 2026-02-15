@@ -12,6 +12,8 @@
 	import { CloneRowCommand } from '$lib/commands/structures/rows/CloneRowCommand';
 	import { DeleteRowCommand } from '$lib/commands/structures/rows/DeleteRowCommand';
 	import { stringifyCssObject } from '$lib/template/utils/stringifyCssObject';
+	import { getClickOutsideContext } from '$lib/clickOutside/contexts/clickOutsideContext.svelte';
+	import { ignoreclickoutside } from '$lib/clickOutside/attachments/ignoreClickOutside.svelte';
 
 	interface Props {
 		entity: RootEntity;
@@ -48,6 +50,7 @@
 
 	const width = $derived(entity.width);
 	const style = $derived(stringifyCssObject(entity.style));
+	const clickOutsideStore = getClickOutsideContext();
 </script>
 
 <table
@@ -58,6 +61,7 @@
 		id: entity.id,
 		data: { accepts: ROW_TYPES }
 	})}
+	{@attach ignoreclickoutside({ store: clickOutsideStore })}
 >
 	<tbody>
 		{#each entity.rows as row (row.id)}
