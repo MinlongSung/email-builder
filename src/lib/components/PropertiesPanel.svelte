@@ -30,10 +30,9 @@
 		right: 0;
 		top: 40px;
 		bottom: 0;
-		width: 320px;
+		width: 400px;
 		background: #fff;
 		border: 1px solid #e0e0e0;
-		z-index: 10;
 		overflow-y: auto;
 	}
 </style>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { getRichtextContext } from '../../contexts/richtextContext.svelte';
 	import { PRESETS } from '../../types';
+	import ColorPicker from '$lib/components/ui/colorPicker/ColorPicker.svelte';
 
 	const LETTER_SPACING_PRESETS = [
 		{ label: 'Normal', value: 'normal' },
@@ -76,10 +77,9 @@
 		{/each}
 	</select>
 
-	<input
-		type="color"
-		oninput={(e) => editor?.chain().focus().setColor(e.currentTarget.value).run()}
-		title="Text Color"
+	<ColorPicker
+		value={editor?.getAttributes('textStyle')?.color || '#000000'}
+		onchange={(color) => editor?.chain().focus().setColor(color).run()}
 	/>
 	<button
 		type="button"
@@ -89,10 +89,9 @@
 		clear color
 	</button>
 
-	<input
-		type="color"
-		oninput={(e) => editor?.chain().focus().setBackgroundColor(e.currentTarget.value).run()}
-		title="Background Color"
+	<ColorPicker
+		value={editor?.getAttributes('textStyle')?.backgroundColor || '#ffffff'}
+		onchange={(color) => editor?.chain().focus().setBackgroundColor(color).run()}
 	/>
 	<button
 		type="button"

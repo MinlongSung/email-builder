@@ -1,4 +1,6 @@
 <script lang="ts">
+	import ColorPicker from '$lib/components/ui/colorPicker/ColorPicker.svelte';
+
 	interface LinkConfig {
 		color?: string;
 		isUnderlined?: boolean;
@@ -13,10 +15,9 @@
 </script>
 
 <p>Color</p>
-<input
-	type="color"
+<ColorPicker
 	value={config?.color || '#0000ff'}
-	oninput={(e) => onUpdate('color', e.currentTarget.value)}
+	onchange={(color) => onUpdate('color', color)}
 />
 
 <p>Underlined</p>
@@ -34,15 +35,6 @@
 		margin: 8px 0 4px 0;
 		font-size: 14px;
 		color: #666;
-	}
-
-	input[type='color'] {
-		width: 100%;
-		height: 40px;
-		padding: 4px;
-		border: 1px solid #ddd;
-		border-radius: 4px;
-		cursor: pointer;
 	}
 
 	.checkbox-label {

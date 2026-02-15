@@ -31,6 +31,7 @@
 	import DragOverlay from '$lib/dnd/adapter/components/DragOverlay.svelte';
 	import PaddingControl from '$lib/components/ui/PaddingControl.svelte';
 	import NodeRenderer from '../../shared/NodeRenderer.svelte';
+	import BorderRadiusControl from '$lib/components/ui/BorderRadiusControl.svelte';
 
 	// ─── Props ────────────────────────────────────────────
 	interface Props {
@@ -241,8 +242,19 @@
 		if (parts.length === 3) return [parts[0], parts[1], parts[2], parts[1]];
 		return [parts[0], parts[1], parts[2], parts[3]];
 	}
+	function parseBorderRadius(style?: Record<string, string | number>): [number, number, number, number] {
+		const raw = style?.borderRadius;
+		if (!raw || typeof raw !== 'string') return [0, 0, 0, 0];
+
+		const parts = raw.split(/\s+/).map((v) => parseInt(v, 10) || 0);
+		if (parts.length === 1) return [parts[0], parts[0], parts[0], parts[0]];
+		if (parts.length === 2) return [parts[0], parts[1], parts[0], parts[1]];
+		if (parts.length === 3) return [parts[0], parts[1], parts[2], parts[1]];
+		return [parts[0], parts[1], parts[2], parts[3]];
+	}
 
 	const paddingValues = $derived(parsePadding(entity.style));
+	const borderRadiusValues = $derived(parseBorderRadius(entity.style));
 
 	function handlePaddingChange(values: [number, number, number, number]) {
 		const rowIndex = getRowIndex();
@@ -255,6 +267,21 @@
 				store: templateStore,
 				rowIndex,
 				updates: { style: { ...entity.style, padding } }
+			}),
+			{ type: 'row.update' }
+		);
+	}
+	function handleBorderRadiusChange(values: [number, number, number, number]) {
+		const rowIndex = getRowIndex();
+		if (rowIndex === undefined) return;
+
+		const borderRadius = `${values[0]}px ${values[1]}px ${values[2]}px ${values[3]}px`;
+
+		historyService.executeCommand(
+			new UpdateRowCommand({
+				store: templateStore,
+				rowIndex,
+				updates: { style: { ...entity.style, borderRadius } }
 			}),
 			{ type: 'row.update' }
 		);
@@ -303,40 +330,41 @@
 	onDestroy(() => dndStore.manager.off('drop', handleDrop));
 </script>
 
-<div>
-	<label>
-		Responsive:
-		<input type="checkbox" checked={entity.isResponsive} onchange={toggleResponsive} />
-	</label>
-</div>
-
-<label>
-	Separator (px):
-	<button
-		onclick={() => updateSeparatorSize(entity.separatorSize - SEPARATOR_STEP)}
-		disabled={entity.separatorSize - SEPARATOR_STEP < SEPARATOR_MIN}
-	>
-		-{SEPARATOR_STEP}
-	</button>
-	<input
-		type="number"
-		min={SEPARATOR_MIN}
-		max={SEPARATOR_MAX}
-		step="1"
-		value={entity.separatorSize}
-		oninput={(e) => debouncedUpdateSeparatorSize(+e.currentTarget.value)}
-	/>
-	<button
-		onclick={() => updateSeparatorSize(entity.separatorSize + SEPARATOR_STEP)}
-		disabled={entity.separatorSize + SEPARATOR_STEP > SEPARATOR_MAX}
-	>
-		+{SEPARATOR_STEP}
-	</button>
-</label>
-
-<PaddingControl values={paddingValues} onchange={handlePaddingChange} />
-
 <div {@attach scrollable({ manager: dndStore.manager, id: entity.id })}>
+	<div>
+		<label>
+			Responsive:
+			<input type="checkbox" checked={entity.isResponsive} onchange={toggleResponsive} />
+		</label>
+	</div>
+
+	<label>
+		Separator (px):
+		<button
+			onclick={() => updateSeparatorSize(entity.separatorSize - SEPARATOR_STEP)}
+			disabled={entity.separatorSize - SEPARATOR_STEP < SEPARATOR_MIN}
+		>
+			-{SEPARATOR_STEP}
+		</button>
+		<input
+			type="number"
+			min={SEPARATOR_MIN}
+			max={SEPARATOR_MAX}
+			step="1"
+			value={entity.separatorSize}
+			oninput={(e) => debouncedUpdateSeparatorSize(+e.currentTarget.value)}
+		/>
+		<button
+			onclick={() => updateSeparatorSize(entity.separatorSize + SEPARATOR_STEP)}
+			disabled={entity.separatorSize + SEPARATOR_STEP > SEPARATOR_MAX}
+		>
+			+{SEPARATOR_STEP}
+		</button>
+	</label>
+	
+	<PaddingControl values={paddingValues} onchange={handlePaddingChange} />
+	<BorderRadiusControl values={borderRadiusValues} onchange={handleBorderRadiusChange} />
+
 	<button onclick={addColumn} disabled={!canAddColumn}> Add Column </button>
 
 	{#each entity.columns as column, index (column.id)}

@@ -7,7 +7,7 @@
 	import type { Command } from '$lib/commands/Command';
 	import { BatchCommand } from '$lib/commands/BatchCommands';
 	import { UpdateTemplateConfigCommand } from '$lib/commands/config/UpdateTemplateConfigCommand';
-	import type { BlockType, Heading } from '$lib/template/types';
+	import type { Align, BlockType, Heading, TextDirection } from '$lib/template/types';
 	import TypographyControls from './settingsTab/TypographyControls.svelte';
 	import LinkControls from './settingsTab/LinkControls.svelte';
 	import ButtonControls from './settingsTab/ButtonControls.svelte';
@@ -16,6 +16,7 @@
 		transformText,
 		transformButton
 	} from '$lib/template/nodes/utils/blockTransformers.svelte';
+	import ColorPicker from '$lib/components/ui/colorPicker/ColorPicker.svelte';
 
 	const templateStore = getTemplateContext();
 	const historyService = getHistoryContext();
@@ -24,7 +25,9 @@
 
 	const root = $derived(templateStore.template.root);
 	let width = $derived(root.width || 600);
-	let backgroundColor = $derived(root.style?.['background-color'] || '#ffffff');
+	let dir = $derived(root.dir || 'ltr');
+	let align = $derived(root.align || 'left');
+	let backgroundColor = $derived(root.bgcolor || '#ffffff');
 	let targetTextType = $state<'paragraph' | Heading>('paragraph');
 
 	const handleRootUpdate = debounce((updates: Partial<RootEntity>) => {
@@ -37,20 +40,10 @@
 		});
 	}, 300);
 
-	const handleWidthUpdate = (e: Event & { currentTarget: EventTarget & HTMLInputElement }) => {
-		handleRootUpdate({ width: +e.currentTarget.value });
-	};
-
-	const handleBackgroundColorUpdate = (
-		e: Event & { currentTarget: EventTarget & HTMLInputElement }
-	) => {
-		handleRootUpdate({
-			style: {
-				...root.style,
-				'background-color': e.currentTarget.value
-			}
-		});
-	};
+	const handleWidthUpdate = (width: number) => handleRootUpdate({ width });
+	const handleTextDirectionUpdate = (dir?: TextDirection) => handleRootUpdate({ dir });
+	const handleContentAlignUpdate = (align?: Align) => handleRootUpdate({ align });
+	const handleBackgroundColorUpdate = (color?: string) => handleRootUpdate({ bgcolor: color });
 
 	const handleTemplateConfigUpdate = debounce(
 		(target: 'paragraph' | Heading | 'link' | 'button', name: string, value: string | boolean) => {
@@ -102,10 +95,46 @@
 	<p>Template settings</p>
 
 	<p>Width</p>
-	<input type="number" bind:value={width} oninput={handleWidthUpdate} />
+	<input
+		type="number"
+		bind:value={width}
+		oninput={(e) => handleWidthUpdate(+e.currentTarget.value)}
+	/>
 
 	<p>Background Color</p>
-	<input type="color" bind:value={backgroundColor} oninput={handleBackgroundColorUpdate} />
+	<ColorPicker value={backgroundColor} onchange={handleBackgroundColorUpdate} />
+
+	<p>Text direction</p>
+	<button
+		type="button"
+		class:selected={dir === 'ltr'}
+		onclick={() => handleTextDirectionUpdate('ltr')}
+	>
+		LTR
+	</button>
+	<button
+		type="button"
+		class:selected={dir === 'rtl'}
+		onclick={() => handleTextDirectionUpdate('rtl')}
+	>
+		RTL
+	</button>
+
+	<p>Content align</p>
+	<button
+		type="button"
+		class:selected={align === 'left'}
+		onclick={() => handleContentAlignUpdate('left')}
+	>
+		Left
+	</button>
+	<button
+		type="button"
+		class:selected={align === 'center'}
+		onclick={() => handleContentAlignUpdate('center')}
+	>
+		Center
+	</button>
 
 	<h4>Typography Styles</h4>
 
@@ -212,5 +241,9 @@
 		background: #3b82f6;
 		color: #ffffff;
 		border-color: #3b82f6;
+	}
+
+	.selected {
+		background-color: red;
 	}
 </style>

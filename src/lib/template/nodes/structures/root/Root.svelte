@@ -11,7 +11,6 @@
 	import { getHistoryContext } from '$lib/history/contexts/historyContext.svelte';
 	import { CloneRowCommand } from '$lib/commands/structures/rows/CloneRowCommand';
 	import { DeleteRowCommand } from '$lib/commands/structures/rows/DeleteRowCommand';
-	import { stringifyCssObject } from '$lib/template/utils/stringifyCssObject';
 	import { getClickOutsideContext } from '$lib/clickOutside/contexts/clickOutsideContext.svelte';
 	import { ignoreclickoutside } from '$lib/clickOutside/attachments/ignoreClickOutside.svelte';
 
@@ -49,13 +48,17 @@
 	};
 
 	const width = $derived(entity.width);
-	const style = $derived(stringifyCssObject(entity.style));
+	const align = $derived(entity.align);
+	const dir = $derived(entity.dir);
+	const bgcolor = $derived(entity.bgcolor);
 	const clickOutsideStore = getClickOutsideContext();
 </script>
 
 <table
 	{width}
-	{style}
+	{align}
+	{dir}
+	{bgcolor}
 	{@attach droppable({
 		manager: dndStore.manager,
 		id: entity.id,

@@ -50,6 +50,7 @@
 	.container {
 		display: flex;
 		flex-direction: column;
+		height: 100%;
         flex-wrap: wrap;
         overflow: hidden;
 		gap: 4px;

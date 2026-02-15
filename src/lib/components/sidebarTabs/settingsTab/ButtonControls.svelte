@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { PRESETS } from '$lib/richtext/adapter/types';
+	import ColorPicker from '$lib/components/ui/colorPicker/ColorPicker.svelte';
 
 	interface ButtonConfig {
 		fontFamily?: string;
@@ -66,17 +67,15 @@
 />
 
 <p>Color</p>
-<input
-	type="color"
+<ColorPicker
 	value={config?.color || '#ffffff'}
-	oninput={(e) => onUpdate('color', e.currentTarget.value)}
+	onchange={(color) => onUpdate('color', color)}
 />
 
 <p>Background color</p>
-<input
-	type="color"
+<ColorPicker
 	value={config?.backgroundColor || '#0066cc'}
-	oninput={(e) => onUpdate('backgroundColor', e.currentTarget.value)}
+	onchange={(color) => onUpdate('backgroundColor', color)}
 />
 
 <p>Padding</p>
@@ -117,15 +116,6 @@
 		border: 1px solid #ddd;
 		border-radius: 4px;
 		font-size: 14px;
-	}
-
-	input[type='color'] {
-		width: 100%;
-		height: 40px;
-		padding: 4px;
-		border: 1px solid #ddd;
-		border-radius: 4px;
-		cursor: pointer;
 	}
 
 	select:focus,

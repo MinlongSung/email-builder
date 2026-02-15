@@ -42,7 +42,7 @@
 	.sidebar {
 		display: flex;
 		flex-direction: column;
-		flex-basis: 320px;
+		flex-basis: 400px;
 		border-left: 1px solid #e0e0e0;
 	}
 

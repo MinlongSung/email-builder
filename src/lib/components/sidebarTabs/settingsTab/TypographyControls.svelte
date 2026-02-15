@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { PRESETS } from '$lib/richtext/adapter/types';
+	import ColorPicker from '$lib/components/ui/colorPicker/ColorPicker.svelte';
 
 	interface TypographyConfig {
 		fontFamily?: string;
@@ -53,10 +54,9 @@
 />
 
 <p>Color</p>
-<input
-	type="color"
+<ColorPicker
 	value={config?.color || '#000000'}
-	oninput={(e) => onUpdate('color', e.currentTarget.value)}
+	onchange={(color) => onUpdate('color', color)}
 />
 
 <style>

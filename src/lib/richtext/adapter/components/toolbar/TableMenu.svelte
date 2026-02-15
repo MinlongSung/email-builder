@@ -4,6 +4,7 @@
 	import { floating } from '$lib/floating-ui/adapter/attachments/floating.svelte';
 	import { arrow, flip, offset } from '@floating-ui/dom';
 	import { cellSelectionPluginKey } from '$lib/richtext/core/extensions/nodes/table/plugins/cellSelection';
+	import ColorPicker from '$lib/components/ui/colorPicker/ColorPicker.svelte';
 
 	const richtextContext = getRichtextContext();
 	const editor = $derived(richtextContext.activeEditor);
@@ -52,11 +53,9 @@
 				⬍ Split
 			</button>
 
-			<input
-				type="color"
+			<ColorPicker
 				value={backgroundColor}
-				oninput={(e) => editor?.commands.setCellAttribute('backgroundColor', e.currentTarget.value)}
-				title="Background color"
+				onchange={(color) => editor?.commands.setCellAttribute('backgroundColor', color)}
 			/>
 
 			<button
@@ -106,16 +105,14 @@
 				<option value="none">None</option>
 			</select>
 
-			<input
-				type="color"
+			<ColorPicker
 				value={border.color}
-				oninput={(e) => {
+				onchange={(color) => {
 					editor?.commands.setCellAttribute('border', {
 						...border,
-						color: e.currentTarget.value
+						color
 					});
 				}}
-				title="Border color"
 			/>
 
 			<button onclick={() => editor?.commands.deleteTable()} class="delete-btn"> 🗑 </button>

@@ -84,9 +84,15 @@ export interface BaseNodeEntity {
   style?: Record<string, string | number>;
 }
 
+export type Align = "left" | "center" | "right";
+export type VerticalAlign = "top" | "middle" | "bottom";
+export type TextDirection = "ltr" | "rtl";
 export interface RootEntity extends BaseNodeEntity {
   type: "root";
   width: number;
+  align?: Align;
+  dir?: TextDirection;
+  bgcolor?: string;
   rows: RowEntity[]
 }
 
