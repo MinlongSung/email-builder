@@ -15,9 +15,14 @@ export const ButtonRender = ({ block }: Props) => {
 
   return (
     <BlockWrapper block={block}>
-      <a className="inline-block max-w-full" style={style} >
+      <div
+        className="inline-block max-w-full"
+        style={style}
+        role="button"
+        tabIndex={0}
+      >
         <RichtextEditor block={block} />
-      </a>
+      </div>
     </BlockWrapper>
   );
 };
