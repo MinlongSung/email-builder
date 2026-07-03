@@ -84,7 +84,7 @@ export function BlockWrapper({ block, children, className, ...props }: Props) {
     ],
   );
 
-  const handlePointerUp = (e: React.PointerEvent) => {
+  const handleClick = (e: React.MouseEvent) => {
     if (!isSelectable) return;
     e.stopPropagation();
     if (isSelected) return;
@@ -112,7 +112,7 @@ export function BlockWrapper({ block, children, className, ...props }: Props) {
           setDropRef(e);
           toolbarAccessRefs.setReference(e);
         }}
-        onPointerUp={handlePointerUp}
+        onClick={handleClick}
         onMouseOver={handleMouseOver}
         onMouseLeave={handleMouseLeave}
         className={cn(
