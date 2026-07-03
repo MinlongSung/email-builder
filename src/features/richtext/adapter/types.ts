@@ -10,14 +10,13 @@ export interface SelectionCoordinates {
   end: Coordinates;
 }
 
-export interface MountEditorProps {
-  editorId: string;
+export interface StartEditionProps {
   content: JSONContent;
   coordinates: SelectionCoordinates;
 }
 
 export interface RichtextContextProps {
-  editor: Editor | null;
-  editorId: string;
-  mountEditor: (props: MountEditorProps) => void;
+  editor: Editor;
+  startEdition: (props: StartEditionProps) => void;
+  syncContent: (content: JSONContent) => void;
 }
