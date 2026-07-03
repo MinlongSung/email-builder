@@ -12,7 +12,7 @@ interface Props {
 }
 
 export function RichtextProvider({ children }: Props) {
-  const [editorId, setEditorId] = useState<string>('');
+  const [editorId, setEditorId] = useState<string>("");
 
   const editor = useEditor({
     extensions: RICHTEXT_EXTENSIONS,
@@ -24,17 +24,16 @@ export function RichtextProvider({ children }: Props) {
     },
   });
 
-  const mountEditor = ({ editorId, content, coordinates }: MountEditorProps) => {
+  const mountEditor = ({
+    editorId,
+    content,
+    coordinates,
+  }: MountEditorProps) => {
     flushSync(() => setEditorId(editorId));
     editor.commands.setContent(content);
-    const from = editor.view.posAtCoords({
-      left: coordinates.start.x,
-      top: coordinates.start.y,
-    })?.pos;
-    const to = editor.view.posAtCoords({
-      left: coordinates.end.x,
-      top: coordinates.end.y,
-    })?.pos;
+    const { start, end } = coordinates;
+    const from = editor.view.posAtCoords({ left: start.x, top: start.y })?.pos;
+    const to = editor.view.posAtCoords({ left: end.x, top: end.y })?.pos;
     if (from != null && to != null) {
       editor.commands.setTextSelection({ from, to });
     }
