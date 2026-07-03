@@ -1,5 +1,5 @@
 import type { ButtonBlock, TextBlock } from "@/features/models/types";
-import type { Editor } from "@tiptap/core";
+import type { Editor, JSONContent } from "@tiptap/core";
 
 export interface Coordinates {
   x: number;
@@ -11,13 +11,14 @@ export interface SelectionCoordinates {
   end: Coordinates;
 }
 
-export interface SetEditorProps {
-  block: TextBlock | ButtonBlock;
+export interface MountEditorProps {
+  editorId: string;
+  content: JSONContent;
   coordinates: SelectionCoordinates;
 }
 
 export interface RichtextContextProps {
   editor: Editor | null;
-  activeBlock: TextBlock | ButtonBlock | null;
-  setEditor: (props: SetEditorProps) => void;
+  editorId: string;
+  mountEditor: (props: MountEditorProps) => void;
 }

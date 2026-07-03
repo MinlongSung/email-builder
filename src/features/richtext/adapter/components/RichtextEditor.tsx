@@ -12,7 +12,7 @@ interface Props extends React.ComponentProps<"div"> {
 }
 
 export const RichtextEditor = ({ block }: Props) => {
-  const { editor, activeBlock, setEditor } = useRichtext();
+  const { editor, editorId, mountEditor } = useRichtext();
 
   const selectionCoordinatesRef = useRef<SelectionCoordinates>({
     start: { x: 0, y: 0 },
@@ -25,7 +25,11 @@ export const RichtextEditor = ({ block }: Props) => {
 
   const handleSelectionEnd = (e: React.PointerEvent) => {
     selectionCoordinatesRef.current.end = { x: e.clientX, y: e.clientY };
-    setEditor({ block, coordinates: selectionCoordinatesRef.current });
+    mountEditor({
+      editorId: block.id,
+      content: block.props.content,
+      coordinates: selectionCoordinatesRef.current,
+    });
   };
 
   const html = useMemo(
@@ -44,7 +48,7 @@ export const RichtextEditor = ({ block }: Props) => {
     }
   }, [block, editor]);
 
-  if (activeBlock?.id === block.id) return <EditorContent editor={editor} />;
+  if (editorId === block.id) return <EditorContent editor={editor} />;
 
   return (
     <span

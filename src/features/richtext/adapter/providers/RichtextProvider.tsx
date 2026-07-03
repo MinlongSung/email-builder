@@ -5,17 +5,14 @@ import { useEditor } from "@tiptap/react";
 
 import { RichtextContext } from "@/features/richtext/adapter/contexts/RichtextContext";
 import { RICHTEXT_EXTENSIONS } from "@/features/richtext/adapter/presets";
-import type { ButtonBlock, TextBlock } from "@/features/models/types";
-import type { SetEditorProps } from "@/features/richtext/adapter/types";
+import type { MountEditorProps } from "@/features/richtext/adapter/types";
 
 interface Props {
   children: React.ReactNode;
 }
 
 export function RichtextProvider({ children }: Props) {
-  const [activeBlock, setActiveBlock] = useState<
-    TextBlock | ButtonBlock | null
-  >(null);
+  const [editorId, setEditorId] = useState<string>('');
 
   const editor = useEditor({
     extensions: RICHTEXT_EXTENSIONS,
@@ -27,9 +24,9 @@ export function RichtextProvider({ children }: Props) {
     },
   });
 
-  const setEditor = ({ block, coordinates }: SetEditorProps) => {
-    flushSync(() => setActiveBlock(block));
-    editor.commands.setContent(block.props.content);
+  const mountEditor = ({ editorId, content, coordinates }: MountEditorProps) => {
+    flushSync(() => setEditorId(editorId));
+    editor.commands.setContent(content);
     const from = editor.view.posAtCoords({
       left: coordinates.start.x,
       top: coordinates.start.y,
@@ -47,10 +44,10 @@ export function RichtextProvider({ children }: Props) {
   const contextValue = useMemo(
     () => ({
       editor,
-      activeBlock,
-      setEditor,
+      editorId,
+      mountEditor,
     }),
-    [editor, activeBlock, setEditor],
+    [editor, editorId, mountEditor],
   );
 
   return (
