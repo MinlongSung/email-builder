@@ -38,6 +38,7 @@ export function useDroppable({
 
   const isOver = state.over?.id === id;
   const isTopHalf = isOver && state.isTopHalf;
+  const isLeftHalf = isOver && state.isLeftHalf;
   const isDragging = !!state.dragged;
   const isBeingDragged = state.dragged?.id === id;
 
@@ -46,6 +47,7 @@ export function useDroppable({
     isDragging,
     isOver,
     isTopHalf,
+    isLeftHalf,
     isBeingDragged,
   };
 }
