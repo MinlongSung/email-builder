@@ -1,4 +1,3 @@
-import type { ButtonBlock, TextBlock } from "@/features/models/types";
 import type { Editor, JSONContent } from "@tiptap/core";
 
 export interface Coordinates {
