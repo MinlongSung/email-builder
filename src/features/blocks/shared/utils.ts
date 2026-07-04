@@ -1,122 +1,248 @@
 import type {
-  BackgroundImage,
+  Background,
+  BackgroundPositionValue,
   Border,
-  BorderRadius,
+  ColumnProps,
+  CornerRadius,
+  HasLayout,
+  HasStyle,
+  Insets,
+  Layout,
   Spacing,
+  Style,
+  Typography,
+  Viewport,
 } from "@/features/models/types";
 
-const PROPERTY_MAP = {
-  padding: "padding",
-  margin: "margin",
+export interface RenderContext {
+  viewport: Viewport;
+}
 
-  backgroundColor: "backgroundColor",
-
-  border: "border",
-  borderRadius: "borderRadius",
-
-  width: "width",
-  height: "height",
-
-  color: "color",
-
-  fontFamily: "fontFamily",
-  fontSize: "fontSize",
-  letterSpacing: "letterSpacing",
-} satisfies Record<string, keyof React.CSSProperties>;
-
-function isSpacing(value: unknown): value is Spacing {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "top" in value &&
-    "right" in value &&
-    "bottom" in value &&
-    "left" in value
+export function createStyle(
+  props: HasLayout & HasStyle,
+  ...overrides: Array<
+    React.CSSProperties | false | null | undefined
+  >
+): React.CSSProperties {
+  return Object.assign(
+    {},
+    layoutToCss(props.layout),
+    styleToCss(props.style),
+    ...overrides.filter(Boolean),
   );
 }
 
-function isBorder(value: unknown): value is Border {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "width" in value &&
-    "style" in value &&
-    "color" in value
-  );
+export function createColumnContentCss(
+  props: ColumnProps,
+): React.CSSProperties {
+  return {
+    ...layoutToCss(props.layout),
+    ...styleToCss(props.style),
+  };
 }
 
-function isBorderRadius(value: unknown): value is BorderRadius {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "topLeft" in value &&
-    "topRight" in value &&
-    "bottomLeft" in value &&
-    "bottomRight" in value
-  );
+// ======================================================
+// LAYOUT
+// ======================================================
+
+function layoutToCss(layout?: Layout): React.CSSProperties {
+  if (!layout) return {};
+
+  return {
+    width: layout.width,
+    height: layout.height,
+
+    maxWidth: layout.maxWidth,
+    maxHeight: layout.maxHeight,
+
+    margin: spacingToCss(layout.margin),
+    padding: spacingToCss(layout.padding),
+
+    gap: layout.gap,
+
+    textAlign: layout.align,
+    verticalAlign: layout.verticalAlign,
+
+    direction: layout.direction,
+  };
 }
 
-function isBackgroundImage(value: unknown): value is BackgroundImage {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "url" in value &&
-    "repeat" in value &&
-    "position" in value &&
-    "size" in value
-  );
+// ======================================================
+// STYLE
+// ======================================================
+
+function styleToCss(style?: Style): React.CSSProperties {
+  if (!style) return {};
+
+  return {
+    ...backgroundToCss(style.background),
+    ...borderToCss(style.border),
+    ...typographyToCss(style.typography),
+  };
 }
 
-function serialize(value: unknown) {
-  if (isSpacing(value)) {
-    return `${value.top} ${value.right} ${value.bottom} ${value.left}`;
-  }
+// ======================================================
+// BACKGROUND
+// ======================================================
 
-  if (isBorder(value)) {
-    return `${value.width} ${value.style} ${value.color}`;
-  }
+function backgroundToCss(background?: Background): React.CSSProperties {
+  if (!background) return {};
 
-  if (isBorderRadius(value)) {
-    return `${value.topLeft} ${value.topRight} ${value.bottomRight} ${value.bottomLeft}`;
-  }
-
-  if (isBackgroundImage(value)) {
-    return {
-      backgroundImage: `url("${value.url}")`,
-      backgroundRepeat: value.repeat,
-      backgroundPosition: `${value.position.horizontal} ${value.position.vertical}`,
-      backgroundSize:
-        typeof value.size === "string"
-          ? value.size
-          : `${value.size.width} ${value.size.height}`,
-    };
-  }
-
-  return value;
-}
-
-export function createStyle<T extends object>(props: T): React.CSSProperties {
   const style: React.CSSProperties = {};
 
-  for (const [key, value] of Object.entries(props)) {
-    if (value == null) continue;
+  if (background.color) {
+    style.backgroundColor = background.color;
+  }
 
-    const cssProperty = PROPERTY_MAP[key];
+  if (background.image) {
+    style.backgroundImage = `url("${background.image.url}")`;
 
-    if (!cssProperty) continue;
+    style.backgroundRepeat = background.image.repeat;
 
-    const serialized = serialize(value);
+    if (background.image.position) {
+      style.backgroundPosition = backgroundPositionToCss(
+        background.image.position,
+      );
+    }
 
-    if (
-      typeof serialized === "object" &&
-      serialized !== null &&
-      !Array.isArray(serialized)
-    ) {
-      Object.assign(style, serialized);
-    } else {
-      style[cssProperty] = serialized as never;
+    if (background.image.size) {
+      style.backgroundSize = backgroundSizeToCss(background.image.size);
     }
   }
 
+  if (background.gradient) {
+    style.backgroundImage = background.gradient.value;
+  }
+
   return style;
+}
+
+// ======================================================
+// BORDER
+// ======================================================
+
+function borderToCss(border?: Border): React.CSSProperties {
+  if (!border) return {};
+
+  return {
+    border:
+      border.width && border.style && border.color
+        ? `${borderWidthToCss(border.width)} ${border.style} ${border.color}`
+        : undefined,
+
+    borderRadius: borderRadiusToCss(border.radius),
+  };
+}
+
+// ======================================================
+// TYPOGRAPHY
+// ======================================================
+
+function typographyToCss(
+  typography?: Typography,
+): React.CSSProperties {
+  if (!typography) return {};
+
+  return {
+    color: typography.color,
+
+    fontFamily: typography.fontFamily,
+
+    fontSize: typography.fontSize,
+
+    fontWeight: typography.fontWeight,
+
+    fontStyle: typography.fontStyle,
+
+    lineHeight: typography.lineHeight,
+
+    letterSpacing: typography.letterSpacing,
+
+    textAlign: typography.textAlign,
+
+    textDecoration: typography.textDecoration,
+
+    textTransform: typography.textTransform,
+  };
+}
+
+// ======================================================
+// HELPERS
+// ======================================================
+
+function spacingToCss(spacing?: Spacing): string | undefined {
+  if (!spacing) return undefined;
+
+  if (typeof spacing === "string") {
+    return spacing;
+  }
+
+  return insetsToCss(spacing);
+}
+
+function insetsToCss(insets: Insets): string {
+  return [
+    insets.top ?? "0",
+    insets.right ?? "0",
+    insets.bottom ?? "0",
+    insets.left ?? "0",
+  ].join(" ");
+}
+
+function borderWidthToCss(width: Border["width"]): string | undefined {
+  if (!width) return undefined;
+
+  if (typeof width === "string") {
+    return width;
+  }
+
+  return [
+    width.top ?? "0",
+    width.right ?? "0",
+    width.bottom ?? "0",
+    width.left ?? "0",
+  ].join(" ");
+}
+
+function borderRadiusToCss(
+  radius?: Border["radius"],
+): string | undefined {
+  if (!radius) return undefined;
+
+  if (typeof radius === "string") {
+    return radius;
+  }
+
+  return cornerRadiusToCss(radius);
+}
+
+function cornerRadiusToCss(radius: CornerRadius): string {
+  return [
+    radius.topLeft ?? "0",
+    radius.topRight ?? "0",
+    radius.bottomRight ?? "0",
+    radius.bottomLeft ?? "0",
+  ].join(" ");
+}
+
+function backgroundPositionToCss(
+  position: Background["image"]["position"],
+): string {
+  if (typeof position === "string") {
+    return position;
+  }
+
+  const value = position as BackgroundPositionValue;
+
+  return `${value.x} ${value.y}`;
+}
+
+function backgroundSizeToCss(
+  size: NonNullable<Background["image"]>["size"],
+): string {
+  if (typeof size === "string") {
+    return size;
+  }
+
+  return `${size.width ?? "auto"} ${size.height ?? "auto"}`;
 }

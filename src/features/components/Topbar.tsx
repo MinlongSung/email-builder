@@ -2,8 +2,8 @@ import { useEditorStore } from "@/stores/useEditorStore";
 import { useHistoryStore } from "@/stores/useHistoryStore";
 
 export function Topbar() {
-  const viewMode = useEditorStore((state) => state.viewMode);
-  const setViewMode = useEditorStore((state) => state.setViewMode);
+  const viewport = useEditorStore((state) => state.viewport);
+  const setViewport = useEditorStore((state) => state.setViewport);
   const canUndo = useHistoryStore((state) => state.canUndo);
   const canRedo = useHistoryStore((state) => state.canRedo);
   const undo = useHistoryStore((state) => state.undo);
@@ -15,9 +15,9 @@ export function Topbar() {
 
       <div className="flex items-center bg-slate-700 rounded-md p-1 gap-1">
         <button
-          onClick={() => setViewMode("desktop")}
+          onClick={() => setViewport("desktop")}
           className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-            viewMode === "desktop"
+            viewport === "desktop"
               ? "bg-white text-slate-800"
               : "text-slate-300 hover:text-white"
           }`}
@@ -25,9 +25,9 @@ export function Topbar() {
           Desktop
         </button>
         <button
-          onClick={() => setViewMode("mobile")}
+          onClick={() => setViewport("mobile")}
           className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
-            viewMode === "mobile"
+            viewport === "mobile"
               ? "bg-white text-slate-800"
               : "text-slate-300 hover:text-white"
           }`}

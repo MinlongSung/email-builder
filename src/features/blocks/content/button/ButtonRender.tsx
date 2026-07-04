@@ -22,10 +22,7 @@ export const ButtonRender = ({ block }: Props) => {
     startEdition({ content: block.props.content, coordinates });
   };
 
-  const style = {
-    ...createStyle(block.props),
-    textDecoration: "none",
-  };
+  const style = createStyle(block.props);
 
   return (
     <BlockWrapper block={block}>

@@ -1,8 +1,8 @@
 import type { RootBlock } from "@/features/models/types";
 import { BlockWrapper } from "@/features/blocks/shared/BlockWrapper";
 import { DropPlaceholder } from "@/features/dnd/adapter/components/DropPlaceholder";
-import { useEditorStore } from "@/stores/useEditorStore";
 import { createStyle } from "@/features/blocks/shared/utils";
+import { useEditorStore } from "@/stores/useEditorStore";
 
 interface Props {
   block: RootBlock;
@@ -10,18 +10,19 @@ interface Props {
 }
 
 export const RootRender = ({ block, children }: Props) => {
-  const isMobile = useEditorStore((s) => s.viewMode === "mobile");
+  const viewport = useEditorStore((s) => s.viewport);
+
+  const style = createStyle(block.props, {
+    flexBasis:
+      viewport === "mobile"
+        ? "320px"
+        : (block.props.layout?.maxWidth ?? block.props.layout?.width),
+  });
   const isEmpty = block.childrenIds.length === 0;
-  const style: React.CSSProperties = {
-    ...createStyle(block.props),
-    flexBasis: isMobile ? "320px" : block.props.width,
-  };
 
   return (
-    <BlockWrapper block={block}>
-      <div style={style}>
-        {isEmpty ? <DropPlaceholder id={block.id} /> : children}
-      </div>
+    <BlockWrapper block={block} style={style}>
+      {isEmpty ? <DropPlaceholder id={block.id} /> : children}
     </BlockWrapper>
   );
 };

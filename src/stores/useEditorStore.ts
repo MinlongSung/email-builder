@@ -1,21 +1,21 @@
+import type { Viewport } from "@/features/models/types";
 import { create } from "zustand";
 
-type ViewMode = "desktop" | "mobile";
 
 interface State {
-  viewMode: ViewMode;
+  viewport: Viewport;
   selectedBlockId: string | null;
   hoveredBlockId: string | null;
-  setViewMode: (viewMode: ViewMode) => void;
+  setViewport: (viewport: Viewport) => void;
   setSelectedBlockId: (id: string | null) => void;
   setHoveredBlockId: (id: string | null) => void;
 }
 
 export const useEditorStore = create<State>()((set) => ({
-  viewMode: "desktop",
+  viewport: "desktop",
   selectedBlockId: null,
   hoveredBlockId: null,
-  setViewMode: (viewMode) => set({ viewMode }),
+  setViewport: (viewport) => set({ viewport }),
   setSelectedBlockId: (id) => set({ selectedBlockId: id }),
   setHoveredBlockId: (id) => set({ hoveredBlockId: id }),
 }));
