@@ -8,7 +8,7 @@ import type { Block } from "@/features/models/types";
 import { blockRegistry } from "@/features/blocks";
 import { useDraggable } from "@/features/dnd/adapter/hooks/useDraggable";
 import { useDroppable } from "@/features/dnd/adapter/hooks/useDroppable";
-import { useEditorStore } from "@/stores/useEditorStore";
+import { useEditorStore } from "@/features/stores/useEditorStore";
 import { DropLine } from "@/features/dnd/adapter/components/DropLine";
 import { BlockWrapperContext } from "@/features/blocks/shared/BlockWrapperContext";
 

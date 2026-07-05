@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Command } from "@/features/commands/Command";
+import type { Command } from "@/features/editor/commands/Command";
 
 export type CommandType =
   | "content:add"

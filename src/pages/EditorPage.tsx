@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useTemplateStore } from "@/stores/useTemplateStore";
+import { useTemplateStore } from "@/features/stores/useTemplateStore";
 import { SAMPLE_TEMPLATE } from "@/features/templates/sample-template";
 import { DndProvider } from "@/features/dnd/adapter/providers/DndProvider";
 import { RichtextProvider } from "@/features/richtext/adapter/providers/RichtextProvider";

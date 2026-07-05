@@ -2,7 +2,7 @@ import type { RowBlock } from "@/features/models/types";
 import { BlockWrapper } from "@/features/blocks/shared/BlockWrapper";
 import { DropPlaceholder } from "@/features/dnd/adapter/components/DropPlaceholder";
 import { createStyle } from "@/features/blocks/shared/utils";
-import { useEditorStore } from "@/stores/useEditorStore";
+import { useEditorStore } from "@/features/stores/useEditorStore";
 
 interface Props {
   block: RowBlock;
@@ -18,7 +18,7 @@ export const RowRender = ({ block, children }: Props) => {
     alignItems: "flex-start",
     flexDirection: stack ? "column" : "row",
   });
-  
+
   const isEmpty = block.childrenIds.length === 0;
 
   return (

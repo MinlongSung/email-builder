@@ -1,6 +1,6 @@
 import { useScrollable } from "@/features/dnd/adapter/hooks/useScrollable";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useTemplateStore } from "@/stores/useTemplateStore";
+import { useTemplateStore } from "@/features/stores/useTemplateStore";
 import { BlockNode } from "@/features/blocks/Renderer";
 
 export function Canvas() {

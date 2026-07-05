@@ -2,7 +2,7 @@ import type { RootBlock } from "@/features/models/types";
 import { BlockWrapper } from "@/features/blocks/shared/BlockWrapper";
 import { DropPlaceholder } from "@/features/dnd/adapter/components/DropPlaceholder";
 import { createStyle } from "@/features/blocks/shared/utils";
-import { useEditorStore } from "@/stores/useEditorStore";
+import { useEditorStore } from "@/features/stores/useEditorStore";
 
 interface Props {
   block: RootBlock;

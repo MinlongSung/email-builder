@@ -1,5 +1,5 @@
-import { useEditorStore } from "@/stores/useEditorStore";
-import { useHistoryStore } from "@/stores/useHistoryStore";
+import { useEditorStore } from "@/features/stores/useEditorStore";
+import { useHistoryStore } from "@/features/stores/useHistoryStore";
 
 export function Topbar() {
   const viewport = useEditorStore((state) => state.viewport);

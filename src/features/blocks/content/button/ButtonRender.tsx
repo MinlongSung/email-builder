@@ -5,7 +5,7 @@ import { BlockWrapper } from "@/features/blocks/shared/BlockWrapper";
 import { RichtextEditor } from "@/features/richtext/adapter/components/RichtextEditor";
 import { createStyle } from "@/features/blocks/shared/utils";
 import { useRichtext } from "@/features/richtext/adapter/hooks/useRichtext";
-import { useEditorStore } from "@/stores/useEditorStore";
+import { useEditorStore } from "@/features/stores/useEditorStore";
 import { RichtextWrapper } from "@/features/richtext/adapter/components/RichtextWrapper";
 import { RichtextPreview } from "@/features/richtext/adapter/components/RichtextPreview";
 
