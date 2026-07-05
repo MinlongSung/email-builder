@@ -1,7 +1,7 @@
 export * from "./children/insertChild";
 export * from "./children/removeChild";
 
-export * from "./tree/addSubtree";
-export * from "./tree/moveSubtree";
-export * from "./tree/removeSubtree";
-export * from "./tree/duplicateSubtree";
+export * from "./tree/addTree";
+export * from "./tree/duplicateTree";
+export * from "./tree/moveTree";
+export * from "./tree/removeTree";

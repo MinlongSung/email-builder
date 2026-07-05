@@ -1,5 +1,5 @@
 import type { Block, BlockTree } from "@/features/models/types";
-import { getChildren } from "./getChildren";
+import { getChildren } from "@/features/document/queries";
 
 export function getDescendants(
   document: BlockTree,

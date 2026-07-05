@@ -13,6 +13,6 @@ export * from "./getParent";
 export * from "./getPreviousSibling";
 export * from "./getRoot";
 export * from "./getSiblings";
-export * from "./getSubtree";
+export * from "./sliceTree";
 
 export * from "./isAncestor";

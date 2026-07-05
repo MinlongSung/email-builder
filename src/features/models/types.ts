@@ -475,7 +475,7 @@ export interface BlockDefinition<T extends Block = Block> {
   Render: React.ComponentType<{ block: T; children?: React.ReactNode }>;
   icon?: React.ReactNode;
   label?: string;
-  Card?: React.ComponentType<{ block: T }>;
+  Preview?: React.ComponentType;
 }
 
 export interface BlockTree {
@@ -483,18 +483,53 @@ export interface BlockTree {
   blocks: Record<string, Block>;
 }
 
+/**
+ * A reusable block preset that can be inserted into the document.
+ *
+ * Templates are displayed in the sidebar (e.g. Text, Hero, Footer, 2 Columns)
+ * and are responsible for creating the initial block tree to insert.
+ */
 export interface BlockTemplate {
+  /**
+   * Unique template identifier.
+   */
   id: string;
+
+  /**
+   * Root block type created by this template.
+   * Used for filtering, grouping and analytics.
+   */
+  type: BlockType;
+
+  /**
+   * Display name shown in the sidebar.
+   */
   name: string;
-  create: () => BlockTree;
+
+  /**
+   * Optional short description shown in tooltips or search results.
+   */
+  description?: string;
+
+  /**
+   * Optional icon displayed in list mode.
+   */
+  icon?: React.ReactNode;
+
+  /**
+   * Search keywords.
+   */
+  tags?: string[];
+
+  /**
+   * Creates a new tree instance to insert into the document.
+   *
+   * A new tree should be returned on every call with fresh block ids.
+   */
+  create(): BlockTree;
 }
 
 export interface EmailTemplate {
   document: BlockTree;
 }
 export type Viewport = "desktop" | "mobile";
-
-export interface Subtree {
-  rootId: string;
-  blocks: Record<string, Block>;
-}
