@@ -108,6 +108,7 @@ export function BlockWrapper({ block, children, className, ...props }: Props) {
   return (
     <BlockWrapperContext.Provider value={contextValue}>
       <div
+        data-block-type={block.type}
         ref={(e) => {
           setDropRef(e);
           toolbarAccessRefs.setReference(e);
