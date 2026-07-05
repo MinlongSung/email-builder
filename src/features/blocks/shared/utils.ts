@@ -18,7 +18,7 @@ export interface RenderContext {
   viewport: Viewport;
 }
 
-export function createStyle(
+export function toCss(
   props: HasLayout & HasStyle,
   ...overrides: Array<
     React.CSSProperties | false | null | undefined

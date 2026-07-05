@@ -1,7 +1,7 @@
 import type { TextBlock } from "@/features/models/types";
 import { BlockWrapper } from "@/features/blocks/shared/BlockWrapper";
 import { RichtextEditor } from "@/features/richtext/adapter/components/RichtextEditor";
-import { createStyle } from "@/features/blocks/shared/utils";
+import { toCss } from "@/features/blocks/shared/utils";
 import { useEditorStore } from "@/features/stores/useEditorStore";
 import { flushSync } from "react-dom";
 import { useRichtext } from "@/features/richtext/adapter/hooks/useRichtext";
@@ -21,7 +21,7 @@ export const TextRender = ({ block }: Props) => {
     startEdition({ content: block.props.content, coordinates });
   };
 
-  const style = createStyle(block.props);
+  const style = toCss(block.props);
 
   return (
     <BlockWrapper block={block}>

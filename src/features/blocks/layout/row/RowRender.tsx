@@ -1,7 +1,7 @@
 import type { RowBlock } from "@/features/models/types";
 import { BlockWrapper } from "@/features/blocks/shared/BlockWrapper";
 import { DropPlaceholder } from "@/features/dnd/adapter/components/DropPlaceholder";
-import { createStyle } from "@/features/blocks/shared/utils";
+import { toCss } from "@/features/blocks/shared/utils";
 import { useEditorStore } from "@/features/stores/useEditorStore";
 
 interface Props {
@@ -13,11 +13,14 @@ export const RowRender = ({ block, children }: Props) => {
   const viewport = useEditorStore((s) => s.viewport);
 
   const stack = viewport === "mobile" && block.props.responsive?.mobile?.stack;
-  const style = createStyle(block.props, {
-    display: "flex",
-    alignItems: "flex-start",
-    flexDirection: stack ? "column" : "row",
-  });
+  const style = toCss(
+    block.props,
+    {
+      display: "flex",
+      alignItems: "flex-start",
+    },
+    stack && { flexDirection: "column" },
+  );
 
   const isEmpty = block.childrenIds.length === 0;
 

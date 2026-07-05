@@ -3,7 +3,7 @@ import { flushSync } from "react-dom";
 import type { ButtonBlock } from "@/features/models/types";
 import { BlockWrapper } from "@/features/blocks/shared/BlockWrapper";
 import { RichtextEditor } from "@/features/richtext/adapter/components/RichtextEditor";
-import { createStyle } from "@/features/blocks/shared/utils";
+import { toCss } from "@/features/blocks/shared/utils";
 import { useRichtext } from "@/features/richtext/adapter/hooks/useRichtext";
 import { useEditorStore } from "@/features/stores/useEditorStore";
 import { RichtextWrapper } from "@/features/richtext/adapter/components/RichtextWrapper";
@@ -22,7 +22,7 @@ export const ButtonRender = ({ block }: Props) => {
     startEdition({ content: block.props.content, coordinates });
   };
 
-  const style = createStyle(block.props);
+  const style = toCss(block.props);
 
   return (
     <BlockWrapper block={block}>

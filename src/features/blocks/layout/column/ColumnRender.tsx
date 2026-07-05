@@ -1,7 +1,7 @@
 import type { ColumnBlock } from "@/features/models/types";
 import { BlockWrapper } from "@/features/blocks/shared/BlockWrapper";
 import { DropPlaceholder } from "@/features/dnd/adapter/components/DropPlaceholder";
-import { createStyle } from "@/features/blocks/shared/utils";
+import { toCss } from "@/features/blocks/shared/utils";
 import { useEditorStore } from "@/features/stores/useEditorStore";
 import { useTemplateStore } from "@/features/stores/useTemplateStore";
 
@@ -18,7 +18,7 @@ export const ColumnRender = ({ block, children }: Props) => {
   const stack = viewport === "mobile" && parent.props.responsive?.mobile?.stack;
   console.log(stack);
 
-  const style = createStyle(block.props, stack && { width: "100%" });
+  const style = toCss(block.props, stack && { width: "100%" });
   const wrapperStyle = { width: style.width };
   const contentStyle = { padding: style.padding };
 
