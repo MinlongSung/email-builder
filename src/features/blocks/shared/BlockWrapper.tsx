@@ -126,7 +126,7 @@ export function BlockWrapper({ block, children, className, ...props }: Props) {
         {...props}
       >
         {children}
-        {isHovered && isDraggable && <ToolbarAccess />}
+        {(isHovered || isSelected) && isDraggable && <ToolbarAccess />}
         {isOver && !isBeingDragged && <DropLine isTopHalf={isTopHalf} />}
       </div>
     </BlockWrapperContext.Provider>
