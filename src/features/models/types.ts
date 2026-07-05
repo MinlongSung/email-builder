@@ -493,3 +493,8 @@ export interface EmailTemplate {
   document: BlockTree;
 }
 export type Viewport = "desktop" | "mobile";
+
+export interface Subtree {
+  rootId: string;
+  blocks: Record<string, Block>;
+}
