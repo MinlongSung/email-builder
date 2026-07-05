@@ -10,8 +10,9 @@ import { PropertyPanel } from "@/features/components/PropertiesPanel";
 import { DragOverlay } from "@/features/dnd/adapter/components/DragOverlay";
 
 import type { BlockTree } from "@/features/models/types";
-import type { DndState, DroppableContainer } from "@/features/dnd/core/types";
+import type { DndState } from "@/features/dnd/core/types";
 import { checkIsLeftHalf, checkIsTopHalf } from "@/features/dnd/core/utils";
+import { getDroppedOnPath } from "@/features/dnd/adapter/utils/getDroppedOnPath";
 
 export const EditorPage = () => {
   const template = useTemplateStore((state) => state.template);
@@ -71,40 +72,3 @@ export const EditorPage = () => {
     </DndProvider>
   );
 };
-
-export function isValidDropBlock(
-  candidate: DroppableContainer | undefined,
-  draggedType: string,
-) {
-  return (
-    !!candidate &&
-    !candidate.disabled &&
-    candidate.data.accepts.includes(draggedType)
-  );
-}
-
-export function getDroppedOnPath(
-  state: DndState,
-  tree: BlockTree,
-): DroppableContainer[] {
-  const { dragged, over, droppables } = state;
-
-  if (!dragged || !over) return [];
-
-  const path: DroppableContainer[] = [];
-
-  let id: string | null = over.id;
-
-  while (id) {
-    const block = tree.blocks[id];
-    if (!block) break;
-
-    const candidate = droppables[id];
-    if (candidate) path.unshift(candidate);
-    if (isValidDropBlock(candidate, dragged.data.type)) return path;
-
-    id = block.parentId;
-  }
-
-  return [];
-}
