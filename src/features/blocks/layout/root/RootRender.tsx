@@ -17,8 +17,10 @@ export const RootRender = ({ block, children }: Props) => {
   const isEmpty = block.childrenIds.length === 0;
 
   return (
-    <BlockWrapper block={block} style={style}>
-      {isEmpty ? <DropPlaceholder id={block.id} /> : children}
+    <BlockWrapper block={block}>
+      <div style={style}>
+        {isEmpty ? <DropPlaceholder id={block.id} /> : children}
+      </div>
     </BlockWrapper>
   );
 };
