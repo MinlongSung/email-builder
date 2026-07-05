@@ -240,7 +240,6 @@ export const SAMPLE_TEMPLATE: EmailTemplate = {
 
             typography: {
               color: "#ffffff",
-              fontWeight: 600,
               textDecoration: "none"
             },
           },
