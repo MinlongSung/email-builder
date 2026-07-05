@@ -4,6 +4,7 @@ import { DropPlaceholder } from "@/features/dnd/adapter/components/DropPlacehold
 import { toCss } from "@/features/blocks/shared/utils";
 import { useEditorStore } from "@/features/stores/useEditorStore";
 import { useTemplateStore } from "@/features/stores/useTemplateStore";
+import { getParent } from "@/features/document/queries";
 
 interface Props {
   block: ColumnBlock;
@@ -14,10 +15,8 @@ export const ColumnRender = ({ block, children }: Props) => {
   const viewport = useEditorStore((s) => s.viewport);
 
   const template = useTemplateStore((s) => s.template);
-  const parent = template.document.blocks[block.parentId];
-  const stack = viewport === "mobile" && parent.props.responsive?.mobile?.stack;
-  console.log(stack);
-
+  const row = getParent(template.document, block);
+  const stack = viewport === "mobile" && row?.props.responsive?.mobile?.stack;
   const style = toCss(block.props, stack && { width: "100%" });
   const wrapperStyle = { width: style.width };
   const contentStyle = { padding: style.padding };
