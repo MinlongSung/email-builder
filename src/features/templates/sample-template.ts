@@ -9,7 +9,7 @@ export const SAMPLE_TEMPLATE: EmailTemplate = {
         id: "root-1",
         type: "root",
         parentId: null,
-        childrenIds: ["row-1", "row-2"],
+        childrenIds: ["row-1", "row-2", "row-3"],
 
         props: {
           layout: {
@@ -253,6 +253,55 @@ export const SAMPLE_TEMPLATE: EmailTemplate = {
               title: "Get Started",
               target: "_blank",
             },
+          },
+        },
+      },
+
+      "row-3": {
+        id: "row-3",
+        type: "row",
+        parentId: "root-1",
+        childrenIds: ["column-4", "column-5"],
+
+        props: {
+          layout: {
+            gap: "10px",
+            padding: "30px",
+          },
+
+          responsive: {
+            mobile: {
+              stack: true,
+            },
+          },
+        },
+      },
+
+      "column-4": {
+        id: "column-4",
+        type: "column",
+        parentId: "row-3",
+        childrenIds: [],
+
+        props: {
+          layout: {
+            width: "100%",
+            padding: "30px",
+          },
+        },
+      },
+
+
+      "column-5": {
+        id: "column-5",
+        type: "column",
+        parentId: "row-3",
+        childrenIds: [],
+
+        props: {
+          layout: {
+            width: "50%",
+            padding: "30px",
           },
         },
       },
