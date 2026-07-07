@@ -2,6 +2,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { useScrollable } from "@/features/dnd/adapter/hooks/useScrollable";
 import { ContentCatalog } from "@/features/components/ContentCatalog";
 import { CONTENT_TEMPLATES } from "@/features/catalogs/content";
+import { RowCatalog } from "@/features/components/RowCatalog";
+import { ROW_TEMPLATES } from "@/features/catalogs//layout";
 
 export function Sidebar() {
   const { setNodeRef } = useScrollable({ id: "sidebar" });
@@ -14,11 +16,13 @@ export function Sidebar() {
           <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
 
-        <div className="flex overflow-y-auto" ref={setNodeRef}>
+        <div className="overflow-y-auto" ref={setNodeRef}>
           <TabsContent value="content">
             <ContentCatalog templates={CONTENT_TEMPLATES}/>
           </TabsContent>
-          <TabsContent value="rows">Rows</TabsContent>
+          <TabsContent value="rows">
+            <RowCatalog templates={ROW_TEMPLATES} />
+          </TabsContent>
           <TabsContent value="settings">Settings</TabsContent>
         </div>
       </Tabs>

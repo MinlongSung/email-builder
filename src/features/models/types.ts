@@ -472,10 +472,19 @@ export interface BlockDefinition<T extends Block = Block> {
   isDraggable: boolean;
   isSelectable: boolean;
   isHoverable: boolean;
-  Render: React.ComponentType<{ block: T; children?: React.ReactNode }>;
-  icon?: React.ReactNode;
   label?: string;
-  Preview?: React.ComponentType;
+  Icon?: React.ComponentType;
+  Render: React.ComponentType<RenderProps<T>>;
+  Preview?: React.ComponentType<PreviewProps<T>>;
+}
+
+export interface RenderProps<T extends Block = Block> {
+  block: T;
+  children?: React.ReactNode;
+}
+export interface PreviewProps<T extends Block = Block> extends RenderProps<T> {
+  tree: BlockTree;
+  ref?: React.Ref<any>;
 }
 
 export interface BlockTree {
@@ -510,11 +519,6 @@ export interface BlockTemplate {
    * Optional short description shown in tooltips or search results.
    */
   description?: string;
-
-  /**
-   * Optional icon displayed in list mode.
-   */
-  icon?: React.ReactNode;
 
   /**
    * Search keywords.

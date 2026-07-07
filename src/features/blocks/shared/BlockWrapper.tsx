@@ -11,6 +11,8 @@ import { useDroppable } from "@/features/dnd/adapter/hooks/useDroppable";
 import { useEditorStore } from "@/features/stores/useEditorStore";
 import { DropLine } from "@/features/dnd/adapter/components/DropLine";
 import { BlockWrapperContext } from "@/features/blocks/shared/BlockWrapperContext";
+import { sliceTree } from "@/features/document/queries";
+import { useTemplateStore } from "@/features/stores/useTemplateStore";
 
 interface Props extends React.ComponentProps<"div"> {
   block: Block;
@@ -20,9 +22,11 @@ export function BlockWrapper({ block, children, className, ...props }: Props) {
   const { accepts, isDraggable, isSelectable, isHoverable } =
     blockRegistry[block.type];
 
+  const template = useTemplateStore((s) => s.template);
+  const tree = sliceTree(template.document, [block.id]);
   const { setNodeRef: setDragRef } = useDraggable({
     id: block.id,
-    data: { type: block.type },
+    data: { type: block.type, tree },
     disabled: !isDraggable,
   });
 

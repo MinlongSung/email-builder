@@ -3,6 +3,7 @@ import {
   type ColumnBlock,
 } from "@/features/models/types";
 import { ColumnRender } from "@/features/blocks/layout/column/ColumnRender";
+import { ColumnPreview } from "@/features/blocks/layout/column/ColumnPreview";
 
 export const columnDefinition: BlockDefinition<ColumnBlock> = {
   type: "column",
@@ -11,4 +12,5 @@ export const columnDefinition: BlockDefinition<ColumnBlock> = {
   isSelectable: false,
   isHoverable: false,
   Render: ColumnRender,
+  Preview: ColumnPreview
 };

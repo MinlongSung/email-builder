@@ -23,6 +23,7 @@ export function createRowBlock(
           bottom: "0px",
           left: "20px",
         },
+        gap: "10px"
       },
 
       style: {},

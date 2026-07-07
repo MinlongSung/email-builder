@@ -13,6 +13,7 @@ import type { BlockTree } from "@/features/models/types";
 import type { DndState } from "@/features/dnd/core/types";
 import { checkIsLeftHalf, checkIsTopHalf } from "@/features/dnd/core/utils";
 import { getDroppedOnPath } from "@/features/dnd/adapter/utils/getDroppedOnPath";
+import { BlockOverlay } from "@/features/blocks/shared/BlockOverlay";
 
 export const EditorPage = () => {
   const template = useTemplateStore((state) => state.template);
@@ -46,7 +47,7 @@ export const EditorPage = () => {
     >
       {({ dragged }) => (
         <RichtextProvider>
-          <div className="h-screen flex flex-col overflow-hidden">
+          <div className="flex flex-col h-screen overflow-hidden">
             <Topbar />
             <main className="relative flex flex-1 overflow-hidden">
               <Canvas />
@@ -55,17 +56,7 @@ export const EditorPage = () => {
             </main>
           </div>
           <DragOverlay>
-            {dragged && (
-              <div
-                style={{
-                  height: 30,
-                  width: 30,
-                  background: "red",
-                }}
-              >
-                holaaa
-              </div>
-            )}
+            <BlockOverlay data={dragged?.data} />
           </DragOverlay>
         </RichtextProvider>
       )}
