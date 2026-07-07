@@ -21,7 +21,6 @@ export function BlockNode({ blockId, tree }: BlockNodeProps) {
 interface PreviewNodeProps extends BlockNodeProps {
   ref?: React.Ref<any>;
 }
-
 export function PreviewNode({ blockId, tree, ref }: PreviewNodeProps) {
   const block = tree.blocks[blockId];
   const { Preview } = blockRegistry[block.type];
