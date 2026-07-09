@@ -11,9 +11,19 @@ import { DragOverlay } from "@/features/dnd/adapter/components/DragOverlay";
 
 import type { BlockTree } from "@/features/models/types";
 import type { DndState } from "@/features/dnd/core/types";
-import { checkIsLeftHalf, checkIsTopHalf } from "@/features/dnd/core/utils";
-import { getDroppedOnPath } from "@/features/dnd/adapter/utils/getDroppedOnPath";
 import { BlockOverlay } from "@/features/blocks/shared/BlockOverlay";
+import { getBlockById } from "@/features/document/core/queries";
+import { MoveTreeCommand } from "@/features/document/core/commands/move/MoveTreeCommand";
+import { AddTreeCommand } from "@/features/document/core/commands/add/AddTreeCommand";
+import { useHistory } from "@/features/document/adapter/hooks/useHistory";
+import {
+  checkIsSamePosition,
+  getInsertionIndex,
+  getTreePositions,
+  normalizeInsertionIndex,
+  resolveDragState,
+} from "@/features/dnd/adapter/utils";
+import { duplicateTree } from "@/features/document/core/utils";
 
 export const EditorPage = () => {
   const template = useTemplateStore((state) => state.template);
@@ -23,26 +33,81 @@ export const EditorPage = () => {
     setTemplate(SAMPLE_TEMPLATE);
   }, []);
 
+  const { execute } = useHistory();
+
   if (!template) return null;
 
-  const handleDragMove = (state: DndState, tree: BlockTree) => {
-    const path = getDroppedOnPath(state, tree);
+  const handleDrop = (state: DndState, tree: BlockTree) => {
+    const { dragged, droppedOn } = state;
 
-    const [droppedOn, over] = path;
+    if (!droppedOn) return;
 
-    return {
-      ...state,
-      droppedOn: droppedOn ?? null,
-      over: over ?? null,
-      isTopHalf: over ? checkIsTopHalf(over.rect, state.coordinates) : false,
-      isLeftHalf: over ? checkIsLeftHalf(over.rect, state.coordinates) : false,
-    };
+    const index = getInsertionIndex(state, tree);
+
+    const exists = !!getBlockById(tree, dragged.id);
+
+    if (!exists) {
+      execute(
+        new AddTreeCommand(
+          duplicateTree(
+            dragged.data.tree,
+            dragged.data.tree.rootIds,
+            droppedOn.id,
+          ),
+          droppedOn.id,
+          index,
+        ),
+        {
+          action: "add",
+          targets: [],
+        },
+      );
+
+      return;
+    }
+
+    const normalizedIndex = normalizeInsertionIndex({
+      tree,
+      blockId: dragged.id,
+      parentId: droppedOn.id,
+      index,
+    });
+
+    if (
+      checkIsSamePosition({
+        tree,
+        blockId: dragged.id,
+        parentId: droppedOn.id,
+        index: normalizedIndex,
+      })
+    ) {
+      return;
+    }
+
+    execute(
+      new MoveTreeCommand(
+        dragged.data.tree.rootIds,
+        getTreePositions(tree, dragged.data.tree.rootIds),
+        {
+          parentId: droppedOn.id,
+          index: normalizedIndex,
+        },
+      ),
+      {
+        action: "move",
+        targets: [],
+      },
+    );
   };
 
   return (
     <DndProvider
       resolvers={{
-        onDragMove: (state) => handleDragMove(state, template.document),
+        onDragMove: (state) => resolveDragState(state, template.document),
+        onDrop: (state) => resolveDragState(state, template.document),
+      }}
+      callbacks={{
+        onDrop: (state) => handleDrop(state, template.document),
       }}
     >
       {({ dragged }) => (

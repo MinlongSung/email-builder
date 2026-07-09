@@ -53,7 +53,7 @@ export function useDraggable({
   }, [id, manager]);
 
   const isDragging = !!state.dragged;
-  const isBeingDragged = state.over?.id === id;
+  const isBeingDragged = state.dragged?.id === id;
 
   return {
     setNodeRef,

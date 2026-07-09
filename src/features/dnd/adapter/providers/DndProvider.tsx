@@ -1,5 +1,6 @@
 import {
   useCallback,
+  useEffect,
   useMemo,
   useState,
   useSyncExternalStore,
@@ -9,20 +10,15 @@ import {
   DndManager,
   type DndManagerOptions,
 } from "@/features/dnd/core/DndManager";
-import type { DndState } from "@/features/dnd/core/types";
+import type { DndState, DragResolvers } from "@/features/dnd/core/types";
 import { DndContext } from "@/features/dnd/adapter/contexts/DndContext";
 import { pointerWithin } from "@/features/dnd/core/utils";
 import { MouseSensor } from "@/features/dnd/core/sensors/MouseSensor";
 import { TouchSensor } from "@/features/dnd/core/sensors/TouchSensor";
 
-type DndResolvers = {
-  onDragMove?: (state: DndState) => DndState;
-  onDrop?: (state: DndState) => DndState;
-};
-
 export interface DndProviderProps extends DndManagerOptions {
   children: ReactNode | ((state: DndState) => ReactNode);
-  resolvers?: DndResolvers;
+  resolvers?: DragResolvers;
 }
 
 export function DndProvider({
@@ -39,10 +35,21 @@ export function DndProvider({
     ],
   ],
 }: DndProviderProps) {
-  const [manager] = useState<DndManager>(
+  const manager = useMemo(
     () =>
-      new DndManager({ callbacks, sensors, scrollOptions, collisionDetection }),
+      new DndManager({
+        callbacks,
+        resolvers,
+        sensors,
+        scrollOptions,
+        collisionDetection,
+      }),
+    [],
   );
+
+  useEffect(() => {
+    manager.setOptions({ callbacks, resolvers });
+  }, [manager, callbacks, resolvers]);
 
   const [snapshot, setSnapshot] = useState<DndState>({
     coordinates: { x: 0, y: 0 },
@@ -56,41 +63,23 @@ export function DndProvider({
 
   const subscribe = useCallback(
     (onChange: () => void) => {
-      const onDragStart = (state: DndState) => {
-        setSnapshot(state);
-        onChange();
-      };
-      const onDragMove = (state: DndState) => {
-        const nextState = resolvers?.onDragMove?.(state) ?? state;
-        setSnapshot(nextState);
-        onChange();
-      };
-      const onDrop = (state: DndState) => {
-        const nextState = resolvers?.onDrop?.(state) ?? state;
-        setSnapshot(nextState);
-        onChange();
-      };
-      const onDragEnd = (state: DndState) => {
-        setSnapshot(state); 
-        onChange();
-      };
-      const onDragCancel = (state: DndState) => {
+      const handleChange = (state: DndState) => {
         setSnapshot(state);
         onChange();
       };
 
-      manager.on("dragStart", onDragStart);
-      manager.on("dragMove", onDragMove);
-      manager.on("drop", onDrop);
-      manager.on("dragEnd", onDragEnd);
-      manager.on("dragCancel", onDragCancel);
+      manager.on("dragStart", handleChange);
+      manager.on("dragMove", handleChange);
+      manager.on("drop", handleChange);
+      manager.on("dragEnd", handleChange);
+      manager.on("dragCancel", handleChange);
 
       return () => {
-        manager.off("dragStart", onDragStart);
-        manager.off("dragMove", onDragMove);
-        manager.off("drop", onDrop);
-        manager.off("dragEnd", onDragEnd);
-        manager.off("dragCancel", onDragCancel);
+        manager.off("dragStart", handleChange);
+        manager.off("dragMove", handleChange);
+        manager.off("drop", handleChange);
+        manager.off("dragEnd", handleChange);
+        manager.off("dragCancel", handleChange);
         manager.destroy();
       };
     },

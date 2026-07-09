@@ -15,7 +15,7 @@ export class EventEmitter<Events extends Record<string, any>> {
     return this;
   }
 
-  emit<K extends keyof Events>(event: K, payload?: Events[K]): this {
+  emit<K extends keyof Events>(event: K, payload: Events[K]): this {
     this.listeners.get(event)?.forEach((fn) => fn(payload));
     return this;
   }

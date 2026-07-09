@@ -18,6 +18,7 @@ export function ToolbarAccess({ className }: Props) {
       className={className}
       ref={setToolbarAccessFloatingRef}
       style={toolbarAccessFloatingStyles}
+      onClick={() => setIsHovering(true)}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
@@ -26,4 +27,3 @@ export function ToolbarAccess({ className }: Props) {
     </div>
   );
 }
-

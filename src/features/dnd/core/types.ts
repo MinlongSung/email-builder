@@ -51,7 +51,12 @@ export interface DragCallbacks {
   onDragMove?: (state: DndState) => void;
   onDrop?: (state: DndState) => void;
   onDragEnd?: (state: DndState) => void;
-  onDragCancel?: () => void;
+  onDragCancel?: (state: DndState) => void;
+}
+
+export interface DragResolvers {
+  onDragMove?: (state: DndState) => DndState;
+  onDrop?: (state: DndState) => DndState;
 }
 
 export interface ScrollOptions {

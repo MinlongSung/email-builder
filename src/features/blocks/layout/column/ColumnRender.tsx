@@ -4,7 +4,7 @@ import { DropPlaceholder } from "@/features/dnd/adapter/components/DropPlacehold
 import { toCss } from "@/features/blocks/shared/utils";
 import { useEditorStore } from "@/features/stores/useEditorStore";
 import { useTemplateStore } from "@/features/stores/useTemplateStore";
-import { getParent } from "@/features/document/queries";
+import { getParent } from "@/features/document/core/queries";
 
 interface Props {
   block: ColumnBlock;

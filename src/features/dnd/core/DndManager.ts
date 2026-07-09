@@ -8,6 +8,7 @@ import type {
   DragCallbacks,
   DragEvents,
   Draggable,
+  DragResolvers,
   Droppable,
   Scrollable,
   ScrollOptions,
@@ -21,6 +22,7 @@ export interface DndManagerOptions {
   collisionDetection?: CollisionDetection;
   scrollOptions?: ScrollOptions;
   callbacks?: DragCallbacks;
+  resolvers?: DragResolvers;
 }
 
 export class DndManager extends EventEmitter<DragEvents> {
@@ -37,6 +39,13 @@ export class DndManager extends EventEmitter<DragEvents> {
       threshold: options.scrollOptions?.threshold ?? 50,
       speed: options.scrollOptions?.speed ?? 10,
     });
+  }
+
+  setOptions(options: DndManagerOptions) {
+    this.options = {
+      ...this.options,
+      ...options,
+    };
   }
 
   registerDraggable = (draggable: Draggable) => {
@@ -129,12 +138,16 @@ export class DndManager extends EventEmitter<DragEvents> {
                 isTopHalf,
                 isLeftHalf,
               });
-              const state = this.store.getState();
+              const baseState = this.store.getState();
+              const state =
+                this.options.resolvers?.onDragMove?.(baseState) ?? baseState;
               this.options.callbacks?.onDragMove?.(state);
               this.emit("dragMove", state);
             },
             onEnd: () => {
-              let state = this.store.getState();
+              const baseState = this.store.getState();
+              let state =
+                this.options.resolvers?.onDragMove?.(baseState) ?? baseState;
               this.options.callbacks?.onDrop?.(state);
               this.emit("drop", state);
               this.store.resetState();
@@ -146,9 +159,10 @@ export class DndManager extends EventEmitter<DragEvents> {
               this.activeSensor = null;
             },
             onCancel: () => {
-              this.options.callbacks?.onDragCancel?.();
-              this.emit("dragCancel");
               this.store.resetState();
+              const state = this.store.getState();
+              this.options.callbacks?.onDragCancel?.(state);
+              this.emit("dragCancel", state);
               this.rectTracker.stop();
               this.autoScroller.stop();
               this.activeSensor = null;

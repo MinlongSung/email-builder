@@ -1,13 +1,11 @@
 import { useEditorStore } from "@/features/stores/useEditorStore";
-import { useHistoryStore } from "@/features/stores/useHistoryStore";
+import { useHistory } from "@/features/document/adapter/hooks/useHistory";
 
 export function Topbar() {
   const viewport = useEditorStore((state) => state.viewport);
   const setViewport = useEditorStore((state) => state.setViewport);
-  const canUndo = useHistoryStore((state) => state.canUndo);
-  const canRedo = useHistoryStore((state) => state.canRedo);
-  const undo = useHistoryStore((state) => state.undo);
-  const redo = useHistoryStore((state) => state.redo);
+
+  const { canUndo, canRedo, undo, redo } = useHistory();
 
   return (
     <header className="h-14 bg-slate-800 text-white flex items-center px-4 shrink-0 gap-4">
