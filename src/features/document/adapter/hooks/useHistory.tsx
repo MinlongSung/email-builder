@@ -7,6 +7,7 @@ import { useTemplateStore } from "@/features/stores/useTemplateStore";
 import { generateId } from "@/features/utils/generateId";
 import { useCallback } from "react";
 import type { Command } from "@/features/document/core/commands/Command";
+import type { BlockTree } from "@/features/models/types";
 
 export const useHistory = () => {
   const template = useTemplateStore((s) => s.template);
@@ -27,10 +28,15 @@ export const useHistory = () => {
 
   const execute = useCallback(
     (
-      command: Command,
+      commandOrCreator: Command | ((document: BlockTree) => Command),
       metadata: Omit<CommandMetadata, "entryId" | "timestamp">,
     ) => {
       if (!template) return;
+
+      const command =
+        typeof commandOrCreator === "function"
+          ? commandOrCreator(template.document)
+          : commandOrCreator;
 
       const document = command.execute(template.document);
 
