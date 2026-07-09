@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { autoUpdate, flip, useFloating } from "@floating-ui/react";
 
 import { cn } from "@/components/utils/cn";
@@ -11,8 +11,9 @@ import { useDroppable } from "@/features/dnd/adapter/hooks/useDroppable";
 import { useEditorStore } from "@/features/stores/useEditorStore";
 import { DropLine } from "@/features/dnd/adapter/components/DropLine";
 import { BlockWrapperContext } from "@/features/blocks/shared/BlockWrapperContext";
-import { sliceTree } from "@/features/document/queries";
+import { sliceTree } from "@/features/document/core/queries";
 import { useTemplateStore } from "@/features/stores/useTemplateStore";
+import { ToolbarAccess } from "@/features/blocks/shared/ToolbarAccess";
 
 interface Props extends React.ComponentProps<"div"> {
   block: Block;
@@ -64,7 +65,7 @@ export function BlockWrapper({ block, children, className, ...props }: Props) {
       whileElementsMounted: autoUpdate,
       middleware: [
         gap({ padding: 10 }),
-        flip({ fallbackPlacements: ["top-end"] }),
+        flip({ fallbackPlacements: ["top-end", "bottom-start"] }),
       ],
     });
 
@@ -130,44 +131,13 @@ export function BlockWrapper({ block, children, className, ...props }: Props) {
         {...props}
       >
         {children}
-        {(isHovered || isSelected) && isDraggable && <ToolbarAccess />}
+        {isDraggable && (
+          <ToolbarAccess
+            className={cn("hidden", (isHovered || isSelected) && "block")}
+          />
+        )}
         {isOver && !isBeingDragged && <DropLine isTopHalf={isTopHalf} />}
       </div>
     </BlockWrapperContext.Provider>
-  );
-}
-
-function ToolbarAccess() {
-  const {
-    setToolbarAccessFloatingRef,
-    toolbarAccessFloatingStyles,
-    setToolbarReferenceRef,
-  } = useContext(BlockWrapperContext);
-
-  const [isHovering, setIsHovering] = useState(false);
-
-  return (
-    <div
-      ref={setToolbarAccessFloatingRef}
-      style={toolbarAccessFloatingStyles}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
-    >
-      <div ref={setToolbarReferenceRef}>menu</div>
-      {isHovering && <Toolbar />}
-    </div>
-  );
-}
-
-function Toolbar() {
-  const { setDragRef, setToolbarFloatingRef, toolbarFloatingStyles } =
-    useContext(BlockWrapperContext);
-
-  return (
-    <div ref={setToolbarFloatingRef} style={toolbarFloatingStyles}>
-      <div ref={setDragRef} className="w-20 bg-red-300">
-        Drag me
-      </div>
-    </div>
   );
 }
