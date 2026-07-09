@@ -19,7 +19,10 @@ import {
 import { MoveTreeCommand } from "@/features/document/core/commands/move/MoveTreeCommand";
 import { AddTreeCommand } from "@/features/document/core/commands/add/AddTreeCommand";
 import { useHistory } from "@/features/document/adapter/hooks/useHistory";
-import { getInsertionIndex, resolveDragState } from "@/features/dnd/adapter/utils";
+import {
+  getInsertionIndex,
+  resolveDragState,
+} from "@/features/dnd/adapter/utils";
 import {
   checkIsSamePosition,
   duplicateTree,
@@ -82,14 +85,10 @@ export const EditorPage = () => {
     }
 
     execute(
-      new MoveTreeCommand(
-        dragged.data.tree.rootIds,
-        getTreePositions(tree, dragged.data.tree.rootIds),
-        {
-          parentId: droppedOn.id,
-          index: resolvedIndex,
-        },
-      ),
+      new MoveTreeCommand(tree, dragged.data.tree.rootIds, {
+        parentId: droppedOn.id,
+        index: resolvedIndex,
+      }),
       {
         action: "move",
         targets: [],

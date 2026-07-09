@@ -11,14 +11,14 @@ export function Toolbar() {
   const { execute } = useHistory();
 
   const handleDuplicate = () => {
-    execute(new DuplicateTreeCommand([block.id]), {
+    execute((document) => new DuplicateTreeCommand(document, [block.id]), {
       action: "duplicate",
       targets: [],
     });
   };
 
   const handleRemove = () => {
-    execute(new RemoveTreeCommand([block.id]), {
+    execute((document) => new RemoveTreeCommand(document, [block.id]), {
       action: "delete",
       targets: [],
     });
