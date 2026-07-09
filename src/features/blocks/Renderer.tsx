@@ -18,15 +18,15 @@ export function BlockNode({ blockId, tree }: BlockNodeProps) {
   );
 }
 
-interface PreviewNodeProps extends BlockNodeProps {
+interface PreviewNodeProps extends BlockNodeProps, React.ComponentProps<"div"> {
   ref?: React.Ref<any>;
 }
-export function PreviewNode({ blockId, tree, ref }: PreviewNodeProps) {
+export function PreviewNode({ blockId, tree, ref, ...props }: PreviewNodeProps) {
   const block = tree.blocks[blockId];
   const { Preview } = blockRegistry[block.type];
 
   return (
-    <Preview ref={ref} block={block} tree={tree}>
+    <Preview {...props} ref={ref} block={block} tree={tree}>
       {block.childrenIds.map((childId) => (
         <PreviewNode key={childId} blockId={childId} tree={tree} />
       ))}

@@ -482,7 +482,7 @@ export interface RenderProps<T extends Block = Block> {
   block: T;
   children?: React.ReactNode;
 }
-export interface PreviewProps<T extends Block = Block> extends RenderProps<T> {
+export interface PreviewProps<T extends Block = Block> extends RenderProps<T>, React.ComponentProps<"div"> {
   tree: BlockTree;
   ref?: React.Ref<any>;
 }
