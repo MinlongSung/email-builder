@@ -10,7 +10,6 @@ import { generateId } from "@/features/utils/generateId";
 export function duplicateTree(
   document: BlockTree,
   rootIds: string[],
-  parentId: string,
 ): BlockTree {
   // 1. Extract the selected tree (can be multiple roots)
   const tree = sliceTree(document, rootIds);
@@ -35,10 +34,9 @@ export function duplicateTree(
 
     clone.id = newId;
 
-    // remap parent
-    clone.parentId = block.parentId
-      ? (idMap.get(block.parentId) ?? parentId)
-      : parentId;
+    if (block.parentId) {
+      clone.parentId = idMap.get(block.parentId) ?? block.parentId;
+    }
 
     // remap children
     clone.childrenIds = block.childrenIds.map((childId) => idMap.get(childId)!);

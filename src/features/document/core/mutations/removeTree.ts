@@ -1,14 +1,8 @@
 import type { BlockTree } from "@/features/models/types";
 
-import { sliceTree } from "@/features/document/core/queries";
-import { removeChild, getBlockOrThrow } from "@/features/document/core/utils";
+import { sliceTree, getBlockOrThrow } from "@/features/document/core/queries";
+import { removeChild } from "@/features/document/core/mutations";
 
-/**
- * Removes one or multiple root blocks (and their descendants)
- * from the document tree.
- *
- * Returns the removed BlockTree snapshot.
- */
 export function removeTree(document: BlockTree, rootIds: string[]): BlockTree {
   const tree = sliceTree(document, rootIds);
 

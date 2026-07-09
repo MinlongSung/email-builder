@@ -1,12 +1,13 @@
 import type { BlockTree } from "@/features/models/types";
 
-import { getBlockOrThrow, insertChild } from "@/features/document/core/utils";
+import { getBlockOrThrow } from "@/features/document/core/queries";
+import { insertChild } from "@/features/document/core/mutations";
 
 export function addTree(
   document: BlockTree,
   tree: BlockTree,
   parentId: string,
-  index?: number,
+  index: number = 0,
 ): void {
   const parent = getBlockOrThrow(document, parentId);
 
@@ -14,11 +15,11 @@ export function addTree(
     document.blocks[block.id] = structuredClone(block);
   }
 
-  for (const rootId of tree.rootIds) {
+  tree.rootIds.forEach((rootId, offset) => {
     const root = getBlockOrThrow(document, rootId);
 
     root.parentId = parentId;
 
-    insertChild(parent, root.id, index);
-  }
+    insertChild(parent, root.id, index + offset);
+  });
 }

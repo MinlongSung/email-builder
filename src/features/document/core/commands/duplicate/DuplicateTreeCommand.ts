@@ -1,15 +1,23 @@
 import type { BlockTree } from "@/features/models/types";
 
-import { Command } from "@/features/document/commands/Command";
-import { addTree, duplicateTree, removeTree } from "@/features/document/utils";
+import { Command } from "@/features/document/core/commands/Command";
+import {
+  getDuplicateTargets,
+} from "@/features/document/core/queries";
+import {
+  duplicateTree,
+  resolveDuplicateInsertions,
+} from "@/features/document/core/utils";
+import {
+  addTree,
+  removeTree,
+} from "@/features/document/core/mutations";
 
 export class DuplicateTreeCommand extends Command {
-  private duplicated!: BlockTree;
+  private duplicated: BlockTree[] = [];
 
   constructor(
     private readonly rootIds: string[],
-    private readonly parentId: string,
-    private readonly index?: number,
   ) {
     super();
   }
@@ -17,9 +25,30 @@ export class DuplicateTreeCommand extends Command {
   execute(document: BlockTree): BlockTree {
     const next = structuredClone(document);
 
-    this.duplicated = duplicateTree(next, this.rootIds, this.parentId);
+    const targets = resolveDuplicateInsertions(
+      getDuplicateTargets(
+        next,
+        this.rootIds,
+      ),
+    );
 
-    addTree(next, this.duplicated, this.parentId, this.index);
+    this.duplicated = [];
+
+    for (const target of targets) {
+      const duplicated = duplicateTree(
+        next,
+        target.rootIds,
+      );
+
+      addTree(
+        next,
+        duplicated,
+        target.parentId,
+        target.insertIndex,
+      );
+
+      this.duplicated.push(duplicated);
+    }
 
     return next;
   }
@@ -27,7 +56,9 @@ export class DuplicateTreeCommand extends Command {
   undo(document: BlockTree): BlockTree {
     const next = structuredClone(document);
 
-    removeTree(next, this.duplicated.rootIds);
+    for (const tree of this.duplicated) {
+      removeTree(next, tree.rootIds);
+    }
 
     return next;
   }

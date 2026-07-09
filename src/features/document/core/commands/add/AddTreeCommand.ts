@@ -1,6 +1,6 @@
 import type { BlockTree } from "@/features/models/types";
 import { Command } from "@/features/document/core/commands/Command";
-import { addTree, removeTree } from "@/features/document/core/utils";
+import { addTree, removeTree } from "@/features/document/core/mutations";
 
 export class AddTreeCommand extends Command {
   constructor(

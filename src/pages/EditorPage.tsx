@@ -12,18 +12,19 @@ import { DragOverlay } from "@/features/dnd/adapter/components/DragOverlay";
 import type { BlockTree } from "@/features/models/types";
 import type { DndState } from "@/features/dnd/core/types";
 import { BlockOverlay } from "@/features/blocks/shared/BlockOverlay";
-import { getBlockById } from "@/features/document/core/queries";
+import {
+  getBlockById,
+  getTreePositions,
+} from "@/features/document/core/queries";
 import { MoveTreeCommand } from "@/features/document/core/commands/move/MoveTreeCommand";
 import { AddTreeCommand } from "@/features/document/core/commands/add/AddTreeCommand";
 import { useHistory } from "@/features/document/adapter/hooks/useHistory";
+import { getInsertionIndex, resolveDragState } from "@/features/dnd/adapter/utils";
 import {
   checkIsSamePosition,
-  getInsertionIndex,
-  getTreePositions,
-  normalizeInsertionIndex,
-  resolveDragState,
-} from "@/features/dnd/adapter/utils";
-import { duplicateTree } from "@/features/document/core/utils";
+  duplicateTree,
+  resolveInsertionIndex,
+} from "@/features/document/core/utils";
 
 export const EditorPage = () => {
   const template = useTemplateStore((state) => state.template);
@@ -49,11 +50,7 @@ export const EditorPage = () => {
     if (!exists) {
       execute(
         new AddTreeCommand(
-          duplicateTree(
-            dragged.data.tree,
-            dragged.data.tree.rootIds,
-            droppedOn.id,
-          ),
+          duplicateTree(dragged.data.tree, dragged.data.tree.rootIds),
           droppedOn.id,
           index,
         ),
@@ -66,7 +63,7 @@ export const EditorPage = () => {
       return;
     }
 
-    const normalizedIndex = normalizeInsertionIndex({
+    const resolvedIndex = resolveInsertionIndex({
       tree,
       blockId: dragged.id,
       parentId: droppedOn.id,
@@ -78,7 +75,7 @@ export const EditorPage = () => {
         tree,
         blockId: dragged.id,
         parentId: droppedOn.id,
-        index: normalizedIndex,
+        index: resolvedIndex,
       })
     ) {
       return;
@@ -90,7 +87,7 @@ export const EditorPage = () => {
         getTreePositions(tree, dragged.data.tree.rootIds),
         {
           parentId: droppedOn.id,
-          index: normalizedIndex,
+          index: resolvedIndex,
         },
       ),
       {

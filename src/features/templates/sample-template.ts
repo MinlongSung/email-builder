@@ -96,7 +96,7 @@ export const SAMPLE_TEMPLATE: EmailTemplate = {
         id: "column-3",
         type: "column",
         parentId: "row-2",
-        childrenIds: [],
+        childrenIds: ["text-3"],
 
         props: {
           layout: {
@@ -177,6 +177,44 @@ export const SAMPLE_TEMPLATE: EmailTemplate = {
                   {
                     type: "text",
                     text: "Este es un subtítulo.",
+                    marks: [
+                      {
+                        type: "bold",
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+
+          layout: {
+            margin: {
+              bottom: "24px",
+            },
+          },
+        },
+      },
+      "text-3": {
+        id: "text-3",
+        type: "text",
+        parentId: "column-3",
+        childrenIds: [],
+
+        props: {
+          content: {
+            type: "doc",
+            content: [
+              {
+                type: "paragraph",
+                content: [
+                  {
+                    type: "text",
+                    text: "Mi otro texto. ",
+                  },
+                  {
+                    type: "text",
+                    text: "Mi otro subtítulo.",
                     marks: [
                       {
                         type: "bold",

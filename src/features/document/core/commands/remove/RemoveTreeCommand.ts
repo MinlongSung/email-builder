@@ -1,12 +1,9 @@
 import type { BlockTree } from "@/features/models/types";
 
-import { Command } from "@/features/document/commands/Command";
-import { getBlockById, getChildIndex } from "@/features/document/core/queries";
-import {
-  removeTree,
-  addTree,
-  getBlockOrThrow,
-} from "@/features/document/utils";
+import { Command } from "@/features/document/core/commands/Command";
+import { getChildIndex, getTreePositions } from "@/features/document/core/queries";
+import { removeTree, addTree } from "@/features/document/core/mutations";
+import { getBlockOrThrow } from "@/features/document/core/queries";
 
 export class RemoveTreeCommand extends Command {
   private tree!: BlockTree;
@@ -20,15 +17,11 @@ export class RemoveTreeCommand extends Command {
   execute(document: BlockTree): BlockTree {
     const next = structuredClone(document);
 
-    for (const rootId of this.rootIds) {
-      const block = getBlockOrThrow(next, rootId);
+    const positions = getTreePositions(next, this.rootIds);
 
-      if (!block.parentId) {
-        throw new Error(`Block "${rootId}" has no parent.`);
-      }
-
-      this.parentIds[rootId] = block.parentId;
-      this.indexes[rootId] = getChildIndex(next, rootId);
+    for (const position of positions) {
+      this.parentIds[position.id] = position.parentId;
+      this.indexes[position.id] = position.index;
     }
 
     this.tree = removeTree(next, this.rootIds);

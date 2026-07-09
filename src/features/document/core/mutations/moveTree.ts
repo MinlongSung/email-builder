@@ -1,16 +1,13 @@
 import type { BlockTree } from "@/features/models/types";
 
-import {
-  removeChild,
-  insertChild,
-  getBlockOrThrow,
-} from "@/features/document/core/utils";
+import { getBlockOrThrow } from "@/features/document/core/queries";
+import { removeChild, insertChild } from "@/features/document/core/mutations";
 
 export function moveTree(
   document: BlockTree,
   rootIds: string[],
   parentId: string,
-  index?: number,
+  index: number = 0,
 ): void {
   const parent = getBlockOrThrow(document, parentId);
 
@@ -29,10 +26,6 @@ export function moveTree(
   roots.forEach((root, offset) => {
     root.parentId = parentId;
 
-    insertChild(
-      parent,
-      root.id,
-      index !== undefined ? index + offset : undefined,
-    );
+    insertChild(parent, root.id, index + offset);
   });
 }

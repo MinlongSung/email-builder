@@ -1,8 +1,7 @@
-import type { DndState, DroppableContainer } from "@/features/dnd/core/types";
 import type { BlockTree } from "@/features/models/types";
+import type { DndState, DroppableContainer } from "@/features/dnd/core/types";
 import { checkIsLeftHalf, checkIsTopHalf } from "@/features/dnd/core/utils";
 import { getBlockById, getChildIndex } from "@/features/document/core/queries";
-import { getBlockOrThrow } from "@/features/document/core/utils";
 
 const checkIsValidDrop = (
   candidate: DroppableContainer | undefined,
@@ -55,83 +54,17 @@ export const resolveDragState = (state: DndState, tree: BlockTree) => {
   };
 };
 
-export const getInsertionIndex = (state: DndState, tree: BlockTree): number => {
-  const { over, droppedOn } = state;
+export function getInsertionIndex(state: DndState, tree: BlockTree): number {
+  const { over, droppedOn, isTopHalf } = state;
 
-  const droppedBlock = getBlockById(tree, droppedOn.id);
-
-  const overId = over?.id;
-  if (!overId) return droppedBlock.childrenIds.length;
-
-  const overIndex = getChildIndex(tree, overId);
-  return state.isTopHalf ? overIndex : overIndex + 1;
-};
-
-interface NormalizeInsertionIndexOptions {
-  tree: BlockTree;
-  blockId: string;
-  parentId: string;
-  index: number;
-}
-
-export const normalizeInsertionIndex = ({
-  tree,
-  blockId,
-  parentId,
-  index,
-}: NormalizeInsertionIndexOptions): number => {
-  const block = getBlockById(tree, blockId);
-
-  if (!block?.parentId) return index;
-
-  // Si cambia de padre, el índice no cambia.
-  if (block.parentId !== parentId) return index;
-
-  const currentIndex = getChildIndex(tree, blockId);
-
-  // Al mover hacia abajo dentro del mismo padre,
-  // al quitar el bloque los índices disminuyen en uno.
-  if (currentIndex < index) {
-    return index - 1;
+  if (!droppedOn) {
+    throw new Error("Missing drop target.");
   }
 
-  return index;
-};
-
-interface CheckIsSamePositionOptions {
-  tree: BlockTree;
-  blockId: string;
-  parentId: string;
-  index: number;
-}
-
-export const checkIsSamePosition = ({
-  tree,
-  blockId,
-  parentId,
-  index,
-}: CheckIsSamePositionOptions): boolean => {
-  const block = getBlockById(tree, blockId);
-
-  if (!block || block.parentId !== parentId) {
-    return false;
+  if (!over) {
+    return getBlockById(tree, droppedOn.id).childrenIds.length;
   }
 
-  return getChildIndex(tree, blockId) === index;
-};
-
-export function getTreePositions(tree: BlockTree, ids: string[]) {
-  return ids.map((id) => {
-    const block = getBlockOrThrow(tree, id);
-
-    if (!block.parentId) {
-      throw new Error(`Block "${id}" has no parent.`);
-    }
-
-    return {
-      id,
-      parentId: block.parentId,
-      index: getChildIndex(tree, id),
-    };
-  });
+  const index = getChildIndex(tree, over.id);
+  return isTopHalf ? index : index + 1;
 }

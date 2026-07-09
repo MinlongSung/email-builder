@@ -1,7 +1,7 @@
 import type { BlockTree } from "@/features/models/types";
 
 import { Command } from "@/features/document/core/commands/Command";
-import { moveTree } from "@/features/document/core/utils";
+import { moveTree } from "@/features/document/core/mutations";
 
 type TreePosition = {
   id: string;
